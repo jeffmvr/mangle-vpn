@@ -1,0 +1,14 @@
+[Unit]
+Description=Mangle VPN OpenVPN server
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStartPre={{ root_dir }}/manage.py vpn pre-start
+ExecStart={{ openvpn }} --config {{ ovpn_config }}
+ExecStartPost={{ root_dir }}/manage.py vpn post-start
+ExecStopPost={{ root_dir }}/manage.py vpn post-stop
+
+[Install]
+WantedBy=multi-user.target

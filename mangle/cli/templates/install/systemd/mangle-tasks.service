@@ -1,0 +1,14 @@
+[Unit]
+Description=Mangle VPN task queue
+After=network.target
+Requires=redis.service
+BindsTo=mangle-web.service
+
+[Service]
+User=root
+Group=root
+WorkingDirectory={{ root_dir }}
+ExecStart={{ root_dir }}/manage.py run_huey
+
+[Install]
+WantedBy=multi-user.target

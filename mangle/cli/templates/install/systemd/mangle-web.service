@@ -1,0 +1,20 @@
+[Unit]
+Description=Mangle VPN web application
+After=network.target
+Requires=redis.service mangle-tasks.service
+
+[Service]
+User=root
+Group=root
+WorkingDirectory={{ root_dir }}
+ExecStart={{ gunicorn }} \
+  --access-logfile {{ access_log }} \
+  --error-logfile {{ error_log }} \
+  --workers {{ workers }} \
+  --bind unix:{{ socket }} \
+  mangle.wsgi:application
+ExecStartPost={{ root_dir }}/manage.py web post-start
+ExecStopPost={{ root_dir }}/manage.py web post-stop
+
+[Install]
+WantedBy=multi-user.target
