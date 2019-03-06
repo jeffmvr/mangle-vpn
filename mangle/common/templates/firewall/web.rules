@@ -1,0 +1,2 @@
+-t filter -A INPUT -p tcp --dport {{ http_port }} -j ACCEPT
+-t filter -A INPUT -p tcp --dport {{ https_port }} -j ACCEPT

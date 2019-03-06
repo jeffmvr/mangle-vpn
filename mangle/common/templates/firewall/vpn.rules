@@ -1,0 +1,18 @@
+-t filter -A INPUT -i {{ interface }} -p {{ protocol }} --dport {{ port }} -m conntrack --ctstate NEW -j ACCEPT
+-t filter -A INPUT -i tun0 -j ACCEPT
+-t filter -A OUTPUT -o tun0 -j ACCEPT
+-t filter -A FORWARD -s {{ subnet }} -j MangleVPN
+-t nat -A POSTROUTING -o {{ nat_interface }} -s {{ subnet }} -j MASQUERADE
+{% if nameservers %}
+{% for nameserver in nameservers %}
+-t filter -A MangleVPN -i tun0 -d {{ nameserver }} -p tcp --dport 53 -j ACCEPT
+-t filter -A MangleVPN -i tun0 -d {{ nameserver }} -p udp --dport 53 -j ACCEPT
+{% endfor %}
+{% endif %}
+{% if local_addrs %}
+{% for addr in local_addrs %}
+-t filter -A MangleVPN -i tun0 -d {{ addr }} -j ACCEPT
+{% endfor %}
+{% endif %}
+-t filter -A MangleVPN -i tun0 -j MangleVPN_Clients
+-t filter -A MangleVPN -j DROP

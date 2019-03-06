@@ -1,0 +1,136 @@
+<template>
+  <div class="ui row">
+    <h2>Invite Users</h2>
+
+    <!-- #Form -->
+    <div class="ui form">
+      <table class="ui very basic table">
+        <tbody>
+          <!-- #Emails -->
+          <form-table-row>
+            <template slot="label">
+              E-mail Addresses
+            </template>
+            <template slot="help">
+              A list of the user email addresses, one per line, for users
+              who will be granted access to the application and OpenVPN server.
+            </template>
+            <template slot="input">
+              <textarea id="emails" rows="6" v-model="user.email"></textarea>
+              <p class="form-error">
+                {{ errors.email | error }}
+              </p>
+            </template>
+          </form-table-row><!-- #Emails -->
+
+          <!-- #Group -->
+          <form-table-row>
+            <template slot="label">
+              Group
+            </template>
+            <template slot="help">
+              The group to which each user will be assigned, used to enforce
+              access control and other administrative settings.
+            </template>
+            <template slot="input">
+              <select class="ui dropdown" v-model="user.group_id">
+                <option disabled selected="selected" value="">
+                  Select Group
+                </option>
+                <option v-for="group in groups" :value="group.id">
+                  {{ group.name }}
+                </option>
+              </select>
+              <p class="form-error">
+                {{ errors.group_id | error }}
+              </p>
+            </template>
+          </form-table-row><!-- #Group -->
+
+          <!-- #Notification -->
+          <form-table-row>
+            <template slot="label">
+              Send Notification
+            </template>
+            <template slot="help">
+              Whether to send the user(s) a notification e-mail with instructions
+              on how to setup their account.
+            </template>
+            <template slot="input">
+              <select id="notify" class="ui dropdown" v-model="user.notify">
+                <option :value="true">
+                  Yes
+                </option>
+                <option :value="false">
+                  No
+                </option>
+              </select>
+            </template>
+          </form-table-row><!-- #Notification -->
+        </tbody>
+      </table>
+    </div><!-- #Form -->
+
+    <!-- #Actions -->
+    <div class="form-actions">
+      <a href="/#/admin/users" class="ui button">
+        Cancel
+      </a>
+      <button class="ui button green" @click="create">
+        Invite
+      </button>
+    </div><!-- #Actions -->
+  </div>
+</template>
+
+
+<script>
+  import BaseMixin from "@/components/mixins/BaseMixin"
+  import FormTableRow from "@/components/common/FormTableRow"
+
+  export default {
+    name: "UserCreate",
+    mixins: [
+      BaseMixin,
+    ],
+    components: {
+      FormTableRow,
+    },
+    data() {
+      return {
+        errors: {},
+        groups: [],
+        user: {},
+      }
+    },
+    mounted() {
+      document.getElementById("emails").focus();
+
+      $("#notify").dropdown("set selected", "true");
+
+      // Retrieve a list of all Groups so the dropdown can be populated
+      this.axios.get("/admin/groups/all")
+        .then(resp => {
+          this.groups = resp.data;
+          $(".ui.dropdown").dropdown();
+        });
+    },
+
+    methods: {
+      /**
+       * Creates the users.
+       * @returns {null}
+       */
+      create() {
+        this.axios.post("/admin/users/", this.user)
+          .then(resp => {
+            this.$router.push("/#/admin/users");
+            this.toastr.success("The users were created.", "Users Created");
+          })
+          .catch(err => {
+            this.errors = err.response.data;
+          });
+      }
+    }
+  }
+</script>
