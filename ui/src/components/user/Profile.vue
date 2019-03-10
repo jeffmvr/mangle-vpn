@@ -211,10 +211,11 @@
         this.newDevice = {};
         this.creatingDevice = true;
 
+        // simulate a sleep for 100ms
         new Promise(resolve => setTimeout(resolve, 100))
           .then(() => {
             $("#newDevice").focus();
-          })
+          });
       }
     }, // #Methods
     computed: {
@@ -232,7 +233,6 @@
        * @returns {boolean}
        */
       hasDevices: function() {
-        console.log(this.store.profile);
         return this.store.profile.devices !== undefined && this.store.profile.devices.length > 0;
       },
     }

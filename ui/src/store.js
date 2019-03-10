@@ -5,6 +5,7 @@ export default {
   activePage: "",
   appInitialized: false,
   appOrganization: "Mangle",
+  appVersion: "",
   profile: {},
   events: new Vue(),
 }

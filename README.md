@@ -111,11 +111,9 @@ The following items are in no particular order and represent features that are
 to be added in the future.
 - [ ] Support additional OAuth2 providers
 - [ ] Support LDAP authentication
-- [ ] Group specific device expiration time limits
 - [x] Add web-based setup
 - [x] Support setting specific operations (instead of all settings at once)
 - [ ] REST API for developer consumption
-- [ ] Update application from web UI
+- [x] Update application from web UI
 - [ ] Automate the configuration and use of Let's Encrypt from web UI
-- [ ] User Linux installation scripts
 - [x] Add license

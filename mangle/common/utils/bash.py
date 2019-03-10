@@ -1,17 +1,17 @@
 import subprocess
 
 
-def run(*args):
+def run(*args, **kwargs):
     """
     Runs a BASH command with the given arguments and returns whether the
     command process exited successfully.
     :return: bool
     """
-    code, out, err = run_output(*args)
+    code, out, err = run_output(*args, **kwargs)
     return code == 0
 
 
-def run_output(*args):
+def run_output(*args, **kwargs):
     """
     Runs a BASH command with the given arguments and returns a tuple containing
     the command process exit code, the standard output, and standard error.
@@ -24,7 +24,9 @@ def run_output(*args):
         executable="/bin/bash",
         shell=True,
         stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE, )
+        stdout=subprocess.PIPE,
+        **kwargs,
+    )
 
     # this call will block until the process finishes
     stdout, stderr = proc.communicate()

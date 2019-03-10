@@ -95,15 +95,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+#######################################
 # Application Paths
+#######################################
 
-# Directory Paths
+# Directories
 DATA_DIR = os.path.join(BASE_DIR, "data")
 KEY_DIR = os.path.join(DATA_DIR, "keys")
 LOG_DIR = os.path.join(DATA_DIR, "logs")
 SYSTEMD_DIR = os.path.join(DATA_DIR, "systemd")
 
-# File Paths
+# Files
 DATABASE_PATH = os.path.join(DATA_DIR, "mangle.db")
 DJANGO_LOG_FILE = os.path.join(LOG_DIR, "django.log")
 OPENVPN_CONFIG_FILE = os.path.join(DATA_DIR, "openvpn.conf")
@@ -124,8 +126,11 @@ WEB_SSL_DH_FILE = os.path.join(KEY_DIR, "ssl.dh")
 WEB_VHOST_FILE = "/etc/nginx/conf.d/mangle.conf"
 WEB_WSGI_SOCKET = "/run/mangle-web.sock"
 
+#######################################
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+#######################################
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -133,14 +138,22 @@ DATABASES = {
     }
 }
 
+#######################################
 # Django REST Framework
 # https://www.django-rest-framework.org/
+#######################################
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
     'DEFAULT_PAGINATION_CLASS': 'mangle.web.api.pagination.ApiPagination',
 }
+
+#######################################
+# Logging
+# https://docs.djangoproject.com/en/2.1/topics/logging/
+#######################################
 
 LOGGING = {
     'version': 1,
@@ -189,6 +202,7 @@ LOGGING = {
 
 #######################################
 # Security
+# https://docs.djangoproject.com/en/2.1/topics/security/
 #######################################
 
 CSRF_COOKIE_SECURE = True
@@ -201,5 +215,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 X_FRAME_OPTIONS = 'DENY'
 
 # the secret key is read from file only
-with open(SECRET_KEY_FILE, "r") as f:
-    SECRET_KEY = f.read()
+try:
+    with open(SECRET_KEY_FILE, "r") as f:
+        SECRET_KEY = f.read()
+except FileNotFoundError:
+    if DEBUG:
+        SECRET_KEY = "debug"

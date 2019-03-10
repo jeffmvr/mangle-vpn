@@ -1,5 +1,7 @@
+import logging
 import time
 
+from django.conf import settings
 from django.http.response import JsonResponse
 from rest_framework import filters, status, views, viewsets
 from rest_framework.decorators import action
@@ -8,6 +10,9 @@ from mangle.common import config, mail, models, openvpn
 from mangle.common.utils import bash
 from mangle.web.api import authentication
 from mangle.web.api.admin import permissions, serializers
+
+
+logger = logging.getLogger(__name__)
 
 
 class AdminView(views.APIView):
@@ -130,6 +135,16 @@ class FirewallAdminViewSet(viewsets.ModelViewSet, AdminViewSet):
 
 
 #######################################
+# Device
+#######################################
+
+class DeviceAdminViewSet(viewsets.mixins.DestroyModelMixin,
+                         AdminViewSet):
+    queryset = models.Device.objects.all()
+    serializer_class = serializers.UserDeviceSerializer
+
+
+#######################################
 # Client
 #######################################
 
@@ -248,3 +263,18 @@ class OAuth2SettingView(BaseSettingView):
 
 class VPNSettingView(BaseSettingView):
     serializer_class = serializers.VpnSettingSerializer
+
+
+#######################################
+# Update
+#######################################
+
+class UpdateAppView(AdminView):
+    def post(self, request):
+        """
+        Updates the application to the latest code.
+        :return: Response
+        """
+        bash.run("make", "update", cwd=settings.BASE_DIR)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
