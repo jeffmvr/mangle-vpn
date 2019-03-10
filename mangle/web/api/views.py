@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import status, views, viewsets
 from rest_framework.response import Response
+from mangle.version import version
 from mangle.common import config, models, openvpn
 from mangle.web.api import authentication, permissions, serializers
 
@@ -15,6 +16,10 @@ class UserViewSet(viewsets.GenericViewSet, UserView):
     pass
 
 
+#######################################
+# Info
+#######################################
+
 class ApiInfoView(views.APIView):
     def get(self, request):
         """
@@ -23,6 +28,7 @@ class ApiInfoView(views.APIView):
         """
         return Response({
             "app_organization": config.get("app_organization", "Mangle"),
+            "app_version": version(),
         })
 
 

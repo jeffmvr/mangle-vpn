@@ -41,6 +41,10 @@
         Start OpenVPN
         </button>
       </div>
+      <div style="margin-top: 1em; text-align: center;">
+        Mangle VPN v{{ store.appVersion }}
+        (<a href="javascript:" @click="update">update</a>)
+      </div>
     </div>
 
     <!-- #AdminContent -->
@@ -74,19 +78,28 @@
       clearInterval(this.refreshInterval);
     },
     methods: {
-      // setActiveAdminPage sets the active Admin page based on the current route path.
+      /**
+       * Sets the current Admin page based on the route.
+       * @returns {null}
+       */
       setActiveAdminPage() {
         this.store.activeAdminPage = this.$router.currentRoute.path.split("/")[2];
       },
 
-      // getOpenVPNStatus retrieves and sets the status of the OpenVPN server.
+      /**
+       * Retrieves and sets the OpenVPN server status.
+       * @returns {null}
+       */
       getOpenVPNStatus() {
         this.axios.get("/admin/openvpn/").then(resp => {
           this.vpnStatus = resp.data.status;
         });
       },
 
-      // toggleOpenVPN starts or stops the OpenVPN server depending on its status.
+      /**
+       * Starts or stops the OpenVPN server based on it's current status.
+       * @returns {null}
+       */
       toggleOpenVPN() {
         this.axios.get("/admin/openvpn/toggle/").then(resp => {
           this.vpnStatus = resp.data.status;
@@ -99,7 +112,10 @@
         }
       },
 
-      // restartOpenVPN restarts the OpenVPN server.
+      /**
+       * Restarts the OpenVPN server.
+       * @returns {null}
+       */
       restartOpenVPN() {
         this.axios.get("/admin/openvpn/restart/").then(resp => {
           this.vpnStatus = resp.data.status;
@@ -107,6 +123,23 @@
         });
         this.toastr.success("Restarting the OpenVPN server.", "Restarting");
       },
+
+      /**
+       * Updates the application to the latest version.
+       * @returns {null}
+       */
+      update() {
+        this.axios.post("/admin/update")
+          .then(resp => {
+            this.toastr.success("Application update, reloading page...", "Updated");
+
+            // simulate a sleep for 3s to give the web server time to restart before refreshing
+            new Promise(resolve => setTimeout(resolve, 3000))
+              .then(() => {
+                location.reload(true);
+              });
+          });
+      }
     }, // #Methods
     watch: {
       // Watches for route changes and updates the active admin page accordingly.

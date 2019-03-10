@@ -26,6 +26,7 @@
       this.axios.get("/info")
         .then(resp => {
           this.store.appOrganization = resp.data.app_organization;
+          this.store.appVersion = resp.data.app_version;
         });
     },
     watch: {

@@ -112,14 +112,19 @@
       document.getElementById("groupName").focus();
     },
     methods: {
-      // createGroup creates the new group.
+      /**
+       * Creates a new group.
+       * @returns {null}
+       */
       createGroup() {
-        this.axios.post("/admin/groups/", this.group).then(resp => {
-          this.toastr.success("The group was created.", "Created");
-          this.$router.push("/#/admin/groups");
-        }).catch(err => {
-          this.errors = err.response.data;
-        });
+        this.axios.post("/admin/groups/", this.group)
+          .then(resp => {
+            this.toastr.success("The group was created.", "Created");
+            this.$router.push("/admin/groups");
+          })
+          .catch(err => {
+            this.errors = err.response.data;
+          });
       },
     }, // #Methods
   }

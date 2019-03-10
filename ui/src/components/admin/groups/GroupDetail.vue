@@ -326,65 +326,74 @@
     methods: {
       // Retrieves and populates the group details.
       getGroup() {
-        this.axios.get(`/admin/groups/${this.$route.params.id}/`).then(resp => {
-          this.group = resp.data;
-          $("#statusDropdown").dropdown("set selected", this.group.is_enabled);
-        });
+        this.axios.get(`/admin/groups/${this.$route.params.id}/`)
+          .then(resp => {
+            this.group = resp.data;
+            $("#statusDropdown").dropdown("set selected", this.group.is_enabled);
+          });
       },
 
       // updateGroup updates the group details.
       updateGroup() {
-        this.axios.put(`/admin/groups/${this.$route.params.id}/`, this.group).then(resp => {
-          this.toastr.success("The group was updated.", "Updated");
-        }).catch(err => {
-          this.errors = err.response.data;
-        })
+        this.axios.put(`/admin/groups/${this.$route.params.id}/`, this.group)
+          .then(resp => {
+            this.toastr.success("The group was updated.", "Updated");
+          })
+          .catch(err => {
+            this.errors = err.response.data;
+          });
       },
 
       // deleteGroup deletes the group and redirects back to the main groups page.
       deleteGroup() {
-        this.axios.delete(`/admin/groups/${this.$route.params.id}/`).then(resp => {
-          this.hideModals();
-          this.$router.push("/#/admin/groups");
-          this.toastr.success("The group was deleted.", "Deleted");
-        });
+        this.axios.delete(`/admin/groups/${this.$route.params.id}/`)
+          .then(resp => {
+            this.hideModals();
+            this.$router.push("/admin/groups");
+            this.toastr.success("The group was deleted.", "Deleted");
+          });
       },
 
       // getFirewallRules retrieves all of the Group's firewall rules.
       getFirewallRules() {
-        this.axios.get(`/admin/groups/${this.$route.params.id}/firewall/`).then(resp => {
-          this.firewall = resp.data;
-        });
+        this.axios.get(`/admin/groups/${this.$route.params.id}/firewall/`)
+          .then(resp => {
+            this.firewall = resp.data;
+          });
       },
 
       // createFirewallRule creates a new firewall rule.
       createFirewallRule() {
         this.firewallRule.group_id = this.group.id;
-        this.axios.post(`/admin/firewall/`, this.firewallRule).then(resp => {
-          this.toastr.success("The firewall rule was added", "Created");
-          this.getFirewallRules();
-          this.hideModals();
-          this.firewallRule = {};
-          this.errors = [];
-        }).catch(err => {
-          this.errors = err.response.data;
-        })
+        this.axios.post(`/admin/firewall/`, this.firewallRule)
+          .then(resp => {
+            this.toastr.success("The firewall rule was added", "Created");
+            this.getFirewallRules();
+            this.hideModals();
+            this.firewallRule = {};
+            this.errors = [];
+          })
+          .catch(err => {
+            this.errors = err.response.data;
+          })
       },
 
       // deleteFirewallRule deletes the given firewall rule.
       deleteFirewallRule(rule) {
-        this.axios.delete(`/admin/firewall/${rule.id}/`).then(resp => {
-          this.getFirewallRules();
-          this.toastr.success("The firewall rule was deleted", "Deleted")
-        });
+        this.axios.delete(`/admin/firewall/${rule.id}/`)
+          .then(resp => {
+            this.getFirewallRules();
+            this.toastr.success("The firewall rule was deleted", "Deleted")
+          });
       },
 
       // toggleFirewallRule toggles the ``is_enabled`` value of the given rule.
       toggleFirewallRule(rule) {
         rule.is_enabled = !rule.is_enabled;
-        this.axios.put(`/admin/firewall/${rule.id}/`, rule).then(resp => {
-          this.toastr.success("The firewall rule was updated", "Updated");
-        });
+        this.axios.put(`/admin/firewall/${rule.id}/`, rule)
+          .then(resp => {
+            this.toastr.success("The firewall rule was updated", "Updated");
+          });
       },
 
       // onShowFirewallRuleModal resets the new firewall rule when the modal is shown.

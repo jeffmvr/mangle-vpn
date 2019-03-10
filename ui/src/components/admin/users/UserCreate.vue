@@ -124,7 +124,7 @@
       create() {
         this.axios.post("/admin/users/", this.user)
           .then(resp => {
-            this.$router.push("/#/admin/users");
+            this.$router.push("/admin/users");
             this.toastr.success("The users were created.", "Users Created");
           })
           .catch(err => {

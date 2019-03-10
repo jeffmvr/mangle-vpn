@@ -352,7 +352,7 @@
         this.axios.delete(`/admin/users/${this.$route.params.id}/`)
           .then(resp => {
             this.hideModals();
-            this.$router.push("/#/admin/users");
+            this.$router.push("/admin/users");
             this.toastr.success("The user was deleted.", "Deleted");
           });
       },
@@ -377,10 +377,11 @@
         this.showModal("revokeDeviceModal", {
           autofocus: false,
           onApprove: ($element) => {
-            this.axios.delete(`/admin/devices/${device.id}/`).then(resp => {
-              this.toastr.success("The device was deleted.", "Deleted");
-              this.getDevices();
-            });
+            this.axios.delete(`/admin/devices/${device.id}/`)
+              .then(resp => {
+                this.toastr.success("The device was deleted.", "Deleted");
+                this.getDevices();
+              });
           },
         });
       },
