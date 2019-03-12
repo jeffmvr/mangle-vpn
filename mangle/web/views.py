@@ -28,6 +28,10 @@ def show_install(request):
     Renders the application installation page.
     :return: Response
     """
+    # do not let the installation run twice
+    if config.get_bool("app_installed", False):
+        return redirect("/")
+
     return render(request, "Install.html", {
         "form": request.session.pop("form", {}),
     })

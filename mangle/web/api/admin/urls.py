@@ -19,7 +19,7 @@ urlpatterns = [
     path("settings/app", views.AppSettingView.as_view()),
     path("settings/mail", views.MailSettingView.as_view()),
     path("settings/mail/test", views.MailSettingTestView.as_view()),
-    path("settings/oauth2", views.OAuth2SettingView.as_view()),
+    path("settings/auth", views.AuthSettingView.as_view()),
     path("settings/vpn", views.VPNSettingView.as_view()),
 
     # Update

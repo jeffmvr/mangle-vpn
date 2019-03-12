@@ -15,7 +15,7 @@
       <a class="active item" data-tab="app">
         <i class="wrench horizontal icon let"></i> General
       </a>
-      <a class="item" data-tab="oauth2">
+      <a class="item" data-tab="auth">
         <i class="lock icon left"></i> Authentication
       </a>
       <a class="item" data-tab="mail">
@@ -98,13 +98,36 @@
           </template>
         </form-table-row><!-- #HttpsPort -->
 
+        <!-- #LetsEncrypt
+        <form-table-row>
+          <template slot="label">
+            SSL (Let's Encrypt)
+          </template>
+          <template slot="help">
+            Configures the web application to use an SSL certificate and private key obtained
+            via Let's Encrypt. You web application MUST be accessible over the internet or
+            proper DNS records must be created (see: <a target="_blank" href="https://letsencrypt.org/how-it-works/">
+            Let's Encrypt Documentation)</a>
+          </template>
+          <template slot="input">
+            <div style="text-align: center">
+              <button class="ui button tiny" @click="setupLetsEncrypt">
+                Configure SSL using Let's Encrypt
+              </button>
+            </div>
+            <p class="form-error">
+              {{ errors.lets_encrypt | error }}
+            </p>
+          </template>
+        </form-table-row> #LetsEncrypt -->
+
         <!-- #SSLCertificate -->
         <form-table-row>
           <template slot="label">
             SSL Certificate
           </template>
           <template slot="help">
-            The SSL certificate that will be used for the web application.
+            The SSL certificate that will be used to encrypt traffic for the web application.
           </template>
           <template slot="input">
             <textarea type="text" class="ui textarea" v-model="settings.app_ssl_crt"></textarea>
@@ -120,7 +143,7 @@
             SSL Private Key
           </template>
           <template slot="help">
-            The SSL private key that will be used for the web application.
+            The SSL private key that will be used to encrypt traffic for the web application.
           </template>
           <template slot="input">
             <textarea type="text" class="ui textarea" v-model="settings.app_ssl_key"></textarea>
@@ -131,65 +154,98 @@
         </form-table-row><!-- #SSLPrivateKey -->
         </tbody>
       </table>
-    </div>
+    </div><!-- #SSLPrivateKey -->
 
      <!-- #OAuth2 -->
-    <div class="ui tab form" data-tab="oauth2" style="padding: 1em;">
+    <div class="ui tab form" data-tab="auth" style="padding: 1em;">
       <table class="ui very basic table">
         <tbody>
           <!-- #OAuth2Provider -->
           <form-table-row>
             <template slot="label">
-              OAuth2 Provider
+              Authentication Type
             </template>
             <template slot="help">
-              The OAuth2 provider that will be used when authenticating users.
+              The authentication method or source that will be used when authenticating users
+              logging into the web application and connecting to the VPN server.
             </template>
             <template slot="input">
-              <select id="oauth2Provider" class="ui dropdown" v-model="settings.oauth2_provider">
-              <option value="google">
-                Google
+              <select id="authType" class="ui dropdown" v-model="settings.auth_type">
+              <option value="oauth2">
+                OAuth2
               </option>
             </select>
               <p class="form-error">
-                {{ errors.oauth2_client_id | error }}
+                {{ errors.app_auth_type | error }}
               </p>
             </template>
           </form-table-row><!-- #OAuth2Provider -->
-
-          <!-- #OAuth2ClientID -->
-          <form-table-row>
-            <template slot="label">
-              OAuth2 Client ID
-            </template>
-            <template slot="help">
-              The OAuth2 client ID from a supported OAuth2 provider.
-            </template>
-            <template slot="input">
-              <input type="text" class="input" v-model="settings.oauth2_client_id">
-              <p class="form-error">
-                {{ errors.oauth2_client_id | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #OAuth2ClientID -->
-
-          <!-- #OAuth2ClientSecret -->
-          <form-table-row>
-            <template slot="label">
-              OAuth2 Client Secret
-            </template>
-            <template slot="help">
-              The OAuth2 client secret from a supported OAuth2 provider.
-            </template>
-            <template slot="input">
-              <input type="text" class="input" v-model="settings.oauth2_client_secret">
-              <p class="form-error">
-                {{ errors.oauth2_client_secret | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #OAuth2ClientSecret -->
         </tbody>
-      </table><!-- #OAuth2 -->
+      </table>
+
+      <br>
+
+      <!-- #OAuth2 -->
+      <div v-show="settings.auth_type === 'oauth2'">
+        <h3>OAuth2 Settings</h3>
+        <div class="ui divider"></div>
+
+        <table class="ui very basic table">
+          <tbody>
+            <!-- #OAuth2Provider -->
+            <form-table-row>
+              <template slot="label">
+                OAuth2 Provider
+              </template>
+              <template slot="help">
+                The OAuth2 provider that will be used when authenticating users.
+              </template>
+              <template slot="input">
+                <select id="oauth2Provider" class="ui dropdown" v-model="settings.oauth2_provider">
+                  <option value="google">
+                    Google
+                  </option>
+                </select>
+                <p class="form-error">
+                  {{ errors.oauth2_client_id | error }}
+                </p>
+              </template>
+            </form-table-row><!-- #OAuth2Provider -->
+
+            <!-- #OAuth2ClientID -->
+            <form-table-row>
+              <template slot="label">
+                OAuth2 Client ID
+              </template>
+              <template slot="help">
+                The OAuth2 client ID from a supported OAuth2 provider.
+              </template>
+              <template slot="input">
+                <input type="text" class="input" v-model="settings.oauth2_client_id">
+                <p class="form-error">
+                  {{ errors.oauth2_client_id | error }}
+                </p>
+              </template>
+            </form-table-row><!-- #OAuth2ClientID -->
+
+            <!-- #OAuth2ClientSecret -->
+            <form-table-row>
+              <template slot="label">
+                OAuth2 Client Secret
+              </template>
+              <template slot="help">
+                The OAuth2 client secret from a supported OAuth2 provider.
+              </template>
+              <template slot="input">
+                <input type="text" class="input" v-model="settings.oauth2_client_secret">
+                <p class="form-error">
+                  {{ errors.oauth2_client_secret | error }}
+                </p>
+              </template>
+            </form-table-row><!-- #OAuth2ClientSecret -->
+          </tbody>
+        </table>
+      </div><!-- #OAuth2 -->
     </div>
 
     <!-- #E-mail -->
@@ -504,7 +560,6 @@
         errors: {},
         settings: {},
         smtpTestEmail: "",
-        sslEmail: "",
       }
     },
     mounted() {
@@ -534,8 +589,9 @@
               $("#vpnInterfaceDropdown").dropdown("set selected", this.settings.vpn_interface);
               $("#vpnNatInterfaceDropdown").dropdown("set selected", this.settings.vpn_nat_interface);
               break;
-            case "oauth2":
-              $("#oauth2Provider").dropdown("set selected", "google");
+            case "auth":
+              $("#authType").dropdown("set selected", this.settings.auth_type);
+              $("#oauth2Provider").dropdown("set selected", this.settings.oauth2_provider);
               break;
           }
         });
@@ -576,6 +632,22 @@
             this.smtpTestEmail = "";
           });
       },
+
+      setupLetsEncrypt() {
+        this.axios.post("/admin/settings/letsEncrypt")
+          .then(resp => {
+            this.toastr.success("SSL has been setup! Refreshing...", "SSL Setup");
+
+            // simulate a sleep for 3s to give the web server time to restart before refreshing
+            new Promise(resolve => setTimeout(resolve, 3000))
+              .then(() => {
+                location.reload(true);
+              });
+          })
+          .catch(err => {
+            this.errors.letsEncrypt = err.response.data;
+          });
+      }
     },
   }
 </script>

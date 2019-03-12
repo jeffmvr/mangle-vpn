@@ -4,8 +4,8 @@
     <div class="ten wide column">
       <h1>Getting Started</h1>
       <p>
-        Generate and download an OpenVPN configuration file for each of your devices and follow the instructions below
-        for your device's operating system.
+        Generate and download an OpenVPN configuration file for each of your devices by clicking the <b>New Device</b>
+        button on the right and follow the instructions below for your device's operating system.
       </p>
       <p>
         In addition to the desktop clients, the OpenVPN Connect mobile application is available from both the
@@ -80,10 +80,10 @@
         </div>
         <div class="item" v-if="!hasDevices" style="padding: 1.5em; text-align: center;">
           <i class="device-expires">
-            You have no devices.
+            You have no devices :(
           </i>
         </div>
-        <div class="item" v-if="creatingDevice" style="background: rgba(33, 186, 69, 0.05);">
+        <div class="item" v-if="creatingDevice" style="background: rgba(33, 186, 69, 0.125);">
           <div class="ui transparent input">
             <input id="newDevice"
                    type="text"

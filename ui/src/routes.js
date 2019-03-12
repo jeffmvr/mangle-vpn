@@ -107,6 +107,7 @@ export default new Router({
           path: 'users/invite',
           name: 'UserCreate',
           component: UserCreate,
+          props: true,
         },
         {
           path: 'users/:id',

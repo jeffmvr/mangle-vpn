@@ -1,7 +1,12 @@
+import logging
+
 from django.conf import settings
 from rest_framework import serializers
 from mangle.common import config, models, validators
 from mangle.common.utils import bash, fs, net
+
+
+logger = logging.getLogger(__name__)
 
 
 #######################################
@@ -58,8 +63,9 @@ class UserInviteSerializer(serializers.Serializer):
         emails = []
 
         for email in value.split():
-            if validators.is_email(value):
+            if validators.is_email(email):
                 emails.append(email.lower())
+                
         return emails
 
     def validate_group_id(self, value):
@@ -108,7 +114,9 @@ class GroupUserSerializer(serializers.ModelSerializer):
         fields = ("id",
                   "created_at",
                   "updated_at",
-                  "email", )
+                  "email",
+                  "last_login",
+                  "name", )
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -376,7 +384,8 @@ class AppSettingSerializer(BaseSettingSerializer):
             bash.run("systemctl", "reload", "nginx")
 
 
-class OAuth2SettingSerializer(BaseSettingSerializer):
+class AuthSettingSerializer(BaseSettingSerializer):
+    auth_type = serializers.CharField(required=True)
     oauth2_provider = serializers.CharField(allow_blank=True, required=False)
     oauth2_client_id = serializers.CharField(required=True)
     oauth2_client_secret = serializers.CharField(required=True)

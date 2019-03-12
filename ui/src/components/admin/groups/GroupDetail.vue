@@ -6,6 +6,9 @@
         <h1>{{ group.name }}</h1>
       </div>
       <div class="nine wide column page-actions">
+        <router-link :to="{ name: 'UserCreate', params: { groupID: group.id } }" class="ui tiny basic green button">
+          Add Users
+        </router-link>
         <button class="ui tiny negative button" @click="showModal('deleteGroupModal')">
           Delete Group
         </button>
@@ -19,6 +22,9 @@
       </a>
       <a class="item" data-tab="firewall">
         <i class="fire icon left"></i> Firewall
+      </a>
+      <a class="item" data-tab="users">
+        <i class="users icon left"></i> Users
       </a>
     </div><!-- #Tabs -->
 
@@ -155,6 +161,34 @@
       </div>
     </div><!-- #FirewallRulesTab -->
 
+    <!-- #UsersTab -->
+    <div class="ui tab" data-tab="users">
+      <table class="ui selectable table" v-if="users.length > 0">
+        <thead>
+          <tr>
+            <th style="width: 66%;">E-mail Address</th>
+            <th>Last Login</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users">
+            <td>
+              <router-link :to="{ name: 'UserDetail', params: { id: user.id } }">
+                {{ user.email }}
+              </router-link>
+            </td>
+            <td>
+              {{ user.last_login | prettyDateTime }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty" v-else>
+        <i>There are no users in the group.</i>
+      </div>
+    </div><!-- #UsersTab -->
+
     <!-- #FirewallRuleModal -->
     <div id="firewallRuleModal" class="ui tiny modal form">
       <div class="header">
@@ -288,6 +322,7 @@
         group: {},
         firewall: [],
         firewallRule: {},
+        users: [],
       }
     },
     mounted() {
@@ -314,6 +349,9 @@
             case "firewall":
               this.getFirewallRules();
               break;
+            case "users":
+              this.getUsers();
+              break;
           }
         },
       });
@@ -324,7 +362,10 @@
       this.firewallRuleModal.remove();
     },
     methods: {
-      // Retrieves and populates the group details.
+      /**
+       * Retrieves the group's details.
+       * @returns {null}
+       */
       getGroup() {
         this.axios.get(`/admin/groups/${this.$route.params.id}/`)
           .then(resp => {
@@ -333,7 +374,10 @@
           });
       },
 
-      // updateGroup updates the group details.
+      /**
+       * Updates the group's details.
+       * @returns {null}
+       */
       updateGroup() {
         this.axios.put(`/admin/groups/${this.$route.params.id}/`, this.group)
           .then(resp => {
@@ -384,6 +428,13 @@
           .then(resp => {
             this.getFirewallRules();
             this.toastr.success("The firewall rule was deleted", "Deleted")
+          });
+      },
+
+      getUsers() {
+        this.axios.get(`/admin/groups/${this.group.id}/users`)
+          .then(resp => {
+            this.users = resp.data;
           });
       },
 

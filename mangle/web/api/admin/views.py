@@ -124,6 +124,17 @@ class GroupAdminViewSet(viewsets.ModelViewSet, AdminView):
         serializer = serializers.FirewallRuleSerializer(rules, many=True)
         return Response(serializer.data)
 
+    @action(["GET"], detail=True)
+    def users(self, request, *args, **kwargs):
+        """
+        Returns all of the group's users.
+        :return: Response
+        """
+        users = self.get_object().users
+
+        serializer = serializers.GroupUserSerializer(users, many=True)
+        return Response(serializer.data)
+
 
 #######################################
 # FirewallRule
@@ -257,8 +268,8 @@ class MailSettingTestView(AdminView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class OAuth2SettingView(BaseSettingView):
-    serializer_class = serializers.OAuth2SettingSerializer
+class AuthSettingView(BaseSettingView):
+    serializer_class = serializers.AuthSettingSerializer
 
 
 class VPNSettingView(BaseSettingView):

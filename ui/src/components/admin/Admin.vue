@@ -131,7 +131,7 @@
       update() {
         this.axios.post("/admin/update")
           .then(resp => {
-            this.toastr.success("Application update, reloading page...", "Updated");
+            this.toastr.success("Application was updated, reloading page...", "Updated");
 
             // simulate a sleep for 3s to give the web server time to restart before refreshing
             new Promise(resolve => setTimeout(resolve, 3000))
