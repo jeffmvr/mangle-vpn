@@ -90,7 +90,7 @@
   }
 
   div.empty {
-    margin-top: 2em;
+    margin-top: 5em;
     text-align: center;
   }
 

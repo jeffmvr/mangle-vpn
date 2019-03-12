@@ -8,7 +8,7 @@
       <!-- #LeftNavLinks -->
       <div class="left menu" v-if="store.profile !== null">
         <a href="/#/" :class="['item', {'active': store.activePage === ''}]">
-          Devices
+          Home
         </a>
         <a href="/#/admin" :class="['item', {'active': store.activePage === 'admin'}]" v-if="store.profile.is_admin">
           Administration

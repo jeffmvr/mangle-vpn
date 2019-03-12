@@ -241,6 +241,14 @@ class Group(Model):
         """
         return "MangleVPN_Group_{}".format(str(self.id).replace("-", ""))[:28]
 
+    @property
+    def clients(self):
+        """
+        Returns all of the group's VPN clients.
+        :return: []Client
+        """
+        return Client.objects.filter(device__user__group_id=self.id).all()
+
     def create_firewall_chain(self):
         """
         Creates the group firewall chain.

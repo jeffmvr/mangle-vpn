@@ -33,7 +33,7 @@
               access control and other administrative settings.
             </template>
             <template slot="input">
-              <select class="ui dropdown" v-model="user.group_id">
+              <select id="groupID" class="ui selection dropdown" v-model="user.group_id">
                 <option disabled selected="selected" value="">
                   Select Group
                 </option>
@@ -107,12 +107,24 @@
       document.getElementById("emails").focus();
 
       $("#notify").dropdown("set selected", "true");
+      $("#groupID").dropdown();
 
       // Retrieve a list of all Groups so the dropdown can be populated
       this.axios.get("/admin/groups/all")
         .then(resp => {
           this.groups = resp.data;
-          $(".ui.dropdown").dropdown();
+
+          $("#groupID").dropdown("refresh")
+
+          // if the groupID is set in the route params then set it as the selected group
+          // this will be set when adding users from a Group page
+          // this is also wrapped in a setTimeout() due to Semantic UI dropdown not updating
+          // properly after retrieving the data
+          if (this.$route.params.groupID !== undefined) {
+            setTimeout(() => {
+              $("#groupID").dropdown("set selected", this.$route.params.groupID);
+            }, 1);
+          }
         });
     },
 

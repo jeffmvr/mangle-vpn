@@ -39,6 +39,7 @@ def group_post_save(instance, **kwargs):
     if instance.is_enabled:
         instance.create_firewall_chain()
     else:
+        instance.clients.delete()
         instance.delete_firewall_chain()
 
 

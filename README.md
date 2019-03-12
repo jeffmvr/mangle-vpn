@@ -11,10 +11,6 @@ framework backed by an SQLite database, and requires OpenVPN 2.4+.
 
 The frontend is uses Vue.js and the Semantic UI CSS framework.
 
-## Getting Started
-*The application should be installed on a fresh machine that is dedicated to 
-running nothing but the web application and OpenVPN server.*
-
 ## Features
 - Self-service OpenVPN device provisioning
 - User groups with group specific firewall rules
@@ -24,6 +20,23 @@ running nothing but the web application and OpenVPN server.*
 - OAuth2 authentication
 - Web based administration
 - Real-time control of OpenVPN clients
+
+## Getting Started
+*The application should be installed on a fresh machine that is dedicated to 
+running nothing but the web application and OpenVPN server.*
+
+### Authentication
+Authentication is performed using one of the supported OAuth2 providers listed
+below and you must first obtain an OAuth2 **client ID** and **client secret**
+before you will be allowed to login.
+
+You must also add the following URL to your **authorized redirect URIs**:
+```bash
+https://<your-hostname>/oauth
+```
+
+**Supported OAuth2 Providers:**
+- Google
 
 ### Installation
 #### Notes
@@ -42,14 +55,6 @@ $ sudo ./install.sh
 ``` 
 Once the installation script has finished, please navigate to the frontend
 application in your browser to perform the initial setup. 
-
-### Authentication
-Authentication is performed using one of the supported OAuth2 providers list
-below, which means you must first obtain an OAuth2 client ID and secret before 
-you will be allowed to login.
-
-**Supported Providers:**
-- Google
 
 ## Configuration
 
@@ -94,7 +99,8 @@ $ sudo systemctl [start|stop|restart|status] mangle-tasks.service
 ```
 
 ## Updating
-You can pull the latest release code by running the following command:
+You can update the application to the latest version from the administration
+UI in the web application or via the command-line:
 ```bash
 $ sudo make update
 ```

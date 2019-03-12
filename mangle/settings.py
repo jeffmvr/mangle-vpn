@@ -1,5 +1,7 @@
 import os
 
+from mangle.common.utils import strings
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -214,10 +216,6 @@ SESSION_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 X_FRAME_OPTIONS = 'DENY'
 
-# the secret key is read from file only
-try:
-    with open(SECRET_KEY_FILE, "r") as f:
-        SECRET_KEY = f.read()
-except FileNotFoundError:
-    if DEBUG:
-        SECRET_KEY = "debug"
+# SECRET_KEY is read from file only
+with open(SECRET_KEY_FILE, "r") as f:
+    SECRET_KEY = f.read()
