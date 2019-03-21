@@ -117,7 +117,7 @@ class User(AbstractBaseUser, Model):
 class Device(Model):
     fingerprint = models.CharField(blank=True, db_index=True, max_length=255)
     last_login = models.DateTimeField(blank=True, null=True)
-    name = models.CharField(max_length=18)
+    name = models.CharField(max_length=32)
     serial = models.CharField(blank=True, default="", max_length=255)
     user = models.ForeignKey("User", on_delete=models.CASCADE)
 
