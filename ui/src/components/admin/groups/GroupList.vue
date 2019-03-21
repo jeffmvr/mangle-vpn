@@ -2,10 +2,10 @@
   <div class="ui row">
     <!-- #Header -->
     <div id="pageHeader" class="ui grid">
-      <div class="seven wide column">
+      <div class="six wide column">
         <h1>Groups</h1>
       </div>
-      <div class="nine wide column page-actions">
+      <div class="ten wide column page-actions">
         <div class="ui icon mini input search">
           <i class="search icon"></i>
           <input class="input" type="text" placeholder="Search Groups..." v-model="search" @keyup="performSearchOnType(getGroups)">
@@ -39,6 +39,9 @@
     <!-- #Pagination -->
     <div class="page-buttons">
       <span>{{ total }} Total</span>
+      <button class="ui tiny button" @click="getGroups">
+        <i class="icon sync"></i> Reload
+      </button>
       <button :class="['ui tiny button', { 'disabled': !hasPrevPage }]" @click="prevPage(getGroups)">
         <i class="angle left icon"></i>
         Prev

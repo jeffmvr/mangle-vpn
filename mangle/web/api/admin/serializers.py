@@ -65,7 +65,7 @@ class UserInviteSerializer(serializers.Serializer):
         for email in value.split():
             if validators.is_email(email):
                 emails.append(email.lower())
-                
+
         return emails
 
     def validate_group_id(self, value):

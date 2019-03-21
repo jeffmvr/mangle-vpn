@@ -44,6 +44,9 @@
 
     <div class="page-buttons">
       <span>{{ total }} Total</span>
+      <button class="ui tiny button" @click="getUsers">
+        <i class="icon sync"></i> Reload
+      </button>
       <button :class="['ui tiny button', { 'disabled': !hasPrevPage }]" @click="prevPage(getUsers)">
         <i class="angle left icon"></i>
         Prev
