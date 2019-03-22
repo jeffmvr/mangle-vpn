@@ -13,6 +13,19 @@
         <a href="https://itunes.apple.com/us/app/openvpn-connect/id590379981?mt=8">Apple App Store</a>.
       </p>
 
+      <div class="ui icon message" style="margin: 2em 0; padding: 2em;">
+        <i class="exclamation triangle icon"></i>
+        <div class="content">
+          <div class="header">
+            VPN Credentials
+          </div>
+          <p>
+            When connecting to the VPN, use your <b>e-mail address</b> as your username and your current <b>two-factor
+            authentication code</b> for your password.
+          </p>
+        </div>
+      </div>
+
       <!-- #macOS -->
       <h3><i class="apple icon"></i>Apple macOS</h3>
       <div class="ui divider"></div>
@@ -50,6 +63,7 @@
         will handle installation of OpenVPN and additional required packages.
       </p>
       <div class="ui message console">
+        $ chmod a+x openvpn-client-installer.sh
         $ sudo ./openvpn-client-installer.sh
       </div><!-- #Linux -->
       <p>

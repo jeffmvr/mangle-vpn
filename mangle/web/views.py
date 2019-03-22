@@ -161,6 +161,20 @@ def process_mfa(request):
 
 
 #######################################
+# Context Processors
+#######################################
+
+def base_context_processor(request):
+    """
+    The base UI context processor.
+    :return: dict
+    """
+    return {
+        "organization": config.get("app_organization", "Mangle"),
+    }
+
+
+#######################################
 # Helpers
 #######################################
 
