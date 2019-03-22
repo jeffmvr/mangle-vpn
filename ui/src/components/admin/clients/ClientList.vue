@@ -57,8 +57,8 @@
       </div>
     </div>
 
-    <div class="empty" v-else>
-      <i>There are no active OpenVPN clients.</i>
+    <div class="empty" style="padding: 2.5em 0;" v-else>
+      <i style="color: #888;">There are no active VPN clients.</i>
     </div>
   </div>
 </template>

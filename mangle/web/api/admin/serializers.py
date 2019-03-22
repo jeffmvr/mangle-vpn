@@ -506,7 +506,7 @@ class VpnSettingSerializer(BaseSettingSerializer):
             return ""
 
         for route in value.split("\n"):
-            if not validators.is_cidr(value) and not validators.is_ipv4(route):
+            if not validators.is_cidr(route) and not validators.is_ipv4(route):
                 raise serializers.ValidationError(
                     "There are one or more invalid routes."
                 )

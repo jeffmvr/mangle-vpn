@@ -125,7 +125,7 @@ class Device(Model):
 
     class Meta:
         db_table = "devices"
-        ordering = ("name", )
+        ordering = ("created_at", )
         default_related_name = "devices"
 
     @property
