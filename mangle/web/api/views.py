@@ -84,7 +84,7 @@ class DeviceViewSet(viewsets.mixins.CreateModelMixin,
         keypair = device.create_keypair()
 
         # generate the OpenVPN client configuration
-        conf = openvpn.client_config(*keypair.pem(), request.GET.get("linux"))
+        conf = openvpn.client_config(*keypair.pem(), request.GET["os"])
 
         # return the HTTP response as a file download
         resp = HttpResponse(conf)
