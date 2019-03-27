@@ -7,12 +7,15 @@ from mangle.common import models
 #######################################
 
 class ProfileDeviceSerializer(serializers.ModelSerializer):
+    os = serializers.CharField(allow_blank=False, required=True, write_only=True)
+
     class Meta:
         model = models.Device
         fields = ("id",
                   "created_at",
                   "updated_at",
-                  "name",)
+                  "name",
+                  "os", )
 
     def save(self, user, **kwargs):
         """
@@ -42,6 +45,15 @@ class ProfileDeviceSerializer(serializers.ModelSerializer):
         :return:
         """
         return value.encode("ascii", errors="ignore").decode()
+
+    def validate_os(self, value):
+        """
+        Validates and returns the device's operating system.
+        :return: str
+        """
+        if value not in ("windows", "macos", "linux"):
+            raise serializers.ValidationError("Unknown operating system.")
+        return value
 
 
 class ProfileGroupSerializer(serializers.ModelSerializer):

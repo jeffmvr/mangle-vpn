@@ -2,7 +2,7 @@
   <div id="app">
     <app-header></app-header>
 
-    <div id="mainContainer" class="ui container grid">
+    <div id="mainContainer" class="ui container grid stackable">
       <router-view/>
     </div>
   </div>
@@ -50,7 +50,7 @@
   }
 
   div#mainContainer {
-    margin-top: 5em;
+    margin-top: 4em;
   }
 
   p.form-error {

@@ -18,7 +18,7 @@
     <!-- #Tabs -->
     <div class="ui pointing secondary menu">
       <a class="active item" data-tab="details">
-        <i class="cog icon let"></i> Details
+        <i class="cog icon left"></i> Details
       </a>
       <a class="item" data-tab="firewall">
         <i class="fire icon left"></i> Firewall

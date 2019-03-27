@@ -4,8 +4,43 @@
     <div class="ten wide column">
       <h1>Getting Started</h1>
       <p>
-        Generate and download an OpenVPN configuration file for each of your devices by clicking the <b>New Device</b>
-        button on the right and follow the instructions below for your device's operating system.
+        Generate and download an OpenVPN configuration file for each of your devices by clicking the
+        <a href="#" @click="showModal('createDeviceModal')">New Device</a> button on the right and follow the instructions
+        below for your device's operating system.
+      </p>
+
+      <!-- #Authentication -->
+      <h3 style="margin-top: 2.5em;">
+        <i class="lock icon"></i>OpenVPN Authentication
+      </h3>
+
+      <div class="ui divider"></div>
+      <p>
+        In order to connect to the OpenVPN server with your devices, you are required to authenticate before each session
+        using the following credentials:
+      </p>
+      <div class="ui message">
+        <table style="margin: 0 auto;">
+          <tr>
+            <td style="font-weight: bold; width: 25%;">Username:</td>
+            <td style="font-style: italic">{{ store.profile.email }}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold; width: 25%;">Password:</td>
+            <td style="font-style: italic">&lt;the two-factor auth code from your mobile app&gt;</td>
+          </tr>
+        </table>
+      </div><!-- #Authentication -->
+
+      <!-- #ClientSetup -->
+      <h3 style="margin-top: 2.5em;">
+        <i class="keyboard icon"></i>OpenVPN Client Setup
+      </h3>
+
+      <div class="ui divider"></div>
+      <p>
+        Follow the instructions for your device's operating system in order to setup your OpenVPN client and connect to
+        the OpenVPN server.
       </p>
       <p>
         In addition to the desktop clients, the OpenVPN Connect mobile application is available from both the
@@ -13,67 +48,76 @@
         <a href="https://itunes.apple.com/us/app/openvpn-connect/id590379981?mt=8">Apple App Store</a>.
       </p>
 
-      <div class="ui icon message" style="margin: 2em 0; padding: 2em;">
-        <i class="exclamation triangle icon"></i>
-        <div class="content">
-          <div class="header">
-            VPN Credentials
-          </div>
-          <p>
-            When connecting to the VPN, use your <b>e-mail address</b> as your username and your current <b>two-factor
-            authentication code</b> for your password.
-          </p>
-        </div>
-      </div>
+      <!-- #Tabs -->
+      <div class="ui pointing secondary menu" style="margin-top: 2em;">
+        <a class="active item" data-tab="macos">
+          <i class="apple icon left"></i> Apple macOS
+        </a>
+        <a class="item" data-tab="windows">
+          <i class="windows icon left"></i> Microsoft Windows
+        </a>
+        <a class="item" data-tab="linux">
+          <i class="linux icon left"></i> Ubuntu 16.04+
+        </a>
+      </div><!-- #Tabs -->
 
       <!-- #macOS -->
-      <h3><i class="apple icon"></i>Apple macOS</h3>
-      <div class="ui divider"></div>
-      <ol>
-        <li>
-          Download and install the <a href="https://tunnelblick.net/release/Tunnelblick_3.7.6a_build_5080.dmg">
-          Tunnelblick</a> client
-        </li>
-        <li>Download and double click a device configuration file (.ovpn) to import it</li>
-        <li>Click the Tunnelblick application icon on the macOS status bar and click Connect</li>
-        <li>Enter your e-mail address (username) and two-factor authentication code (password) when prompted</li>
-      </ol><!-- #macOS -->
+      <div class="ui active tab" data-tab="macos">
+        <p>
+          The following instructions describe how to install and configure the OpenVPN client when using an Apple macOS
+          device, such as a Macbook or Mac Pro.
+        </p>
+        <ol>
+          <li>
+            Download and install the <a href="https://tunnelblick.net/release/Tunnelblick_3.7.6a_build_5080.dmg">
+            Tunnelblick</a> client
+          </li>
+          <li>Download and double click a device configuration file (.ovpn) to import it</li>
+          <li>Click the Tunnelblick application icon on the macOS status bar and click Connect</li>
+          <li>Enter your username (e-mail address) and password (the two-factor authentication code from your mobile app)</li>
+        </ol><!-- #macOS -->
+      </div>
 
       <!-- #Windows -->
-      <h3><i class="windows icon"></i>Microsoft Windows</h3>
-      <div class="ui divider"></div>
-      <ol>
-        <li>
-          Download and install the latest <a href="https://openvpn.net/index.php/open-source/downloads.html">
-          official OpenVPN client</a>
-        </li>
-        <li>
-          Right click the OpenVPN GUI icon in the Windows system tray and click <i>Import File...</i> to import
-          the device configuration (.ovpn) file
-        </li>
-        <li>Right click the OpenVPN GUI icon in the Windows status tray and select Connect</li>
-        <li>Enter your e-mail address (username) and two-factor authentication code (password) when prompted</li>
-      </ol><!-- #Windows -->
+      <div class="ui tab" data-tab="windows">
+        <p>
+          The following instructions describe how to install and configure the OpenVPN client when using a Microsoft
+          Windows device, such as a laptop or desktop.
+        </p>
+
+        <ol>
+          <li>
+            Download and install the latest <a href="https://openvpn.net/index.php/open-source/downloads.html">
+            official OpenVPN client</a>
+          </li>
+          <li>
+            Right click the OpenVPN GUI icon in the Windows system tray and click <i>Import File...</i> to import
+            the device configuration (.ovpn) file
+          </li>
+          <li>Right click the OpenVPN GUI icon in the Windows status tray and select Connect</li>
+          <li>Enter your username (e-mail address) and password (the two-factor authentication code from your mobile app)</li>
+        </ol>
+      </div><!-- #Windows -->
 
       <!-- #Linux -->
-      <h3><i class="linux icon"></i>Ubuntu Linux</h3>
-      <div class="ui divider"></div>
-      <p>
-        Download and run the <a href="/scripts/openvpn-client-installer.sh">OpenVPN client installation script</a> which
-        will handle installation of OpenVPN and additional required packages.
-      </p>
-      <div class="ui message console">
-        $ chmod a+x openvpn-client-installer.sh
-        $ sudo ./openvpn-client-installer.sh
+      <div class="ui tab" data-tab="linux">
+        <p>
+          Download and run the <a href="/scripts/openvpn-client-installer.sh">OpenVPN client installation script</a> which
+          will handle installation of OpenVPN and additional required packages.
+        </p>
+        <div class="ui message console">
+          $ chmod a+x openvpn-client-installer.sh
+          $ sudo ./openvpn-client-installer.sh
+        </div><!-- #Linux -->
+        <p>
+          Once OpenVPN has been installed, you can connect to the OpenVPN server using the following command. Be sure to
+          enter your username (e-mail address) and password (the two-factor authentication code from your mobile app):
+        </p>
+        <div class="ui message console">
+          $ sudo openvpn --config /path/to/config.ovpn
+        </div>
       </div><!-- #Linux -->
-      <p>
-        Once OpenVPN has been installed, you can connect to the OpenVPN server using the following command. Be sure to
-        enter your e-mail address (username) and two-factor authentication code (password) when prompted:
-      </p>
-      <div class="ui message console">
-        $ sudo openvpn --config /path/to/config.ovpn
-      </div><!-- #Linux -->
-    </div><!-- #Instructions -->
+    </div><!-- #ClientSetup -->
 
     <!-- #Devices -->
     <div class="six wide column">
@@ -97,25 +141,13 @@
             You have no devices :(
           </i>
         </div>
-        <div class="item" v-if="creatingDevice" style="background: rgba(33, 186, 69, 0.125);">
-          <div class="ui transparent input">
-            <input id="newDevice"
-                   type="text"
-                   placeholder="Device Name"
-                   v-model="newDevice.name"
-                   @keyup.enter="createDevice"
-                   @keyup.esc="creatingDevice = false"
-                   @blur="creatingDevice = false" >
-          </div>
-        </div>
       </div>
-      <div style="text-align: right;" v-if="canCreateDevices && !creatingDevice">
-        <button class="ui button small green" @click="startCreatingDevice">
+      <div style="text-align: right;" v-if="canCreateDevices">
+        <button class="ui button small green" @click="showModal('createDeviceModal')">
           <i class="ui plus icon"></i>
           New Device
         </button>
       </div>
-    </div><!-- #Devices -->
 
     <!-- #RevokeDeviceModal -->
     <div id="revokeDeviceModal" class="ui basic modal">
@@ -140,28 +172,83 @@
       </div>
     </div><!-- #RevokeDeviceModal -->
 
-    <!-- #DownloadDeviceModal -->
-    <div id="downloadModal" class="ui basic modal" style="text-align: center;">
-      <div class="ui icon header">
-        <i class="cloud download icon green"></i>
-        Download Ready
+    <!-- #DeviceModal -->
+    <div id="createDeviceModal" class="ui small modal">
+      <div class="header">
+        <i class="ui icon left laptop"></i>
+        New Device Configuration
       </div>
-      <div class="content" style="text-align: center;">
-        <p>Please select your operating system in order to download the proper OpenVPN client configuration.</p>
-        <p><b>You will only have the next 60 seconds to download the configuration.</b></p>
+
+      <div class="content" style="padding: 2em 3em 1em 3em;">
+        <p>
+          You must create and install an OpenVPN configuration file for each device you wish to
+          connect with to the OpenVPN server.
+        </p>
+
+        <h4>OpenVPN Credentials</h4>
+        <p>
+          In order to connect to the OpenVPN server with your devices, you are required to authenticate before each session
+          using the following credentials:
+        </p>
+
+        <!-- #Credentials -->
+        <div class="ui message">
+          <table style="margin: 0 auto;">
+            <tr>
+              <td style="font-weight: bold; width: 25%;">Username:</td>
+              <td style="font-style: italic">{{ store.profile.email }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; width: 25%;">Password:</td>
+              <td style="font-style: italic">&lt;the two-factor auth code from your mobile app&gt;</td>
+            </tr>
+          </table>
+        </div><!-- #Credentials -->
+
+        <div class="ui form" style="margin: 2em 0 1em 0;">
+          <table class="ui very basic table">
+            <tr>
+              <td>
+                <label style="font-weight: bold;">Device Name</label>
+              </td>
+              <td>
+                <input type="text" v-model="newDevice.name">
+                <p class="form-error">
+                  {{ errors.name | error }}
+                </p>
+              </td>
+            </tr>
+
+            <!-- #OperatingSystem -->
+            <tr>
+              <td>
+                <label style="font-weight: bold;">Operating System</label>
+              </td>
+              <td>
+                <select id="operatingSystemDropdown" class="ui dropdown" v-model="newDevice.os">
+                  <option value="">Select Operating System</option>
+                  <option value="windows">Microsoft Windows</option>
+                  <option value="macos">Apple macOS</option>
+                  <option value="linux">Linux</option>
+                </select>
+                <p class="form-error">
+                  {{ errors.os | error }}
+                </p>
+              </td>
+            </tr><!-- #OperatingSystem -->
+          </table>
+        </div>
       </div>
+
       <div class="actions" style="text-align: center">
-        <button class="ui basic inverted button" @click="downloadDevice(false)">
-          <i class="apple icon"></i>Apple macOS
+        <button class="ui cancel button">
+          Cancel
         </button>
-        <button class="ui basic inverted button" @click="downloadDevice(false)">
-          <i class="windows icon"></i>Microsoft Windows
-        </button>
-        <button class="ui basic inverted button" @click="downloadDevice(true)">
-          <i class="linux icon"></i>Linux
+        <button id="downloadConfigButton" class="ui green button" @click="createDevice">
+          Download Configuration
         </button>
       </div>
-    </div><!-- #DownloadDeviceModal -->
+    </div>
   </div>
 </template>
 
@@ -175,31 +262,42 @@
     mixins: [mixins.AppComponentMixin,],
     data() {
       return {
+        createDeviceModal: null,
         createdDevice: {},
         downloadModal: null,
+        errors: {},
         revokeDeviceModal: null,
         newDevice: {},
         creatingDevice: false,
       }
     },
     mounted() {
-      this.revokeDeviceModal = $("#revokeDeviceModal").modal();
-      this.downloadModal = $("#downloadModal").modal({
-        autofocus: false,
-        closable: false,
-        keyboardShortcuts: false,
+      $(".secondary.menu .item").tab();
+
+      this.createDeviceModal = $("#createDeviceModal").modal({
+        onShow: this.onCreateDeviceModalShow,
+        onHide: this.onCreateDeviceModalHide,
       });
+
+      this.revokeDeviceModal = $("#revokeDeviceModal").modal();
     },
     methods: {
       // createDevice creates the new device and displays the Download modal.
       createDevice() {
-        this.axios.post("/devices/", this.newDevice).then(resp => {
-          this.store.profile.devices.push(resp.data);
-          this.creatingDevice = false;
-          this.createdDevice = resp.data;
-          this.downloadModal.modal("show");
-          this.newDevice = {};
-        });
+        $("#downloadConfigButton").addClass("loading disabled");
+
+        this.axios.post("/devices/", this.newDevice)
+          .then(resp => {
+            this.store.profile.devices.push(resp.data);
+            this.creatingDevice = false;
+            this.createdDevice = resp.data;
+            this.downloadDevice(this.newDevice.os);
+            this.newDevice = {};
+          })
+          .catch(err => {
+            $("#downloadConfigButton").removeClass("loading disabled");
+            this.errors = err.response.data;
+          });
       },
 
       // deleteDevice displays the confirmation modal and deletes the given device.
@@ -215,21 +313,21 @@
       },
 
       // downloadDevice downloads the most recently created device.
-      downloadDevice(is_linux) {
-        window.location.href = `/api/devices/${this.createdDevice.id}?is_linux=${is_linux}`;
+      downloadDevice(os) {
+        window.location.href = `/api/devices/${this.createdDevice.id}?os=${os}`;
         this.createdDevice = {};
         this.hideModals();
+        this.toastr.success("Device Created.", "Your device was created.");
       },
 
-      startCreatingDevice() {
-        this.newDevice = {};
-        this.creatingDevice = true;
+      onCreateDeviceModalShow(el) {
+        $("#downloadConfigButton").removeClass("loading disabled");
+        $("#operatingSystemDropdown").dropdown("restore defaults");
+      },
 
-        // simulate a sleep for 100ms
-        new Promise(resolve => setTimeout(resolve, 100))
-          .then(() => {
-            $("#newDevice").focus();
-          });
+      onCreateDeviceModalHide(el) {
+        this.errors = {};
+        this.newDevice = {};
       }
     }, // #Methods
     computed: {

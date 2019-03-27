@@ -91,7 +91,7 @@ def server_config():
     return strings.remove_empty_lines(conf)
 
 
-def client_config(crt, key, is_linux=False):
+def client_config(crt, key, os="windows"):
     """
     Returns an OpenVPN client configuration for the given client certificate
     and private key. If `is_linux` is True then the proper DNS scripts commands
@@ -103,7 +103,7 @@ def client_config(crt, key, is_linux=False):
         "client_crt": crt,
         "client_key": key,
         "hostname": config.get("vpn_hostname"),
-        "is_linux": is_linux,
+        "os": os,
         "port": config.get("vpn_port"),
         "protocol": config.get("vpn_protocol"),
         "tls_auth_key": config.get("vpn_tls_auth_key"),
