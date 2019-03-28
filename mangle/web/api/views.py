@@ -4,6 +4,7 @@ from rest_framework import status, views, viewsets
 from rest_framework.response import Response
 from mangle.version import version
 from mangle.common import config, models, openvpn
+from mangle.common.utils import bash
 from mangle.web.api import authentication, permissions, serializers
 
 
@@ -29,7 +30,17 @@ class ApiInfoView(views.APIView):
         return Response({
             "app_organization": config.get("app_organization", "Mangle"),
             "app_version": version(),
+            "update_available": self.update_available(),
         })
+
+    def update_available(self):
+        """
+        Returns whether an updated version of the application is available.
+        :return:
+        """
+        code, out_avail, err = bash.run_output("git ls-remote origin master")
+        code, out_current, err = bash.run_output("git rev-parse master")
+        return out_avail.split()[0] != out_current
 
 
 #######################################

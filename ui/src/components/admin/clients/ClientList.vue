@@ -3,7 +3,7 @@
     <!-- #Header -->
     <div id="pageHeader" class="ui grid">
       <div class="seven wide column">
-        <h1>VPN Clients</h1>
+        <h2>VPN Clients</h2>
       </div>
       <div class="nine wide column page-actions">
         <div class="ui icon mini input search">

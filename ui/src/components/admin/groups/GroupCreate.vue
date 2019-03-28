@@ -1,8 +1,14 @@
 <template>
   <div class="ui row">
-    <div id="pageHeader">
-      <h2>New Group</h2>
-    </div>
+    <!-- #Header -->
+    <div id="pageHeader" class="ui grid">
+      <div class="four wide column" style="margin-top: 0.3em;">
+        <h2>Create Group</h2>
+      </div>
+      <div class="twelve wide column page-actions">
+
+      </div>
+    </div><!-- #Header -->
 
     <!-- #Form -->
     <div class="ui form">

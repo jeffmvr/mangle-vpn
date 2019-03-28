@@ -6,6 +6,7 @@ export default {
   appInitialized: false,
   appOrganization: "Mangle",
   appVersion: "",
+  updateAvailable: false,
   profile: {},
   events: new Vue(),
 }

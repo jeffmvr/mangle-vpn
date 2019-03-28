@@ -23,6 +23,10 @@ def show_app(request, *args, **kwargs):
     return render(request, "index.html")
 
 
+#######################################
+# Installation
+#######################################
+
 def show_install(request):
     """
     Renders the application installation page.
@@ -60,6 +64,10 @@ def process_install(request):
     return redirect("/")
 
 
+#######################################
+# Authentication
+#######################################
+
 @install_required
 def process_oauth(request):
     """
@@ -70,12 +78,6 @@ def process_oauth(request):
 
     if not user:
         return redirect("/logout")
-
-    models.Event.objects.create(
-        name="web.login",
-        user=user,
-        detail="Logged in to web application."
-    )
 
     login(request, user)
     return redirect("/")
@@ -143,6 +145,12 @@ def process_mfa(request):
     if not request.user.verify_mfa_code(code):
         request.session["errors"] = {"code": "Invalid authentication code."}
 
+        models.Event.objects.create(
+            name="web.error",
+            user=request.user,
+            detail="Incorrect two-factor authentication code"
+        )
+
         # if the user doesn't have two-factor authentication enabled on their
         # account then they get redirected to the two-factor setup page
         if not request.user.mfa_enabled:
@@ -155,6 +163,12 @@ def process_mfa(request):
     if not request.user.mfa_enabled:
         request.user.mfa_enabled = True
         request.user.save()
+
+    models.Event.objects.create(
+        name="web.login",
+        user=request.user,
+        detail="Logged in to web application."
+    )
 
     request.session["mfa_confirmed"] = True
     return redirect("/")

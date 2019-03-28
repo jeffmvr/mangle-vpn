@@ -1,6 +1,14 @@
 <template>
   <div class="ui row">
-    <h2>Invite Users</h2>
+    <!-- #Header -->
+    <div id="pageHeader" class="ui grid">
+      <div class="four wide column" style="margin-top: 0.3em;">
+        <h2>Invite Users</h2>
+      </div>
+      <div class="twelve wide column page-actions">
+
+      </div>
+    </div><!-- #Header -->
 
     <!-- #Form -->
     <div class="ui form">

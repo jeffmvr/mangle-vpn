@@ -57,8 +57,8 @@ Vue.filter('prettyDateTime', value => {
 
 // firewallRuleAny returns a string representing an 'any' value.
 Vue.filter('firewallRuleAny', value => {
-  if (value === "" || value === null) {
-    return "all";
+  if (value === "" || value === null || value === "all" ) {
+    return "All";
   }
   return value;
 });

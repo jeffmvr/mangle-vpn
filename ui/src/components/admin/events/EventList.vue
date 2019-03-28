@@ -3,7 +3,7 @@
     <!-- #Header -->
     <div id="pageHeader" class="ui grid">
       <div class="seven wide column">
-        <h1>Events</h1>
+        <h2>Events</h2>
       </div>
       <div class="nine wide column page-actions">
         <div class="ui icon mini input search">

@@ -43,6 +43,8 @@
       </div>
       <div style="margin-top: 1em; text-align: center;">
         Mangle VPN v{{ store.appVersion }}
+        <br>
+        <b v-if="store.updateAvailable === true">Update Available</b>
         (<a href="javascript:" @click="update">update</a>)
       </div>
     </div>
