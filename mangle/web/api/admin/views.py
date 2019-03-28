@@ -277,19 +277,6 @@ class VPNSettingView(BaseSettingView):
 
 
 #######################################
-# Stats
-#######################################
-
-class StatsView(AdminView):
-    def get(self, request):
-        """
-        Returns current system stats.
-        :return: Response
-        """
-        pass
-
-
-#######################################
 # Update
 #######################################
 

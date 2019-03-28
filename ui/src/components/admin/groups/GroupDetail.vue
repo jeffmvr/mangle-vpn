@@ -3,7 +3,7 @@
     <!-- #Header -->
     <div id="pageHeader" class="ui grid">
       <div class="seven wide column">
-        <h1>{{ group.name }}</h1>
+        <h2>{{ group.name }}</h2>
       </div>
       <div class="nine wide column page-actions">
         <router-link :to="{ name: 'UserCreate', params: { groupID: group.id } }" class="ui tiny basic green button">
@@ -115,40 +115,41 @@
 
     <!-- #FirewallRulesTab -->
     <div class="ui tab" data-tab="firewall">
-      <p style="text-align: justify;">
-        Firewall rules are evaluated from top to bottom, with all DENY rules being evaluated first followed by all
-        ALLOW rules. If traffic does not match any of the defined rules, then it will be <b>denied</b> by default.
-      </p>
       <table class="ui selectable table">
         <thead>
           <tr>
-            <th style="width: 12.5%;">Action</th>
+            <th style="width: 5%;"></th>
             <th style="width: 25%;">Destination</th>
-            <th style="width: 15%;">Protocol</th>
+            <th style="width: 20%; text-align: center;">Protocol</th>
             <th style="width: 35%;">Ports</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="rule in firewall" :class="['rule', {'disabled': !rule.is_enabled, positive: rule.action === 'ACCEPT', negative: rule.action !== 'ACCEPT'}]">
+          <tr v-for="rule in firewall" class="rule">
             <td>
-              <span v-if="rule.action === 'ACCEPT'">ALLOW</span>
-              <span v-if="rule.action === 'DROP'">DENY</span>
+              <span v-if="rule.action === 'ACCEPT'">
+                <i class="ui green check circle icon"></i>
+              </span>
+              <span v-if="rule.action === 'DROP'">
+                <i class="ui red ban icon"></i>
+              </span>
             </td>
             <td>{{ rule.destination | firewallRuleAny }}</td>
-            <td>{{ rule.protocol }}</td>
+            <td style="text-align: center;">{{ rule.protocol | firewallRuleAny }}</td>
             <td>{{ rule.port | firewallRuleAny }}</td>
             <td style="text-align: right;">
-              <button class="ui mini basic red button" @click="deleteFirewallRule(rule)">
+              <button class="ui mini basic icon red button" @click="deleteFirewallRule(rule)">
+                <i class="ui times icon"></i>
                 Delete
               </button>
             </td>
           </tr>
-          <tr class="rule negative">
-            <td>DENY</td>
-            <td>anywhere</td>
-            <td>all</td>
-            <td>all</td>
+          <tr class="rule disabled">
+            <td><i class="ui red ban icon"></i></td>
+            <td>Anywhere</td>
+            <td style="text-align: center;">All</td>
+            <td>All</td>
             <td></td>
           </tr>
         </tbody>
@@ -463,10 +464,6 @@
 </script>
 
 <style>
-  tr.rule {
-    font-weight: bold;
-  }
-
   tr.rule.disabled > td:last-child {
     pointer-events: auto !important;
   }

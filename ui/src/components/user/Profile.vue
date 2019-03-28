@@ -11,7 +11,7 @@
 
       <!-- #Authentication -->
       <h3 style="margin-top: 2.5em;">
-        <i class="lock icon"></i>OpenVPN Authentication
+        <i class="lock icon"></i>&nbsp;OpenVPN Authentication
       </h3>
 
       <div class="ui divider"></div>
@@ -19,22 +19,22 @@
         In order to connect to the OpenVPN server with your devices, you are required to authenticate before each session
         using the following credentials:
       </p>
-      <div class="ui message">
+      <div class="ui message" style="padding: 2em 0;">
         <table style="margin: 0 auto;">
           <tr>
             <td style="font-weight: bold; width: 25%;">Username:</td>
-            <td style="font-style: italic">{{ store.profile.email }}</td>
+            <td>{{ store.profile.email }}</td>
           </tr>
           <tr>
             <td style="font-weight: bold; width: 25%;">Password:</td>
-            <td style="font-style: italic">&lt;the two-factor auth code from your mobile app&gt;</td>
+            <td style="font-style: italic">the two-factor auth code from your mobile app</td>
           </tr>
         </table>
       </div><!-- #Authentication -->
 
       <!-- #ClientSetup -->
       <h3 style="margin-top: 2.5em;">
-        <i class="keyboard icon"></i>OpenVPN Client Setup
+        <i class="window restore icon"></i>&nbsp;OpenVPN Client Setup
       </h3>
 
       <div class="ui divider"></div>
@@ -192,15 +192,15 @@
         </p>
 
         <!-- #Credentials -->
-        <div class="ui message">
+        <div class="ui message" style="padding: 2em 0;">
           <table style="margin: 0 auto;">
             <tr>
               <td style="font-weight: bold; width: 25%;">Username:</td>
-              <td style="font-style: italic">{{ store.profile.email }}</td>
+              <td>{{ store.profile.email }}</td>
             </tr>
             <tr>
               <td style="font-weight: bold; width: 25%;">Password:</td>
-              <td style="font-style: italic">&lt;the two-factor auth code from your mobile app&gt;</td>
+              <td style="font-style: italic">the two-factor auth code from your mobile app</td>
             </tr>
           </table>
         </div><!-- #Credentials -->

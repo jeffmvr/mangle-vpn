@@ -27,6 +27,7 @@
         .then(resp => {
           this.store.appOrganization = resp.data.app_organization;
           this.store.appVersion = resp.data.app_version;
+          this.store.updateAvailable = resp.data.update_available;
         });
     },
     watch: {
@@ -45,6 +46,10 @@
 
 
 <style>
+  div#pageHeader > div > h2 {
+    margin-top: 0.4em;
+  }
+
   .ui.container, #mainContainer {
     width: 1072px !important;
   }

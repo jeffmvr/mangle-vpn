@@ -3,7 +3,7 @@
     <!-- #Header -->
     <div id="pageHeader" class="ui grid">
       <div class="seven wide column">
-        <h1>Settings</h1>
+        <h2>Settings</h2>
       </div>
       <div class="nine wide column page-actions">
 

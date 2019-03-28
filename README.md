@@ -12,14 +12,14 @@ framework backed by an SQLite database, and requires OpenVPN 2.4+.
 The frontend is uses Vue.js and the Semantic UI CSS framework.
 
 ## Features
-- Self-service OpenVPN device provisioning
+- Web based OpenVPN administration
+- Self-service OpenVPN device provisioning for end-users
 - User groups with group specific firewall rules
 - Certificate authority management
 - E-mail notifications
-- Two-factor authentication
-- OAuth2 authentication
-- Web based administration
-- Real-time control of OpenVPN clients
+- Google OAuth2 authentication
+- Mandatory two-factor authentication
+- Real-time monitoring and control of OpenVPN clients
 
 ## Getting Started
 *The application should be installed on a fresh machine that is dedicated to 
@@ -115,9 +115,8 @@ machine.
 ## Todo List
 The following items are in no particular order and represent features that are
 to be added in the future.
-- [ ] Support additional OAuth2 providers
+- [x] Add web-based initial setup
 - [ ] Support LDAP authentication
-- [x] Add web-based setup
 - [x] Support setting specific operations (instead of all settings at once)
 - [ ] REST API for developer consumption
 - [x] Update application from web UI
