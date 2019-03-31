@@ -3,6 +3,7 @@ import uuid
 import pyotp
 
 from django.contrib.auth.models import AbstractBaseUser
+from django.utils.crypto import get_random_string
 from django.db import models
 from django.utils import timezone
 from mangle.common import config, iptables, managers, pki
@@ -56,6 +57,8 @@ class User(AbstractBaseUser, Model):
     mfa_enabled = models.BooleanField(blank=True, default=False)
     mfa_enforced = models.NullBooleanField(blank=True, default=None, null=True)
     mfa_secret = models.CharField(blank=True, default="", max_length=255)
+    password_change = models.BooleanField(blank=True, default=False)
+    password_expire = models.DateTimeField(blank=True, default=None, null=True)
 
     objects = managers.UserManager()
 
@@ -96,6 +99,19 @@ class User(AbstractBaseUser, Model):
             name=self.email,
             issuer_name="{} VPN".format(organization),
         )
+
+    def reset_password(self):
+        """
+        Resets the user's password and forces it to be changed on next login.
+        :return: str
+        """
+        password = get_random_string(24)
+
+        self.set_password(password)
+        self.password_change = True
+        self.password_expire = timezone.now() + timezone.timedelta(days=7)
+
+        return password
 
     def save(self, *args, **kwargs):
         """

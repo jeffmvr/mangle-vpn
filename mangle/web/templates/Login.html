@@ -53,26 +53,6 @@
     <a href="/" class="header item">
       {{ organization }} VPN
     </a>
-
-    <div class="left menu">
-
-    </div>
-
-    <!-- #RightMenu -->
-    <div class="right menu">
-      <div class="ui item dropdown">
-        <div class="text">
-          <i class="ui user icon"></i>
-          {{ user.email }}
-        </div>
-        <i class="dropdown icon"></i>
-        <div class="menu">
-          <a href="/logout" class="item">
-            Logout
-          </a>
-        </div>
-      </div>
-    </div><!-- #RightMenu -->
   </div>
 </div>
 
@@ -81,34 +61,42 @@
     <div class="ui segments">
       <div class="ui title segment">
         <h3>
-          <i class="lock icon"></i>
-          Two-Factor Authentication
+          <i class="user icon"></i>
+          User Login
         </h3>
       </div>
 
-      <form class="ui form" action="mfa/process" method="post">
+      <form class="ui form" action="login/process" method="post">
         {% csrf_token %}
 
         <div class="ui body segment" style="border: none;">
-          <p>
-            In order to complete the authentication process, you must provide
-            your current two-factor authentication code from you mobile app.
-          </p>
-
-          <div class="ui input fluid large" style="margin: 1.5em auto; width: 50%;">
-            <input type="text" id="code" autocomplete="off" name="code" style="text-align: center; letter-spacing: 0.66em;">
-          </div>
-
-          <p class="error" style="text-align: center; width: 100%;">
-            {{ errors.code }}
-          </p>
-
+          <table style="width: 75%; margin: 0 auto;">
+            <tr>
+              <td>Username</td>
+              <td>
+                <div class="ui field">
+                  <input type="text" id="username" name="username">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Password</td>
+              <td>
+                <div class="ui field">
+                  <input type="password" name="password">
+                </div>
+              </td>
+            </tr>
+          </table>
           <div class="form-actions">
-            <a href="/logout" class="ui button">
-              Cancel
+            {% if oauth2_provider == "google" %}
+            <a href="/login/google" class="ui basic button">
+              <i class="icon google"></i>
+              Login with Google
             </a>
+            {% endif %}
             <button type="submit" class="ui button green">
-              Submit
+              Login
             </button>
           </div>
         </div>
@@ -117,15 +105,8 @@
   </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-
 <script>
-  $(document).ready(function() {
-    $(".ui.dropdown").dropdown();
-    document.getElementById("code").focus();
-  });
+  document.getElementById("username").focus();
 </script>
-
 </body>
 </html>

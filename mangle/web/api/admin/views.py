@@ -43,22 +43,32 @@ class UserAdminViewSet(AdminView, viewsets.ModelViewSet):
 
         users = serializer.save()
 
-        # send e-mail notifications if desired
-        if request.data.get("notify", False):
-            organization = config.get("app_organization")
+        # contains the e-mail and password that is returned to the UI
+        emails_passwords = []
 
-            for user in users:
+        # send e-mail notifications if desired
+        for user in users:
+            emails_passwords.append({
+                "email": user.email,
+                "password": user.temp_password,
+            })
+
+            if request.data.get("notify", False):
+                organization = config.get("app_organization")
+
                 mail.send_template(
                     recipient=user.email,
                     subject="Welcome to the {} VPN!".format(organization),
                     template="mail/Welcome.html",
                     data={
+                        "email": user.email,
                         "organization": organization,
+                        "password": user.temp_password,
                         "url": config.url(),
                     }
                 )
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(emails_passwords, status=status.HTTP_201_CREATED)
 
     @action(["DELETE"], detail=True)
     def mfa(self, request, pk=None):
@@ -72,6 +82,31 @@ class UserAdminViewSet(AdminView, viewsets.ModelViewSet):
         user.reset_mfa()
         user.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(["DELETE"], detail=True)
+    def password(self, request, pk=None):
+        """
+        Resets the user's password and forces them to change it.
+        :return: Response
+        """
+        user = self.get_object()
+        password = user.reset_password()
+        user.save()
+
+        # send e-mail notifying user
+        mail.send_template(
+            recipient=user.email,
+            subject="{} VPN Password Reset".format(config.get("app_organization")),
+            template="mail/Password.html",
+            data={
+                "email": user.email,
+                "organization": config.get("app_organization"),
+                "password": password,
+                "url": config.url(),
+            }
+        )
+
+        return Response({"password": password})
 
     @action(["GET"], detail=True)
     def devices(self, request, pk=None):

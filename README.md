@@ -17,7 +17,7 @@ The frontend is uses Vue.js and the Semantic UI CSS framework.
 - User groups with group specific firewall rules
 - Certificate authority management
 - E-mail notifications
-- Google OAuth2 authentication
+- Local and OAuth2 authentication supported
 - Optional two-factor authentication enforcement at the group and user level
 - Real-time monitoring and control of OpenVPN clients
 
@@ -25,38 +25,32 @@ The frontend is uses Vue.js and the Semantic UI CSS framework.
 *The application should be installed on a fresh machine that is dedicated to 
 running nothing but the web application and OpenVPN server.*
 
-### Authentication
-Authentication is performed using one of the supported OAuth2 providers listed
-below and you must first obtain an OAuth2 **client ID** and **client secret**
-before you will be allowed to login.
-
-You must also add the following URL to your **authorized redirect URIs**:
-```bash
-https://<your-hostname>/oauth
-```
-
-**Supported OAuth2 Providers:**
-- Google
-
 ### Installation
-#### Notes
-Before beginning the installation, please note:
-- You must have **Git** installed
-- If **SELinux** is enabled, you must provide your own policies
-- It is recommended that you install the application in **/opt**, but if 
-installing in a home directory, ensure permissions on **all** parent
-directories allow for the root user to read
-
 Clone the repository and run the install script:
 ```bash
 $ git clone https://github.com/jeffmvr/mangle-vpn.git
 $ cd mangle-vpn
 $ sudo ./install.sh
 ``` 
-Once the installation script has finished, please navigate to the frontend
-application in your browser to perform the initial setup. 
+Once the installation script has finished, please navigate to the web
+application in your browser to perform the initial setup.
 
 ## Configuration
+
+### OAuth2
+In addition to authentication using the local application database, you can
+configure one of the OAuth2 providers from the list below to perform user
+authentication.
+
+This requires that you obtain an OAuth2 **client ID** and **client secret**
+from your OAuth2 provider and add the following OAuth2 callback URL to your
+providers list of approved callbacks:
+```bash
+https://<your-hostname>/oauth
+```
+
+**Supported OAuth2 Providers:**
+- Google
 
 ### SSL
 By default, a self-signed SSL certificate is created for the web application. 
@@ -117,10 +111,11 @@ The following items are in no particular order and represent features that are
 to be added in the future.
 - [x] Add web-based initial setup
 - [ ] Support LDAP authentication
-- [ ] Support local DB authentication
+- [x] Support local DB authentication
 - [x] Add checking and updating application from Admin UI
 - [x] Support setting specific operations (instead of all settings at once)
 - [ ] REST API for developer consumption
 - [x] Update application from web UI
 - [ ] Automate the configuration and use of Let's Encrypt from web UI
 - [x] Add license
+- [ ] Move users to new group upon deletion of existing group

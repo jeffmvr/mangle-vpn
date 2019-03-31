@@ -16,7 +16,7 @@
         <i class="wrench horizontal icon let"></i> General
       </a>
       <a class="item" data-tab="auth">
-        <i class="lock icon left"></i> Authentication
+        <i class="lock icon left"></i> OAuth2
       </a>
       <a class="item" data-tab="mail">
         <i class="envelope icon left"></i> E-mail
@@ -156,205 +156,175 @@
       </table>
     </div><!-- #SSLPrivateKey -->
 
-     <!-- #OAuth2 -->
+    <!-- #OAuth2 -->
     <div class="ui tab form" data-tab="auth" style="padding: 1em;">
       <table class="ui very basic table">
         <tbody>
-          <!-- #OAuth2Provider -->
-          <form-table-row>
-            <template slot="label">
-              Authentication Type
-            </template>
-            <template slot="help">
-              The authentication method or source that will be used when authenticating users
-              logging into the web application and connecting to the VPN server.
-            </template>
-            <template slot="input">
-              <select id="authType" class="ui dropdown" v-model="settings.auth_type">
-              <option value="oauth2">
-                OAuth2
+        <!-- #OAuth2Provider -->
+        <form-table-row>
+          <template slot="label">
+            OAuth2 Provider
+          </template>
+          <template slot="help">
+            The OAuth2 provider that will be used when authenticating users.
+          </template>
+          <template slot="input">
+            <select id="oauth2Provider" class="ui dropdown" v-model="settings.oauth2_provider">
+              <option value="none">
+                Disabled
+              </option>
+              <option value="google">
+                Google
               </option>
             </select>
-              <p class="form-error">
-                {{ errors.app_auth_type | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #OAuth2Provider -->
+            <p class="form-error">
+              {{ errors.oauth2_provider | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #OAuth2Provider -->
+
+        <!-- #OAuth2ClientID -->
+        <form-table-row v-show="settings.oauth2_provider !== 'none'">
+          <template slot="label">
+            OAuth2 Client ID
+          </template>
+          <template slot="help">
+            The OAuth2 client ID from a supported OAuth2 provider.
+          </template>
+          <template slot="input">
+            <input type="text" class="input" v-model="settings.oauth2_client_id">
+            <p class="form-error">
+              {{ errors.oauth2_client_id | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #OAuth2ClientID -->
+
+        <!-- #OAuth2ClientSecret -->
+        <form-table-row v-show="settings.oauth2_provider !== 'none'">
+          <template slot="label">
+            OAuth2 Client Secret
+          </template>
+          <template slot="help">
+            The OAuth2 client secret from a supported OAuth2 provider.
+          </template>
+          <template slot="input">
+            <input type="text" class="input" v-model="settings.oauth2_client_secret">
+            <p class="form-error">
+              {{ errors.oauth2_client_secret | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #OAuth2ClientSecret -->
         </tbody>
       </table>
-
-      <br>
-
-      <!-- #OAuth2 -->
-      <div v-show="settings.auth_type === 'oauth2'">
-        <h3>OAuth2 Settings</h3>
-        <div class="ui divider"></div>
-
-        <table class="ui very basic table">
-          <tbody>
-            <!-- #OAuth2Provider -->
-            <form-table-row>
-              <template slot="label">
-                OAuth2 Provider
-              </template>
-              <template slot="help">
-                The OAuth2 provider that will be used when authenticating users.
-              </template>
-              <template slot="input">
-                <select id="oauth2Provider" class="ui dropdown" v-model="settings.oauth2_provider">
-                  <option value="google">
-                    Google
-                  </option>
-                </select>
-                <p class="form-error">
-                  {{ errors.oauth2_client_id | error }}
-                </p>
-              </template>
-            </form-table-row><!-- #OAuth2Provider -->
-
-            <!-- #OAuth2ClientID -->
-            <form-table-row>
-              <template slot="label">
-                OAuth2 Client ID
-              </template>
-              <template slot="help">
-                The OAuth2 client ID from a supported OAuth2 provider.
-              </template>
-              <template slot="input">
-                <input type="text" class="input" v-model="settings.oauth2_client_id">
-                <p class="form-error">
-                  {{ errors.oauth2_client_id | error }}
-                </p>
-              </template>
-            </form-table-row><!-- #OAuth2ClientID -->
-
-            <!-- #OAuth2ClientSecret -->
-            <form-table-row>
-              <template slot="label">
-                OAuth2 Client Secret
-              </template>
-              <template slot="help">
-                The OAuth2 client secret from a supported OAuth2 provider.
-              </template>
-              <template slot="input">
-                <input type="text" class="input" v-model="settings.oauth2_client_secret">
-                <p class="form-error">
-                  {{ errors.oauth2_client_secret | error }}
-                </p>
-              </template>
-            </form-table-row><!-- #OAuth2ClientSecret -->
-          </tbody>
-        </table>
-      </div><!-- #OAuth2 -->
-    </div>
+    </div><!-- #OAuth2 -->
 
     <!-- #E-mail -->
     <div class="ui tab form" data-tab="mail" style="padding: 1em;">
       <table class="ui very basic table">
         <tbody>
-          <!-- #SmtpServer -->
-          <form-table-row>
-            <template slot="label">
-              Server
-            </template>
-            <template slot="help">
-              The hostname or IP address of the SMTP server that will be used to
-              send application e-mails.
-            </template>
-            <template slot="input">
-              <input type="text" class="input" v-model="settings.smtp_host">
-              <p class="form-error">
-                {{ errors.smtp_host | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #SmtpServer -->
+        <!-- #SmtpServer -->
+        <form-table-row>
+          <template slot="label">
+            Server
+          </template>
+          <template slot="help">
+            The hostname or IP address of the SMTP server that will be used to
+            send application e-mails.
+          </template>
+          <template slot="input">
+            <input type="text" class="input" v-model="settings.smtp_host">
+            <p class="form-error">
+              {{ errors.smtp_host | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #SmtpServer -->
 
-          <!-- #SmtpPort -->
-          <form-table-row>
-            <template slot="label">
-              Port
-            </template>
-            <template slot="help">
-              The port number used by the SMTP server to accept incoming request. This
-              will usually be 25, 465, or 587.
-            </template>
-            <template slot="input">
-              <input type="text" class="input" v-model="settings.smtp_port">
-              <p class="form-error">
-                {{ errors.smtp_port | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #SmtpPort -->
+        <!-- #SmtpPort -->
+        <form-table-row>
+          <template slot="label">
+            Port
+          </template>
+          <template slot="help">
+            The port number used by the SMTP server to accept incoming request. This
+            will usually be 25, 465, or 587.
+          </template>
+          <template slot="input">
+            <input type="text" class="input" v-model="settings.smtp_port">
+            <p class="form-error">
+              {{ errors.smtp_port | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #SmtpPort -->
 
-          <!-- #SmtpUsername -->
-          <form-table-row>
-            <template slot="label">
-              Username
-            </template>
-            <template slot="help">
-              The username for the account that will be used to send all
-              application e-mails.
-            </template>
-            <template slot="input">
-              <input type="text" class="input" v-model="settings.smtp_username">
-              <p class="form-error">
-                {{ errors.smtp_username | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #SmtpUsername -->
+        <!-- #SmtpUsername -->
+        <form-table-row>
+          <template slot="label">
+            Username
+          </template>
+          <template slot="help">
+            The username for the account that will be used to send all
+            application e-mails.
+          </template>
+          <template slot="input">
+            <input type="text" class="input" v-model="settings.smtp_username">
+            <p class="form-error">
+              {{ errors.smtp_username | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #SmtpUsername -->
 
-          <!-- #SmtpPassword -->
-          <form-table-row>
-            <template slot="label">
-              Password
-            </template>
-            <template slot="help">
-              The password for the account that will be used to send all
-              application e-mails.
-            </template>
-            <template slot="input">
-              <input type="password" class="input" v-model="settings.smtp_password">
-              <p class="form-error">
-                {{ errors.smtp_password | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #SmtpPassword -->
+        <!-- #SmtpPassword -->
+        <form-table-row>
+          <template slot="label">
+            Password
+          </template>
+          <template slot="help">
+            The password for the account that will be used to send all
+            application e-mails.
+          </template>
+          <template slot="input">
+            <input type="password" class="input" v-model="settings.smtp_password">
+            <p class="form-error">
+              {{ errors.smtp_password | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #SmtpPassword -->
 
-          <!-- #SmtpReplyAddress -->
-          <form-table-row>
-            <template slot="label">
-              Sender Name
-            </template>
-            <template slot="help">
-              The name that is displayed to the user in the sender field. This should
-              be a user-friendly name that describes your organization.
-            </template>
-            <template slot="input">
-              <input type="text" class="input" v-model="settings.smtp_reply_address">
-              <p class="form-error">
-                {{ errors.smtp_reply_address | error }}
-              </p>
-            </template>
-          </form-table-row><!-- #SmtpPassword -->
+        <!-- #SmtpReplyAddress -->
+        <form-table-row>
+          <template slot="label">
+            Sender Name
+          </template>
+          <template slot="help">
+            The name that is displayed to the user in the sender field. This should
+            be a user-friendly name that describes your organization.
+          </template>
+          <template slot="input">
+            <input type="text" class="input" v-model="settings.smtp_reply_address">
+            <p class="form-error">
+              {{ errors.smtp_reply_address | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #SmtpPassword -->
 
-          <!-- #SmtpTest -->
-          <form-table-row style="background: #fafafa;">
-            <template slot="label">
-              Send Test E-mail
-            </template>
-            <template slot="help">
-              Test your SMTP configuration by sending a test e-mail to this address. If
-              you do not receive an e-mail within a minute, check your settings.
-            </template>
-            <template slot="input">
-              <input type="text" class="input" v-model="smtpTestEmail">
-              <div style="width: 100%; margin-top: 0.5em; text-align: right">
-                <button class="ui button tiny" @click="sendTestEmail">
-                  Send Test E-mail
-                </button>
-              </div>
-            </template>
-          </form-table-row><!-- #SmtpPassword -->
+        <!-- #SmtpTest -->
+        <form-table-row style="background: #fafafa;">
+          <template slot="label">
+            Send Test E-mail
+          </template>
+          <template slot="help">
+            Test your SMTP configuration by sending a test e-mail to this address. If
+            you do not receive an e-mail within a minute, check your settings.
+          </template>
+          <template slot="input">
+            <input type="text" class="input" v-model="smtpTestEmail">
+            <div style="width: 100%; margin-top: 0.5em; text-align: right">
+              <button class="ui button tiny" @click="sendTestEmail">
+                Send Test E-mail
+              </button>
+            </div>
+          </template>
+        </form-table-row><!-- #SmtpPassword -->
         </tbody>
       </table><!-- #E-mail -->
     </div>
@@ -590,7 +560,6 @@
               $("#vpnNatInterfaceDropdown").dropdown("set selected", this.settings.vpn_nat_interface);
               break;
             case "auth":
-              $("#authType").dropdown("set selected", this.settings.auth_type);
               $("#oauth2Provider").dropdown("set selected", this.settings.oauth2_provider);
               break;
           }

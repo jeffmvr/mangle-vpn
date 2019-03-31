@@ -11,7 +11,7 @@
           <input class="input" type="text" placeholder="Search Users..." v-model="search" @keyup="performSearchOnType(getUsers)">
         </div>
         <a href="/#/admin/users/invite" class="ui tiny green button">
-          <i class="plus icon"></i> Invite Users
+          <i class="plus icon"></i> Create Users
         </a>
       </div>
     </div><!-- #Header -->
