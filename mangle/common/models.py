@@ -54,6 +54,7 @@ class User(AbstractBaseUser, Model):
     is_enabled = models.BooleanField(blank=True, default=True)
     name = models.CharField(blank=True, default="", max_length=255)
     mfa_enabled = models.BooleanField(blank=True, default=False)
+    mfa_enforced = models.NullBooleanField(blank=True, default=None, null=True)
     mfa_secret = models.CharField(blank=True, default="", max_length=255)
 
     objects = managers.UserManager()
@@ -73,6 +74,15 @@ class User(AbstractBaseUser, Model):
         :return: bool
         """
         return self.is_enabled and self.group.is_enabled
+
+    @property
+    def mfa_required(self):
+        """
+        Returns whether the user is required to use two-factor authentication.
+        :return: bool
+        """
+        return (self.mfa_enforced is not False and
+                self.group.mfa_enforced is True)
 
     @property
     def mfa_url(self):
@@ -224,6 +234,7 @@ class Group(Model):
     description = models.TextField(blank=True, default="")
     is_enabled = models.BooleanField(blank=True, default=True)
     max_devices = models.IntegerField(blank=True, default=1)
+    mfa_enforced = models.BooleanField(blank=True, default=True)
     name = models.CharField(db_index=True, max_length=32, unique=True)
 
     objects = managers.GroupManager()

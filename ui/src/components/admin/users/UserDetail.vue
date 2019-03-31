@@ -124,6 +124,25 @@
               </p>
             </template>
           </form-table-row><!-- #Group -->
+
+          <!-- #TwoFactorAuthentication -->
+          <form-table-row>
+            <template slot="label">
+              Two-Factor Authentication
+            </template>
+            <template slot="help">
+              Determines whether the is required to setup and use two-factor authentication
+              when logging into the web application and connecting to the OpenVPN server. This
+              will override any group settings.
+            </template>
+            <template slot="input">
+              <select id="mfaEnforcedDropdown" class="ui dropdown" v-model="user.mfa_enforced">
+                <option value="inherit">Inherit From Group</option>
+                <option :value="true">Required</option>
+                <option :value="false">Not Required</option>
+              </select>
+            </template>
+          </form-table-row><!-- #TwoFactorAuthentication -->
         </tbody>
       </table>
 
@@ -306,6 +325,12 @@
             this.user = resp.data;
             $("#userIsAdmin").dropdown("set selected", this.user.is_admin);
             $("#userIsEnabled").dropdown("set selected", this.user.is_enabled);
+
+            if (this.user.mfa_enforced === null) {
+              this.user.mfa_enforced = "inherit";
+            }
+
+            $("#mfaEnforcedDropdown").dropdown("set selected", this.user.mfa_enforced);
             // Retrieve the list of application groups to populate the dropdown
             // and set the user's group. This is done after the user is retrieved
             // to ensure the dropdown is proerly populated
@@ -322,6 +347,10 @@
        * @returns {null}
        */
       updateUser() {
+        if (this.user.mfa_enforced === "inherit") {
+          this.user.mfa_enforced = null;
+        }
+
         this.axios.put(`/admin/users/${this.$route.params.id}/`, this.user)
           .then(resp => {
             this.user = resp.data;

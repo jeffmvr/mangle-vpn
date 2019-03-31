@@ -81,4 +81,6 @@ class ProfileSerializer(serializers.ModelSerializer):
                   "is_admin",
                   "is_enabled",
                   "last_login",
-                  "mfa_enabled", )
+                  "mfa_enabled",
+                  "mfa_enforced",
+                  "mfa_required", )
