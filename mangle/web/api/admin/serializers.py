@@ -47,6 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
                   "is_enabled",
                   "last_login",
                   "mfa_enabled",
+                  "mfa_enforced",
                   "name", )
 
 
@@ -128,6 +129,7 @@ class GroupSerializer(serializers.ModelSerializer):
                   "description",
                   "is_enabled",
                   "max_devices",
+                  "mfa_enforced",
                   "name", )
 
 

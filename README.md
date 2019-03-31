@@ -18,7 +18,7 @@ The frontend is uses Vue.js and the Semantic UI CSS framework.
 - Certificate authority management
 - E-mail notifications
 - Google OAuth2 authentication
-- Mandatory two-factor authentication
+- Optional two-factor authentication enforcement at the group and user level
 - Real-time monitoring and control of OpenVPN clients
 
 ## Getting Started
@@ -117,6 +117,8 @@ The following items are in no particular order and represent features that are
 to be added in the future.
 - [x] Add web-based initial setup
 - [ ] Support LDAP authentication
+- [ ] Support local DB authentication
+- [x] Add checking and updating application from Admin UI
 - [x] Support setting specific operations (instead of all settings at once)
 - [ ] REST API for developer consumption
 - [x] Update application from web UI

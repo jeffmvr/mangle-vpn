@@ -99,6 +99,25 @@
               </p>
             </template>
           </form-table-row><!-- #MaxDevices -->
+
+          <!-- #TwoFactorAuthentication -->
+          <form-table-row>
+            <template slot="label">
+              Two-Factor Authentication
+            </template>
+            <template slot="help">
+              Determines whether users in the group are required to setup and use
+              two-factor authentication when logging into the web application and
+              connecting to the OpenVPN server. This can be overridden for specific
+              users in the user settings.
+            </template>
+            <template slot="input">
+              <select id="mfaEnforcedDropdown" class="ui dropdown" v-model="group.mfa_enforced">
+                <option :value="true">Required</option>
+                <option :value="false">Not Required</option>
+              </select>
+            </template>
+          </form-table-row><!-- #TwoFactorAuthentication -->
         </tbody>
       </table>
 
@@ -372,6 +391,7 @@
           .then(resp => {
             this.group = resp.data;
             $("#statusDropdown").dropdown("set selected", this.group.is_enabled);
+            $("#mfaEnforcedDropdown").dropdown("set selected", this.group.mfa_enforced);
           });
       },
 

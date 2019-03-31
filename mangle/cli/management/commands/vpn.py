@@ -121,7 +121,7 @@ def vpn_client_authenticate():
         )
         sys.exit(1)
 
-    if not user.verify_mfa_code(password):
+    if user.mfa_required and not user.verify_mfa_code(password):
         models.Event.objects.create(
             name="vpn.error",
             user=user,
@@ -143,6 +143,7 @@ def vpn_client_connect():
     trusted_port = os.environ["trusted_port"]
 
     device = models.Device.objects.by_fingerprint(fingerprint)
+
     if not device:
         print("unknown device with fingerprint: {}".format(fingerprint))
         sys.exit(1)

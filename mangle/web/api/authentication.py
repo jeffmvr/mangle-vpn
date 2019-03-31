@@ -26,9 +26,10 @@ class ApiSessionAuthentication(CredentialAuthentication):
     def authenticate(self, request):
         user = super().authenticate(request)
 
-        if not user.mfa_enabled:
-            raise exceptions.AuthenticationFailed("MfaNotEnabled")
-        if not request.session.get("mfa_confirmed", False):
-            raise exceptions.AuthenticationFailed("MfaNotConfirmed")
+        if user.mfa_required:
+            if not user.mfa_enabled:
+                raise exceptions.AuthenticationFailed("MfaNotEnabled")
+            if not request.session.get("mfa_confirmed", False):
+                raise exceptions.AuthenticationFailed("MfaNotConfirmed")
 
         return user, None
