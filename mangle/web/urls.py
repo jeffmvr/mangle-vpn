@@ -5,7 +5,12 @@ from mangle.web import views
 urlpatterns = [
     path("", views.show_app),
     path("login", views.show_login),
+    path("login/process", views.process_login),
+    path("login/google", views.show_google_login),
     path("logout", views.process_logout),
+    path("password", views.show_password_reset),
+    path("password/process", views.process_password_reset),
+    path("password/reset", views.reset_password),
     path("oauth", views.process_oauth),
     path("install", views.show_install),
     path("install/process", views.process_install),

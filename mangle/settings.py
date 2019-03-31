@@ -16,6 +16,7 @@ DEBUG = os.environ.get("MANGLE_DEBUG", False)
 ALLOWED_HOSTS = ['*']
 
 AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
     "mangle.web.authentication.oauth2.backend.OAuth2Backend",
 ]
 

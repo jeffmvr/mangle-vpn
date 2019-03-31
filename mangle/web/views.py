@@ -20,6 +20,9 @@ def show_app(request, *args, **kwargs):
     Renders the web application.
     :return: Response
     """
+    if request.user.password_change:
+        return redirect("/password")
+
     return render(request, "index.html")
 
 
@@ -55,7 +58,7 @@ def process_install(request):
     # save() updates the application settings and creates the administrator
     # user that was defined in the form and log the user in
     admin = form.save()
-    login(request, admin)
+    login(request, admin, "django.contrib.auth.backends.ModelBackend")
 
     # set the ``app_installed`` setting to True to indicate installation has
     # been performed and the application is ready for use before redirecting
@@ -69,6 +72,42 @@ def process_install(request):
 #######################################
 
 @install_required
+def show_google_login(request):
+    """
+    Redirects the user to the Google OAuth2 page.
+    :return: Response
+    """
+    return redirect_login(request)
+
+
+@install_required
+def show_login(request):
+    """
+    Renders the application login page.
+    :return: Response
+    """
+    return render(request, "Login.html")
+
+
+@install_required
+def process_login(request):
+    """
+    Processes a user login attempt via username and password.
+    :return: Response
+    """
+    username = request.POST["username"]
+    password = request.POST["password"]
+
+    user = authenticate(request, username=username, password=password)
+
+    if not user:
+        return redirect("/logout")
+
+    login(request, user, "django.contrib.auth.backends.ModelBackend")
+    return redirect("/")
+
+
+@install_required
 def process_oauth(request):
     """
     Processes an OAuth2 authentication callback request.
@@ -79,17 +118,8 @@ def process_oauth(request):
     if not user:
         return redirect("/logout")
 
-    login(request, user)
+    login(request, user, "mangle.web.authentication.oauth2.backend.OAuth2Backend")
     return redirect("/")
-
-
-@install_required
-def show_login(request):
-    """
-    Displays the application login page.
-    :return: Response
-    """
-    return redirect_login(request)
 
 
 @install_required
@@ -99,7 +129,51 @@ def process_logout(request):
     :return: Response
     """
     logout(request)
-    return redirect_login(request)
+    return redirect("/login")
+
+
+@install_required
+@mfa_required
+def reset_password(request):
+    """
+    Resets the current user's password.
+    :return: Response
+    """
+    request.user.password_change = True
+    request.user.save()
+    return redirect("/password")
+
+
+@install_required
+@mfa_required
+def show_password_reset(request):
+    """
+    Renders the password reset page.
+    :return: Response
+    """
+    return render(request, "Password.html")
+
+
+@install_required
+@mfa_required
+def process_password_reset(request):
+    """
+    Renders the password reset page.
+    :return: Response
+    """
+    form = forms.PasswordForm(request.POST)
+    if not form.is_valid():
+        save_form(request, form)
+        return redirect("/password")
+
+    request.user.set_password(form.cleaned_data["password"])
+    request.user.password_change = False
+    request.user.save()
+
+    login(request, request.user, "django.contrib.auth.backends.ModelBackend")
+    request.session["mfa_confirmed"] = True
+
+    return redirect("/")
 
 
 #######################################
@@ -185,6 +259,8 @@ def base_context_processor(request):
     """
     return {
         "organization": config.get("app_organization", "Mangle"),
+        "form": request.session.pop("form", {}),
+        "oauth2_provider": config.get("oauth2_provider", None),
     }
 
 

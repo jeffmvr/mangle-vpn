@@ -6,7 +6,10 @@
         <h2>{{ user.email }}</h2>
       </div>
       <div class="twelve wide column page-actions">
-        <button class="ui tiny button" @click="showModal('resetTwoFactorModal')">
+        <button class="ui basic tiny orange button" @click="showModal('resetPasswordModal')">
+          Reset Password
+        </button>
+        <button class="ui basic tiny orange button" @click="showModal('resetTwoFactorModal')">
           Reset 2FA
         </button>
         <button class="ui tiny negative button" @click="showModal('deleteUserModal')">
@@ -52,11 +55,11 @@
               Full Name
             </template>
             <template slot="help">
-              The user's full name as set in their OAuth2 account profile and
-              will remain blank until the user logs in for the first time.
+              The user's full name. If this is left blank and the user logs in via an
+              OAuth2 provider, the name will be automatically populated.
             </template>
             <template slot="input">
-              <input type="text" class="input" v-model="user.name" disabled="disabled">
+              <input type="text" class="input" v-model="user.name">
               <p class="form-error">
                 {{ errors.name | error }}
               </p>
@@ -186,6 +189,62 @@
       </div>
     </div> <!-- # Devices -->
 
+    <!-- #ResetPasswordModal -->
+    <div id="resetPasswordModal" class="ui basic modal">
+      <div class="ui icon header">
+        <i class="exclamation triangle icon red"></i>
+        Reset Password Confirmation
+      </div>
+      <div class="content" style="text-align: center;">
+        <p>
+          Resetting the user's password will randomly generate a random password
+          and force the user to set a new one.
+        </p>
+        <p><b>Are you sure you want to reset the user's password?</b></p>
+      </div>
+      <div class="actions" style="text-align: center">
+        <button class="ui basic inverted button" @click="hideModals()">
+          Cancel
+        </button>
+        <button class="ui basic button red" @click="resetPassword()">
+          Reset Password
+        </button>
+      </div>
+    </div><!-- #ResetPasswordModal -->
+
+    <!-- #PasswordUpdateModal -->
+    <div id="passwordUpdateModal" class="ui tiny modal">
+      <i class="close icon"></i>
+      <div class="header">
+        Password Changed
+      </div>
+      <div class="content">
+        <p>
+          The user's password has been reset. If you have setup application e-mails, then the
+          user will receive an e-mail with their new password and will be forced to change it
+          upon logging in.
+        </p>
+
+        <table class="ui basic table">
+          <thead>
+            <tr>
+              <th>E-mail Address</th>
+              <th>Password</th>
+            </tr>
+          </thead>
+          <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ newPassword }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="actions" style="text-align: center;">
+        <button class="ui primary button" @click="hideModals">
+          Close
+        </button>
+      </div>
+    </div><!-- #PasswordUpdateModal -->
+
     <!-- #DeleteUserModal -->
     <div id="deleteUserModal" class="ui basic modal">
       <div class="ui icon header">
@@ -274,6 +333,7 @@
     data() {
       return {
         deleteUserModal: null,
+        passwordUpdateModal: null,
         resetPasswordModal: null,
         resetTwoFactorModal: null,
         revokeDeviceModal: null,
@@ -281,22 +341,25 @@
         errors: {},
         user: {},
         groups: [],
+        newPassword: "",
       }
     },
     mounted() {
       this.getUser();
 
-      // Delete user confirmation modal
       this.deleteUserModal = $("#deleteUserModal").modal({
         autofocus: false,
       });
 
-      // Two-factor authentication reset confirmation modal
       this.resetTwoFactorModal = $("#resetTwoFactorModal").modal({
-        autofocus: false
+        autofocus: false,
       });
 
-      // Revoked device confirmation modal
+      this.resetPasswordModal = $("#resetPasswordModal").modal({
+        autofocus: false,
+      })
+
+      this.passwordUpdateModal = $("#passwordUpdateModal").modal();
       this.revokeDeviceModal = $("#revokeDeviceModal");
 
       // Reloads the data for the active tab
@@ -358,6 +421,18 @@
           })
           .catch(err => {
             this.errors = err.response.data;
+          });
+      },
+
+      /**
+       * Resets the user's password.
+       * @returns {null}
+       */
+      resetPassword() {
+        this.axios.delete(`/admin/users/${this.$route.params.id}/password/`)
+          .then(resp => {
+            this.newPassword = resp.data.password;
+            this.showModal("passwordUpdateModal");
           });
       },
 

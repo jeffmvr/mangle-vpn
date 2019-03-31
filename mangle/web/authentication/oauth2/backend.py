@@ -50,7 +50,9 @@ class OAuth2Backend:
             logger.error("auth fail: user is inactive - %s", email)
             return None
 
-        user.name = name
+        if not user.name:
+            user.name = name
+
         user.save()
         return user
 

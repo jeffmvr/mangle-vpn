@@ -53,16 +53,24 @@
     </a>
 
     <div class="left menu">
-      <a href="/logout" class="item">
-        Logout
-      </a>
+
     </div>
 
+    <!-- #RightMenu -->
     <div class="right menu">
-      <div class="item">
-        {{ user.email }}
+      <div class="ui item dropdown">
+        <div class="text">
+          <i class="ui user icon"></i>
+          {{ user.email }}
+        </div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a href="/logout" class="item">
+            Logout
+          </a>
+        </div>
       </div>
-    </div>
+    </div><!-- #RightMenu -->
   </div>
 </div>
 
@@ -97,7 +105,6 @@
               <li>Scan the QR code to the right</li>
               <li>Enter the code that is displayed in the box below</li>
             </ol>
-
           </div>
 
           <form class="ui form" action="/mfa/process" method="post">
@@ -127,6 +134,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
 <script>
   new QRious({
@@ -134,7 +143,10 @@
     value: "{{ user.mfa_url | safe }}"
   });
 
-  document.getElementById("code").focus();
+  $(document).ready(function() {
+    $(".ui.dropdown").dropdown();
+    document.getElementById("code").focus();
+  });
 </script>
 </body>
 </html>

@@ -96,6 +96,10 @@ class UserInviteSerializer(serializers.Serializer):
 
             if not user:
                 user = models.User(email=email)
+
+                # new users will have a password set
+                password = user.reset_password()
+                user.temp_password = password
                 users.append(user)
 
             user.group_id = self.validated_data["group_id"]
@@ -387,10 +391,37 @@ class AppSettingSerializer(BaseSettingSerializer):
 
 
 class AuthSettingSerializer(BaseSettingSerializer):
-    auth_type = serializers.CharField(required=True)
     oauth2_provider = serializers.CharField(allow_blank=True, required=False)
-    oauth2_client_id = serializers.CharField(required=True)
-    oauth2_client_secret = serializers.CharField(required=True)
+    oauth2_client_id = serializers.CharField(allow_blank=True, required=False)
+    oauth2_client_secret = serializers.CharField(allow_blank=True, required=False)
+
+    def validate_oauth2_client_id(self, value):
+        """
+        Validates the OAuth2 client ID.
+        :return: str
+        """
+        if self.initial_data["oauth2_provider"] != "none" and not value:
+            raise serializers.ValidationError("This field is required.")
+        return value
+
+    def validate_oauth2_client_secret(self, value):
+        """
+        Validates the OAuth2 client secret.
+        :return: str
+        """
+        if self.initial_data["oauth2_provider"] != "none" and not value:
+            raise serializers.ValidationError("This field is required.")
+        return value
+
+    def validate(self, attrs):
+        """
+        Removes any OAuth2 settings if provider is None.
+        :return: str
+        """
+        if attrs["oauth2_provider"] == "none":
+            attrs["oauth2_client_id"] = ""
+            attrs["oauth2_client_secret"] = ""
+        return attrs
 
 
 class MailSettingSerializer(BaseSettingSerializer):
