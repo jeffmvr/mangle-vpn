@@ -53,6 +53,10 @@ class OAuth2Backend:
         if not user.name:
             user.name = name
 
+        # since the user is using OAuth2 to login, this ensures they aren't
+        # prompted to change their password if this is a new user
+        user.password_change = False
+
         user.save()
         return user
 

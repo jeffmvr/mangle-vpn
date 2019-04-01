@@ -42,7 +42,10 @@
         </button>
       </div>
       <div style="margin-top: 1em; text-align: center;">
-        Mangle VPN v{{ store.appVersion }}
+        <a href="https://github.com/jeffmvr/mangle-vpn" target="_blank">
+          Mangle VPN
+        </a>
+        <u>v{{ store.appVersion }}</u>
         <br>
         <div v-if="store.updateAvailable === true">
           <b>Update Available</b> (<a href="javascript:" @click="update">update</a>)
