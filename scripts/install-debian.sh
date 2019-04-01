@@ -22,11 +22,6 @@ elif [[ ${OS_VERSION_ID} == "18.04" ]]; then
     apt-get install -y python3-distutils
 fi
 
-# Add the PPA for Let's Encrypt certbox and install remaining OS packages
-add-apt-repository -y ppa:certbot/certbot
-apt-get update
-apt-get install -y openvpn python-certbot-nginx
-
 # Install latest version of PIP
 curl https://bootstrap.pypa.io/get-pip.py | python3
 
