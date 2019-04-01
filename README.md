@@ -116,6 +116,5 @@ to be added in the future.
 - [x] Support setting specific operations (instead of all settings at once)
 - [ ] REST API for developer consumption
 - [x] Update application from web UI
-- [ ] Automate the configuration and use of Let's Encrypt from web UI
 - [x] Add license
 - [ ] Move users to new group upon deletion of existing group

@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from rest_framework import serializers
+from mangle.cli.management.commands import install
 from mangle.common import config, models, validators
 from mangle.common.utils import bash, fs, net
 
@@ -374,13 +375,14 @@ class AppSettingSerializer(BaseSettingSerializer):
         if provided.
         :return: None
         """
-        self.is_valid(True)
+        old_http_port = config.get("app_http_port")
+        old_https_port = config.get("app_https_port")
 
         # the SSL certificate and private key should not be stored in the
         # database as settings so remove them from the validated_data dict
         # prior to saving
-        ssl_crt = self.validated_data.pop("app_ssl_crt", None)
-        ssl_key = self.validated_data.pop("app_ssl_key", None)
+        ssl_crt = self.initial_data.pop("app_ssl_crt", None)
+        ssl_key = self.initial_data.pop("app_ssl_key", None)
 
         super().save(**kwargs)
 
@@ -388,6 +390,12 @@ class AppSettingSerializer(BaseSettingSerializer):
             fs.write_file(settings.WEB_SSL_CRT_FILE, ssl_crt, 0o600)
             fs.write_file(settings.WEB_SSL_KEY_FILE, ssl_key, 0o600)
             bash.run("systemctl", "reload", "nginx")
+        
+        if (old_http_port != self.validated_data["app_http_port"] or
+                old_https_port != self.validated_data["app_https_port"]):
+            install.create_web_vhost()
+            bash.run("systemctl", "restart", "nginx")
+            bash.run("systemctl", "restart", "mangle-web")
 
 
 class AuthSettingSerializer(BaseSettingSerializer):

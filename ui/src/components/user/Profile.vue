@@ -29,7 +29,7 @@
             <td style="font-weight: bold; width: 25%;">Password:</td>
             <td style="font-style: italic">
               <span v-if="store.profile.mfa_required">the two-factor auth code from your mobile app</span>
-              <span v-else>blank</span>
+              <span v-else>Not Required</span>
             </td>
           </tr>
         </table>
