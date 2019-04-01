@@ -309,7 +309,7 @@
           onApprove: ($element) => {
             this.axios.delete(`/devices/${device.id}/`).then(resp => {
               utils.deleteFromObject(this.store.profile.devices, "id", device.id);
-              this.toastr.success("The device was deleted.", "Deleted");
+              this.toastr.success("The device was deleted.", "Device deleted");
             });
           },
         });
@@ -320,7 +320,7 @@
         window.location.href = `/api/devices/${this.createdDevice.id}?os=${os}`;
         this.createdDevice = {};
         this.hideModals();
-        this.toastr.success("Device Created.", "Your device was created.");
+        this.toastr.success("Your device was downloaded.", "Device Created");
       },
 
       onCreateDeviceModalShow(el) {

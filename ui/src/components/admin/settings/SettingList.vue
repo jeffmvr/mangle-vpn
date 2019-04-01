@@ -98,29 +98,6 @@
           </template>
         </form-table-row><!-- #HttpsPort -->
 
-        <!-- #LetsEncrypt
-        <form-table-row>
-          <template slot="label">
-            SSL (Let's Encrypt)
-          </template>
-          <template slot="help">
-            Configures the web application to use an SSL certificate and private key obtained
-            via Let's Encrypt. You web application MUST be accessible over the internet or
-            proper DNS records must be created (see: <a target="_blank" href="https://letsencrypt.org/how-it-works/">
-            Let's Encrypt Documentation)</a>
-          </template>
-          <template slot="input">
-            <div style="text-align: center">
-              <button class="ui button tiny" @click="setupLetsEncrypt">
-                Configure SSL using Let's Encrypt
-              </button>
-            </div>
-            <p class="form-error">
-              {{ errors.lets_encrypt | error }}
-            </p>
-          </template>
-        </form-table-row> #LetsEncrypt -->
-
         <!-- #SSLCertificate -->
         <form-table-row>
           <template slot="label">
