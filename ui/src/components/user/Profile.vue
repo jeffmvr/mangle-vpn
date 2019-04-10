@@ -109,7 +109,7 @@
           will handle installation of OpenVPN and additional required packages.
         </p>
         <div class="ui message console">
-          $ chmod a+x openvpn-client-installer.sh
+          $ chmod a+x openvpn-client-installer.sh <br>
           $ sudo ./openvpn-client-installer.sh
         </div><!-- #Linux -->
         <p>
