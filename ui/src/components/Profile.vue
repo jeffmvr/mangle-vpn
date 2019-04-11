@@ -3,52 +3,32 @@
     <!-- #Instructions -->
     <div class="ten wide column">
       <h1>Getting Started</h1>
-      <p>
-        Generate and download an OpenVPN configuration file for each of your devices by clicking the
-        <a href="#" @click="showModal('createDeviceModal')">New Device</a> button on the right and follow the instructions
-        below for your device's operating system.
-      </p>
-
-      <!-- #Authentication -->
-      <h3 style="margin-top: 2.5em;">
-        <i class="lock icon"></i>&nbsp;OpenVPN Authentication
-      </h3>
-
       <div class="ui divider"></div>
       <p>
-        In order to connect to the OpenVPN server with your devices, you are required to authenticate before each session
-        using the following credentials:
+        To get started, generate and download an OpenVPN configuration file for each of your devices by clicking the
+        <a href="#" @click="showModal('createDeviceModal')">New Device</a> button on the right.
       </p>
-      <div class="ui message" style="padding: 2em 0;">
-        <table style="margin: 0 auto;">
-          <tr>
-            <td style="font-weight: bold; width: 25%;">Username:</td>
-            <td>{{ store.profile.email }}</td>
-          </tr>
-          <tr>
-            <td style="font-weight: bold; width: 25%;">Password:</td>
-            <td style="font-style: italic">
-              <span v-if="store.profile.mfa_required">the two-factor auth code from your mobile app</span>
-              <span v-else>Not Required</span>
-            </td>
-          </tr>
-        </table>
-      </div><!-- #Authentication -->
+      <p>
+        <b>
+          Depending on the current application settings, you may be required to enter your username (e-mail address) and
+          password (the current two-factor code from your mobile app).
+        </b>
+      </p>
+      <br>
 
-      <!-- #ClientSetup -->
-      <h3 style="margin-top: 2.5em;">
-        <i class="window restore icon"></i>&nbsp;OpenVPN Client Setup
+      <h3>
+        <i class="ui box icon"></i> OpenVPN Client Setup
       </h3>
-
       <div class="ui divider"></div>
+
       <p>
-        Follow the instructions for your device's operating system in order to setup your OpenVPN client and connect to
-        the OpenVPN server.
+        Follow the instructions below for your device's operating system in order to setup your OpenVPN client and
+        connect to the OpenVPN server.
       </p>
       <p>
-        In addition to the desktop clients, the OpenVPN Connect mobile application is available from both the
-        <a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn">Android Play Store</a> and
-        <a href="https://itunes.apple.com/us/app/openvpn-connect/id590379981?mt=8">Apple App Store</a>.
+        In addition to the desktop clients, the OpenVPN Connect <i>mobile application</i>
+        is available from both the <a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn">Android Play
+        Store</a> and <a href="https://itunes.apple.com/us/app/openvpn-connect/id590379981?mt=8">Apple App Store</a>.
       </p>
 
       <!-- #Tabs -->

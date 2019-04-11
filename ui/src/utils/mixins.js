@@ -10,9 +10,6 @@ export default {
         store: store,
       }
     },
-    mounted() {
-      this.setActivePage();
-    },
     methods: {
       // hideModals hides all of the application modals.
       hideModals() {
@@ -37,19 +34,7 @@ export default {
           this.store.appInitialized = true;
         });
       },
-
-      // setActivePage sets the current active page.
-      setActivePage() {
-        this.store.activePage = this.$router.currentRoute.path.split("/")[1];
-      },
     }, // #Methods
-    watch: {
-      // Checks to make sure the User's password has been confirmed and updates
-      // the current page whenever the route changes.
-      $route (to, from) {
-        this.setActivePage();
-      },
-    } // #Watch
   }, // #AppComponentMixin
 
   //

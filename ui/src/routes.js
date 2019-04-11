@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Profile from '@/components/user/Profile'
+import Profile from '@/components/Profile'
 import Admin from '@/components/admin/Admin'
 import ClientList from '@/components/admin/clients/ClientList'
 import EventList from '@/components/admin/events/EventList'

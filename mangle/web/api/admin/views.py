@@ -21,7 +21,7 @@ class AdminView(views.APIView):
     filter_backends = (filters.SearchFilter, )
 
 
-class AdminViewSet(AdminView, viewsets.GenericViewSet):
+class AdminViewSet(viewsets.GenericViewSet, AdminView):
     pass
 
 
@@ -29,7 +29,7 @@ class AdminViewSet(AdminView, viewsets.GenericViewSet):
 # User
 #######################################
 
-class UserAdminViewSet(AdminView, viewsets.ModelViewSet):
+class UserAdminViewSet(viewsets.ModelViewSet, AdminView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
     search_fields = ("email", "name", "group__name", )
@@ -184,8 +184,7 @@ class FirewallAdminViewSet(viewsets.ModelViewSet, AdminViewSet):
 # Device
 #######################################
 
-class DeviceAdminViewSet(viewsets.mixins.DestroyModelMixin,
-                         AdminViewSet):
+class DeviceAdminViewSet(viewsets.mixins.DestroyModelMixin, AdminViewSet):
     queryset = models.Device.objects.all()
     serializer_class = serializers.UserDeviceSerializer
 
@@ -312,7 +311,7 @@ class VPNSettingView(BaseSettingView):
 
 
 #######################################
-# Update
+# App Update
 #######################################
 
 class UpdateAppView(AdminView):
