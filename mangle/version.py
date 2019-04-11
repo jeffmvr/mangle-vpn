@@ -3,7 +3,7 @@
 __MAJOR__ = 0
 """Increment when making incompatible API changes."""
 
-__MINOR__ = 4
+__MINOR__ = 5
 """Increment when adding backwards compatible functionality."""
 
 __PATCH__ = 0

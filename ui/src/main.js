@@ -26,7 +26,7 @@ axios.interceptors.response.use(resp => {
       // an HTTP 401 response indicates that the user has not yet authenticated
       // or are attempting to access something they shouldn't... in which case
       // they will be redirected to the logout page
-      window.location.href = "/logout";
+      window.location.href = "/";
       break;
     case 404:
       // an HTTP 404 response indicates the API resource the user is attempting

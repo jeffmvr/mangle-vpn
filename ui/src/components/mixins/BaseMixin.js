@@ -10,7 +10,6 @@ export default {
     }
   },
   mounted() {
-    this.setActivePage();
     this.getProfile();
   },
   methods: {
@@ -61,14 +60,6 @@ export default {
 
       modal.modal("show");
       return true;
-    },
-
-    /**
-     * Sets the store's active page based on the current route.
-     * @returns {null}
-     */
-    setActivePage() {
-      this.store.activePage = this.$router.currentRoute.path.split("/")[1];
     },
   },
 }

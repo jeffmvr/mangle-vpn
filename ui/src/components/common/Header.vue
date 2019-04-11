@@ -6,21 +6,19 @@
       </a>
 
       <!-- #LeftNavLinks -->
-      <div class="left menu" v-if="store.profile !== null">
-        <a href="/#/admin" :class="['item', {'active': store.activePage === 'admin'}]" v-if="store.profile.is_admin">
-          Administration
-        </a>
+      <div class="left menu">
+
       </div><!-- #LeftNavLinks -->
 
       <!-- #RightNavLinks -->
       <div class="right menu" v-if="store.profile !== null">
-        <div class="ui item dropdown">
-          <div class="text">
-            <i class="ui user icon"></i>
-            {{ store.profile.email }}
-          </div>
+        <a class="ui item simple dropdown">
+          <i class="ui user icon"></i>&nbsp; {{ store.profile.email }}
           <i class="dropdown icon"></i>
           <div class="menu">
+            <a href="/#/admin" class="item" v-if="store.profile.is_admin === true">
+              Administration
+            </a>
             <a href="/password/reset" class="item">
               Reset Password
             </a>
@@ -28,7 +26,7 @@
               Logout
             </a>
           </div>
-        </div>
+        </a>
       </div><!-- #RightNavLinks -->
     </div>
   </div>
@@ -41,18 +39,9 @@
     name: "Header",
     mixins: [BaseMixin, ],
     mounted() {
-      $('.ui.dropdown').dropdown();
-    },
-    watch: {
-      /**
-       * Updates the store's ``activePage`` value whenever the route changes.
-       * @param {string} to
-       * @param {string} from
-       * @returns {null}
-       */
-      $route (to, from) {
-        this.setActivePage();
-      },
+      $('.ui.simple.dropdown').dropdown({
+        on: "hover",
+      });
     },
   }
 </script>
