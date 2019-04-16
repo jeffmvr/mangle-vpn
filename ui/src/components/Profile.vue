@@ -132,104 +132,109 @@
         </button>
       </div>
 
-    <!-- #RevokeDeviceModal -->
-    <div id="revokeDeviceModal" class="ui basic modal">
-      <div class="ui icon header">
-        <i class="exclamation triangle icon red"></i>
-        Revoke Device Confirmation
-      </div>
-      <div class="content" style="text-align: center;">
-        <p>
-          Revoking the device will make it no longer able to connect and will disconnect all
-          of its active OpenVPN clients.
-        </p>
-        <p><b>Are you sure you want to revoke the device?</b></p>
-      </div>
-      <div class="actions" style="text-align: center">
-        <button class="ui basic inverted cancel button">
-          Cancel
-        </button>
-        <button class="ui basic red ok button">
-          Revoke Device
-        </button>
-      </div>
-    </div><!-- #RevokeDeviceModal -->
-
-    <!-- #DeviceModal -->
-    <div id="createDeviceModal" class="ui small modal">
-      <div class="header">
-        <i class="ui icon left laptop"></i>
-        New Device Configuration
-      </div>
-
-      <div class="content" style="padding: 2em 3em 1em 3em;">
-        <p>
-          You must create and install an OpenVPN configuration file for each device you wish to
-          connect with to the OpenVPN server.
-        </p>
-
-        <h4>OpenVPN Credentials</h4>
-        <p>
-          In order to connect to the OpenVPN server with your devices, you are required to authenticate before each session
-          using the following credentials:
-        </p>
-
-        <!-- #Credentials -->
-        <div class="ui message" style="padding: 2em 0;">
-          <table style="margin: 0 auto;">
-            <tr>
-              <td style="font-weight: bold; width: 25%;">Username:</td>
-              <td>{{ store.profile.email }}</td>
-            </tr>
-            <tr>
-              <td style="font-weight: bold; width: 25%;">Password:</td>
-              <td style="font-style: italic">the two-factor auth code from your mobile app</td>
-            </tr>
-          </table>
-        </div><!-- #Credentials -->
-
-        <div class="ui form" style="margin: 2em 0 1em 0;">
-          <table class="ui very basic table">
-            <tr>
-              <td>
-                <label style="font-weight: bold;">Device Name</label>
-              </td>
-              <td>
-                <input type="text" v-model="newDevice.name">
-                <p class="form-error">
-                  {{ errors.name | error }}
-                </p>
-              </td>
-            </tr>
-
-            <!-- #OperatingSystem -->
-            <tr>
-              <td>
-                <label style="font-weight: bold;">Operating System</label>
-              </td>
-              <td>
-                <select id="operatingSystemDropdown" class="ui dropdown" v-model="newDevice.os">
-                  <option value="">Select Operating System</option>
-                  <option value="windows">Microsoft Windows</option>
-                  <option value="macos">Apple macOS</option>
-                  <option value="linux">Linux</option>
-                </select>
-                <p class="form-error">
-                  {{ errors.os | error }}
-                </p>
-              </td>
-            </tr><!-- #OperatingSystem -->
-          </table>
+      <!-- #RevokeDeviceModal -->
+      <div id="revokeDeviceModal" class="ui basic modal">
+        <div class="ui icon header">
+          <i class="exclamation triangle icon red"></i>
+          Revoke Device Confirmation
         </div>
-      </div>
+        <div class="content" style="text-align: center;">
+          <p>
+            Revoking the device will make it no longer able to connect and will disconnect all
+            of its active OpenVPN clients.
+          </p>
+          <p><b>Are you sure you want to revoke the device?</b></p>
+        </div>
+        <div class="actions" style="text-align: center">
+          <button class="ui basic inverted cancel button">
+            Cancel
+          </button>
+          <button class="ui basic red ok button">
+            Revoke Device
+          </button>
+        </div>
+      </div><!-- #RevokeDeviceModal -->
 
-      <div class="actions" style="text-align: center">
-        <button class="ui cancel button">
-          Cancel
-        </button>
-        <button id="downloadConfigButton" class="ui green button" @click="createDevice">
-          Download Configuration
-        </button>
+      <!-- #DeviceModal -->
+      <div id="createDeviceModal" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+          <i class="ui icon left laptop"></i>
+          Device Configuration
+        </div>
+
+        <div class="content" style="padding: 2em 3em 1em 3em;">
+          <p>
+            You must download and install an OpenVPN configuration file for each device you wish to
+            connect with to the OpenVPN server.
+          </p>
+
+          <h4>
+            <i class="ui icon red exclamation triangle"></i> OpenVPN Credentials
+          </h4>
+          <div class="ui divider"></div>
+          <p>
+            When connecting to the OpenVPN server, you will be prompted for your OpenVPN credentials. If your
+            administrator has disabled two-factor authentication, you can leave the password value blank:
+          </p>
+
+          <!-- #Credentials -->
+          <div class="ui info message" style="padding: 2em 0;">
+            <table style="margin: 0 auto;">
+              <tr>
+                <td style="font-weight: bold; width: 25%;">Username:</td>
+                <td>{{ store.profile.email }}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; width: 25%;">Password:</td>
+                <td style="font-style: italic">the two-factor auth code from your mobile app</td>
+              </tr>
+            </table>
+          </div><!-- #Credentials -->
+
+          <div class="ui form" style="margin: 2em 0 1em 0;">
+            <table class="ui very basic table">
+              <tr>
+                <td>
+                  <label style="font-weight: bold;">Device Name</label>
+                </td>
+                <td>
+                  <input type="text" v-model="newDevice.name">
+                  <p class="form-error">
+                    {{ errors.name | error }}
+                  </p>
+                </td>
+              </tr>
+
+              <!-- #OperatingSystem -->
+              <tr>
+                <td>
+                  <label style="font-weight: bold;">Operating System</label>
+                </td>
+                <td>
+                  <select id="operatingSystemDropdown" class="ui dropdown" v-model="newDevice.os">
+                    <option value="">Select Operating System</option>
+                    <option value="windows">Microsoft Windows</option>
+                    <option value="macos">Apple macOS</option>
+                    <option value="linux">Linux</option>
+                  </select>
+                  <p class="form-error">
+                    {{ errors.os | error }}
+                  </p>
+                </td>
+              </tr><!-- #OperatingSystem -->
+            </table>
+          </div>
+        </div>
+
+        <div class="actions" style="text-align: center">
+          <button class="ui cancel button">
+            Cancel
+          </button>
+          <button id="downloadConfigButton" class="ui green button" @click="createDevice">
+            Download
+          </button>
+        </div>
       </div>
     </div>
   </div>
