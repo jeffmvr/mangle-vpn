@@ -38,8 +38,8 @@
               Group Name
             </template>
             <template slot="help">
-              A unique name given to the group which describes its purpose and
-              the users and devices that are members of it.
+              A unique and descriptive name for the group that describes its purpose and
+              the users.
             </template>
             <template slot="input">
               <input type="text" id="name" class="input" v-model="group.name">
@@ -55,7 +55,7 @@
               Description
             </template>
             <template slot="help">
-              Describes the purpose of the group or any special notes that might be
+              Describes the purpose of the group, including any special notes that might be
               of interest to adminisrators.
             </template>
             <template slot="input">
@@ -71,8 +71,8 @@
             <template slot="help">
               The current status of the group, either enabled or disabled. When
               disabled, any user who is part of the group will not be able to connect
-              to the VPN and any clients currently connected will be disconnected
-              automatically.
+              to the VPN or access the web UI and any active OpenVPN clients will be
+              disconnected immediately.
             </template>
             <template slot="input">
               <select id="statusDropdown" class="ui dropdown" v-model="group.is_enabled">
@@ -88,7 +88,7 @@
               Maximum Devices
             </template>
             <template slot="help">
-              The maximum number of non-revoked devices each user in the group
+              The maximum number of active devices each user in the group
               is allowed to have at any one time. When this number is reached,
               the user will not be allowed to create any additional devices.
             </template>

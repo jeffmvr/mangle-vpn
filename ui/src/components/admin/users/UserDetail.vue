@@ -134,7 +134,7 @@
               Two-Factor Authentication
             </template>
             <template slot="help">
-              Determines whether the is required to setup and use two-factor authentication
+              Determines whether the user is required to setup and use two-factor authentication
               when logging into the web application and connecting to the OpenVPN server. This
               will override any group settings.
             </template>

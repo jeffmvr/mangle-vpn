@@ -21,7 +21,7 @@ class AdminView(views.APIView):
     filter_backends = (filters.SearchFilter, )
 
 
-class AdminViewSet(viewsets.GenericViewSet, AdminView):
+class AdminViewSet(AdminView, viewsets.GenericViewSet):
     pass
 
 
@@ -29,7 +29,7 @@ class AdminViewSet(viewsets.GenericViewSet, AdminView):
 # User
 #######################################
 
-class UserAdminViewSet(viewsets.ModelViewSet, AdminView):
+class UserAdminViewSet(AdminView, viewsets.ModelViewSet):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
     search_fields = ("email", "name", "group__name", )
@@ -134,7 +134,7 @@ class UserAdminViewSet(viewsets.ModelViewSet, AdminView):
 # Group
 #######################################
 
-class GroupAdminViewSet(viewsets.ModelViewSet, AdminView):
+class GroupAdminViewSet(AdminViewSet, viewsets.ModelViewSet):
     queryset = models.Group.objects.all()
     serializer_class = serializers.GroupSerializer
     search_fields = ("name", )
@@ -175,7 +175,7 @@ class GroupAdminViewSet(viewsets.ModelViewSet, AdminView):
 # FirewallRule
 #######################################
 
-class FirewallAdminViewSet(viewsets.ModelViewSet, AdminViewSet):
+class FirewallAdminViewSet(AdminViewSet, viewsets.ModelViewSet):
     queryset = models.FirewallRule.objects.all()
     serializer_class = serializers.FirewallRuleSerializer
 
@@ -184,7 +184,7 @@ class FirewallAdminViewSet(viewsets.ModelViewSet, AdminViewSet):
 # Device
 #######################################
 
-class DeviceAdminViewSet(viewsets.mixins.DestroyModelMixin, AdminViewSet):
+class DeviceAdminViewSet(AdminViewSet, viewsets.mixins.DestroyModelMixin):
     queryset = models.Device.objects.all()
     serializer_class = serializers.UserDeviceSerializer
 
@@ -193,9 +193,9 @@ class DeviceAdminViewSet(viewsets.mixins.DestroyModelMixin, AdminViewSet):
 # Client
 #######################################
 
-class ClientAdminViewSet(viewsets.mixins.ListModelMixin,
-                         viewsets.mixins.DestroyModelMixin,
-                         AdminViewSet):
+class ClientAdminViewSet(AdminViewSet,
+                         viewsets.mixins.ListModelMixin,
+                         viewsets.mixins.DestroyModelMixin):
     queryset = models.Client.objects.all()
     serializer_class = serializers.ClientSerializer
     search_fields = ("remote_ip",
@@ -210,7 +210,7 @@ class ClientAdminViewSet(viewsets.mixins.ListModelMixin,
 # Event
 #######################################
 
-class EventAdminViewSet(viewsets.mixins.ListModelMixin, AdminViewSet):
+class EventAdminViewSet(AdminViewSet, viewsets.mixins.ListModelMixin):
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventSerializer
     search_fields = ("name",
