@@ -19,7 +19,7 @@
             <a href="/#/admin" class="item" v-if="store.profile.is_admin === true">
               Administration
             </a>
-            <a href="/password/reset" class="item">
+            <a href="/password" class="item">
               Reset Password
             </a>
             <a href="/logout" class="item">
