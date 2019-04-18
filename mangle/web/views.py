@@ -138,18 +138,6 @@ def process_logout(request):
 
 @install_required
 @mfa_required
-def reset_password(request):
-    """
-    Resets the current user's password.
-    :return: Response
-    """
-    request.user.password_change = True
-    request.user.save()
-    return redirect("/password")
-
-
-@install_required
-@mfa_required
 def show_password_reset(request):
     """
     Renders the password reset page.
@@ -166,6 +154,7 @@ def process_password_reset(request):
     :return: Response
     """
     form = forms.PasswordForm(request.POST)
+
     if not form.is_valid():
         save_form(request, form)
         return redirect("/password")
