@@ -36,7 +36,7 @@ def show_install(request):
     :return: Response
     """
     # do not let the installation run twice
-    if config.get_bool("app_installed", False):
+    if config.get_bool("app_installed", True):
         return redirect("/")
 
     return render(request, "Install.html", {
@@ -49,6 +49,10 @@ def process_install(request):
     Processes the application installation form.
     :return: Response
     """
+    # do not let the installation run twice
+    if config.get_bool("app_installed", True):
+        return redirect("/")
+
     form = forms.InstallForm(request.POST)
 
     if not form.is_valid():

@@ -20,7 +20,7 @@ def mfa_required(func):
     """
     View decorator that redirects the current user to the proper page if they
     have not setup two-factor authentication or have not confirmed their code
-    for the current session. Only applies to users who are have two-factor
+    for the current session. Only applies to users who have two-factor
     authentication required.
     :return: Response
     """
