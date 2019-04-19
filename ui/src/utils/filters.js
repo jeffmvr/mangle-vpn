@@ -63,6 +63,13 @@ Vue.filter('firewallRuleAny', value => {
   return value;
 });
 
+Vue.filter('firewallRuleDestinationAny', value => {
+  if (value === "" || value === null || value === "all" ) {
+    return "Anywhere";
+  }
+  return value;
+});
+
 // formattedDate returns a nicely formatted date string for a timestamp.
 function formattedDate(date) {
   let month = date.getMonth() + 1;

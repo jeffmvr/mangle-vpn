@@ -28,19 +28,20 @@
         </a>
       </div><!-- #Side Nav -->
 
-      <div v-if="vpnStatus === true">
-        <button class="ui button red fluid" @click="toggleOpenVPN()">
-          Stop OpenVPN
-        </button>
-        <button class="ui button fluid" style="margin-top: 0.5em;" @click="restartOpenVPN()">
-          Restart OpenVPN
-        </button>
+      <div class="item" style="text-align: center; width: 100%;">
+        <div class="ui icon buttons">
+          <button :class="['ui', 'button', {disabled: vpnStatus}]" @click="toggleOpenVPN()">
+            <i class="play green icon"></i>
+          </button>
+          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="toggleOpenVPN()">
+            <i class="stop red icon"></i>
+          </button>
+          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="restartOpenVPN()">
+            <i class="sync alternate icon"></i>
+          </button>
+        </div>
       </div>
-      <div v-else>
-        <button class="ui button green fluid" @click="toggleOpenVPN()">
-        Start OpenVPN
-        </button>
-      </div>
+
       <div style="margin-top: 1em; text-align: center;">
         <a href="https://github.com/jeffmvr/mangle-vpn" target="_blank">
           Mangle VPN
@@ -112,9 +113,9 @@
         });
 
         if (this.vpnStatus === true) {
-          this.toastr.success("Stopping the OpenVPN server.", "Stopping");
+          this.toastr.success("Stopping the OpenVPN server.", "Stopping OpenVPN");
         } else {
-          this.toastr.success("Starting the OpenVPN server.", "Starting");
+          this.toastr.success("Starting the OpenVPN server.", "Starting OpenVPN");
         }
       },
 
@@ -127,7 +128,7 @@
           this.vpnStatus = resp.data.status;
           this.store.events.$emit("vpnRestart");
         });
-        this.toastr.success("Restarting the OpenVPN server.", "Restarting");
+        this.toastr.success("Restarting the OpenVPN server.", "Restarting OpenVPN");
       },
 
       /**
@@ -137,7 +138,7 @@
       update() {
         this.axios.post("/admin/update")
           .then(resp => {
-            this.toastr.success("Application was updated, reloading page...", "Updated");
+            this.toastr.success("Application updated, reloading...", "Application Updated");
 
             // simulate a sleep for 3s to give the web server time to restart before refreshing
             new Promise(resolve => setTimeout(resolve, 3000))

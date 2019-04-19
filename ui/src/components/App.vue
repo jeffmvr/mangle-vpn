@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" class="pushable">
     <app-header></app-header>
 
-    <div id="mainContainer" class="ui container grid stackable">
+    <div id="mainContainer" class="ui container grid stackable pusher">
       <router-view/>
     </div>
   </div>
