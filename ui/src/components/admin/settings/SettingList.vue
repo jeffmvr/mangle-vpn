@@ -403,6 +403,27 @@
           </template>
         </form-table-row><!-- #VpnSubnet -->
 
+        <!-- #VpnRedirectGateway -->
+        <form-table-row>
+          <template slot="label">
+            Redirect Gateway
+          </template>
+          <template slot="help">
+            When set to <i>Yes</i>, all traffic from the client machine will be routed
+            through the OpenVPN server, regardless of whether it's destined for a pushed
+            network or not.
+          </template>
+          <template slot="input">
+            <select id="vpnRedirectGatewayDropdown" class="ui dropdown" v-model="settings.vpn_redirect_gateway">
+              <option value="True">Yes</option>
+              <option value="False">No</option>
+            </select>
+            <p class="form-error">
+              {{ errors.vpn_redirect_gateway | error }}
+            </p>
+          </template>
+        </form-table-row><!-- #VpnRedirectGateway -->
+
         <!-- #VpnNatInterface -->
         <form-table-row>
           <template slot="label">
@@ -532,9 +553,10 @@
 
           switch (this.activeTab) {
             case "vpn":
-              $("#vpnProtocolDropdown").dropdown("set selected", this.settings.vpn_protocol);
               $("#vpnInterfaceDropdown").dropdown("set selected", this.settings.vpn_interface);
               $("#vpnNatInterfaceDropdown").dropdown("set selected", this.settings.vpn_nat_interface);
+              $("#vpnProtocolDropdown").dropdown("set selected", this.settings.vpn_protocol);
+              $("#vpnRedirectGatewayDropdown").dropdown("set selected", this.settings.vpn_redirect_gateway);
               break;
             case "auth":
               $("#oauth2Provider").dropdown("set selected", this.settings.oauth2_provider);

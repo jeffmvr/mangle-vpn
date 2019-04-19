@@ -81,6 +81,7 @@ def server_config():
         "managment_socket": settings.OPENVPN_MANAGEMENT_SOCKET,
         "nameservers": config.get_list("vpn_nameservers"),
         "protocol": config.get("vpn_protocol"),
+        "redirect_gateway": config.get_bool("vpn_redirect_gateway", False),
         "routes": config.get_list("vpn_routes"),
         "server_crt": config.get("vpn_crt"),
         "server_key": config.get("vpn_key"),

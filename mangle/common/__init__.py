@@ -26,6 +26,7 @@ class CommonConfig(AppConfig):
             config.set_default("vpn_nat_interface", interfaces[0])
             config.set_default("vpn_port", 1194)
             config.set_default("vpn_protocol", "udp")
+            config.set_default("vpn_redirect_gateway", False)
             config.set_default("vpn_subnet", "172.25.0.0/16")
         except OperationalError:
             # an OperationalError is raised when attempting to load the
