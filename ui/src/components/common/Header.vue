@@ -28,6 +28,10 @@
               <i class="sign-out icon"></i>
               Sign Out
             </a>
+            <div class="ui divider"></div>
+            <div class="item disabled" style="text-align: center;">
+              Mangle VPN v{{ store.appVersion }}
+            </div>
           </div>
         </a>
       </div><!-- #RightNavLinks -->
