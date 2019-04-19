@@ -154,7 +154,7 @@
                 <i class="ui red ban icon"></i>
               </span>
             </td>
-            <td>{{ rule.destination | firewallRuleAny }}</td>
+            <td>{{ rule.destination | firewallRuleDestinationAny }}</td>
             <td style="text-align: center;">{{ rule.protocol | firewallRuleAny }}</td>
             <td>{{ rule.port | firewallRuleAny }}</td>
             <td style="text-align: right;">

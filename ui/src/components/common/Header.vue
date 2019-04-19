@@ -17,13 +17,16 @@
           <i class="dropdown icon"></i>
           <div class="menu">
             <a href="/#/admin" class="item" v-if="store.profile.is_admin === true">
+              <i class="cog icon"></i>
               Administration
             </a>
             <a href="/password" class="item">
+              <i class="lock icon"></i>
               Reset Password
             </a>
             <a href="/logout" class="item">
-              Logout
+              <i class="sign-out icon"></i>
+              Sign Out
             </a>
           </div>
         </a>

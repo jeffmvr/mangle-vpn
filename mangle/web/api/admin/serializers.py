@@ -165,7 +165,7 @@ class FirewallRuleSerializer(serializers.ModelSerializer):
         # ports cannot be specified when the protocol is 'all', per iptables
         if attrs["protocol"] == "all" and attrs.get("port"):
             raise serializers.ValidationError({
-                "protocol": "Protocol must be TCP or UDP when adding ports."
+                "protocol": "Protocol must be TCP or UDP when using ports."
             })
 
         return attrs
@@ -185,7 +185,7 @@ class FirewallRuleSerializer(serializers.ModelSerializer):
         Validates the destination is an IPv4 CIDR address.
         :return: str
         """
-        if not validators.is_ipv4(value) and not validators.is_cidr(value):
+        if value and not validators.is_ipv4(value) and not validators.is_cidr(value):
             raise serializers.ValidationError("Must be an IPv4 CIDR address.")
         return value
 
