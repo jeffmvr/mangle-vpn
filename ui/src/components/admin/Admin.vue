@@ -32,7 +32,13 @@
         </a>
       </div><!-- #Side Nav -->
 
-      <div class="item" style="text-align: center; width: 100%;">
+      <div class="item" style="padding-top: 1em; text-align: center; width: 100%;">
+        <p>
+          OpenVPN server is &nbsp;
+          <span class="ui green horizontal label" v-if="vpnStatus === true">Running</span>
+          <span class="ui red horizontal label" v-else>Stopped</span>
+        </p>
+
         <div class="ui icon buttons">
           <button :class="['ui', 'button', {disabled: vpnStatus}]" @click="toggleOpenVPN()">
             <i class="play green icon"></i>
@@ -44,13 +50,6 @@
             <i class="sync alternate icon"></i>
           </button>
         </div>
-      </div>
-
-      <div style="margin-top: 1em; text-align: center;">
-        <a href="https://github.com/jeffmvr/mangle-vpn" target="_blank">
-          Mangle VPN
-        </a>
-        <u>v{{ store.appVersion }}</u>
       </div>
     </div>
 
