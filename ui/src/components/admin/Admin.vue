@@ -26,6 +26,10 @@
           <i class="cog icon left"></i>
           Settings
         </a>
+        <a href="javascript:" :class="['item', 'teal', {disabled: store.updateAvailable === false}]" @click="update">
+          <i class="cloud download icon left"></i>
+          Update
+        </a>
       </div><!-- #Side Nav -->
 
       <div class="item" style="text-align: center; width: 100%;">
@@ -47,10 +51,6 @@
           Mangle VPN
         </a>
         <u>v{{ store.appVersion }}</u>
-        <br>
-        <div v-if="store.updateAvailable === true">
-          <b>Update Available</b> (<a href="javascript:" @click="update">update</a>)
-        </div>
       </div>
     </div>
 
