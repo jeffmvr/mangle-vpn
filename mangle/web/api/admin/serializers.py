@@ -471,6 +471,7 @@ class VpnSettingSerializer(BaseSettingSerializer):
     vpn_port = serializers.IntegerField(required=True)
     vpn_protocol = serializers.CharField(required=True)
     vpn_routes = serializers.CharField(allow_blank=True, required=False)
+    vpn_redirect_gateway = serializers.BooleanField(default=False)
     vpn_subnet = serializers.CharField(required=True)
 
     def validate_vpn_hostname(self, value):
