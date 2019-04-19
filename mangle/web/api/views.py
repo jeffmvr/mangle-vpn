@@ -38,9 +38,9 @@ class ApiInfoView(views.APIView):
         Returns whether an updated version of the application is available.
         :return:
         """
-        code, out_avail, err = bash.run_output("git ls-remote origin master")
-        code, out_current, err = bash.run_output("git rev-parse master")
-        return out_avail.split()[0] != out_current
+        _, out_a, _ = bash.run_output("git ls-remote origin master")
+        _, out_b, _ = bash.run_output("git rev-parse HEAD")
+        return out_a.split()[0] != out_b
 
 
 #######################################
