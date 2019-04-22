@@ -26,9 +26,10 @@
           <i class="cog icon left"></i>
           Settings
         </a>
-        <a href="javascript:" :class="['item', 'teal', {disabled: store.updateAvailable === false}]" @click="update">
+        <a href="javascript:" :class="['item', {disabled: store.updateAvailable === false}]" @click="update">
           <i class="cloud download icon left"></i>
           Update
+          <div class="ui red label" v-if="store.updateAvailable">Ready</div>
         </a>
       </div><!-- #Side Nav -->
 
@@ -135,6 +136,12 @@
        * @returns {null}
        */
       update() {
+        // if there is no update available, then do nothing.
+        // this is required since this gets called even when the link is 'disabled'
+        if (!this.store.updateAvailable) {
+          return null;
+        }
+
         this.axios.post("/admin/update")
           .then(resp => {
             this.toastr.success("Application updated, reloading...", "Application Updated");
