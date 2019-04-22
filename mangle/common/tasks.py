@@ -25,6 +25,8 @@ def create_crl():
     with open(settings.PKI_CRL_FILE, "w") as f:
         f.write(pki.create_crl(*serials))
 
+    logger.info("CRL generated for {} revoked certs".format(len(serials)))
+
 
 @db_task()
 def send_email(recipient, subject, body, sender):

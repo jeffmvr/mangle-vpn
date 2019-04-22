@@ -1,3 +1,4 @@
+import multiprocessing
 import os
 
 from mangle.common.utils import strings
@@ -99,6 +100,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 #######################################
 # Application Paths
 #######################################
@@ -112,6 +114,7 @@ SYSTEMD_DIR = os.path.join(DATA_DIR, "systemd")
 # Files
 DATABASE_PATH = os.path.join(DATA_DIR, "mangle.db")
 DJANGO_LOG_FILE = os.path.join(LOG_DIR, "django.log")
+HUEY_LOG_FILE = os.path.join(LOG_DIR, "huey.log")
 OPENVPN_CONFIG_FILE = os.path.join(DATA_DIR, "openvpn.conf")
 OPENVPN_LOG_FILE = os.path.join(LOG_DIR, "openvpn.log")
 OPENVPN_MANAGEMENT_SOCKET = "/run/mangle-vpn.sock"
@@ -130,6 +133,7 @@ WEB_SSL_DH_FILE = os.path.join(KEY_DIR, "ssl.dh")
 WEB_VHOST_FILE = "/etc/nginx/conf.d/mangle.conf"
 WEB_WSGI_SOCKET = "/run/mangle-web.sock"
 
+
 #######################################
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -142,6 +146,7 @@ DATABASES = {
     }
 }
 
+
 #######################################
 # Django REST Framework
 # https://www.django-rest-framework.org/
@@ -153,6 +158,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'mangle.web.api.pagination.ApiPagination',
 }
+
 
 #######################################
 # Logging
@@ -183,6 +189,14 @@ LOGGING = {
             'filename': TASKS_LOG_FILE,
             'maxBytes': 1024*1024*10,       # 10MB
             'backupCount': 10,
+        },
+        'huey': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'standard',
+            'filename': HUEY_LOG_FILE,
+            'maxBytes': 1024*1024*10,       # 10MB
+            'backupCount': 10,
         }
     },
     'loggers': {
@@ -197,12 +211,13 @@ LOGGING = {
             'propagate': False,
         },
         'huey.consumer': {
-            'handlers': ['tasks', ],
+            'handlers': ['huey', ],
             'level': 'INFO',
             'propagate': False,
         },
     },
 }
+
 
 #######################################
 # Security
@@ -224,3 +239,15 @@ SESSION_SAVE_EVERY_REQUEST = True
 # SECRET_KEY is read from file only
 with open(SECRET_KEY_FILE, "r") as f:
     SECRET_KEY = f.read()
+
+
+#######################################
+# Huey
+# https://huey.readthedocs.io/en/latest/django.html
+#######################################
+HUEY = {
+    'name': 'mangle-vpn',
+    'consumer': {
+        'workers': multiprocessing.cpu_count(),
+    },
+}
