@@ -126,7 +126,7 @@
         </div>
       </div>
       <div style="text-align: right;" v-if="canCreateDevices">
-        <button class="ui button small green" @click="showModal('createDeviceModal')">
+        <button class="ui button icon small green" @click="showModal('createDeviceModal')">
           <i class="ui plus icon"></i>
           New Device
         </button>
@@ -160,7 +160,7 @@
         <i class="close icon"></i>
         <div class="header">
           <i class="ui icon left laptop"></i>
-          Device Configuration
+          New Device Configuration
         </div>
 
         <div class="content" style="padding: 2em 3em 1em 3em;">
@@ -179,7 +179,7 @@
           </p>
 
           <!-- #Credentials -->
-          <div class="ui info message" style="padding: 2em 0;">
+          <div class="ui message" style="padding: 2em 0;">
             <table style="margin: 0 auto;">
               <tr>
                 <td style="font-weight: bold; width: 25%;">Username:</td>
