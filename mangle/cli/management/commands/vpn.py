@@ -76,6 +76,7 @@ def vpn_post_start():
         group.create_firewall_chain()
 
     config.set("vpn_firewall_rules", rules)
+    config.set("vpn_restart_pending", False)
 
 
 def vpn_post_stop():

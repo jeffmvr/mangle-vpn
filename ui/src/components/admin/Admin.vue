@@ -1,7 +1,7 @@
 <template>
   <div class="ui row">
     <!-- #Side Nav -->
-    <div class="four wide column">
+    <div class="four wide sticky column">
       <div class="ui fluid large pointing vertical menu">
         <div class="header item">
           Administration
@@ -41,13 +41,13 @@
         </p>
 
         <div class="ui icon buttons">
-          <button :class="['ui', 'button', {disabled: vpnStatus}]" @click="toggleOpenVPN()">
+          <button :class="['ui', 'button', {disabled: vpnStatus}]" @click="toggleOpenVPN">
             <i class="play green icon"></i>
           </button>
-          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="toggleOpenVPN()">
+          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="toggleOpenVPN">
             <i class="stop red icon"></i>
           </button>
-          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="restartOpenVPN()">
+          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="restartOpenVPN">
             <i class="sync alternate icon"></i>
           </button>
         </div>
@@ -56,6 +56,13 @@
 
     <!-- #AdminContent -->
     <div class="twelve wide column">
+      <div class="ui info message" v-if="vpnRestartPending">
+        There are changes that require the OpenVPN service to be restarted.
+        <button class="ui blue mini button" @click="restartOpenVPN">
+          Restart OpenVPN
+        </button>
+      </div>
+
       <router-view></router-view>
     </div><!-- #AdminContent -->
   </div>
@@ -72,6 +79,7 @@
     ],
     data() {
       return {
+        vpnRestartPending: false,
         vpnStatus: false,
         refreshInterval: null,
       }
@@ -80,6 +88,10 @@
       this.setActiveAdminPage();
       this.getOpenVPNStatus();
       this.refreshInterval = setInterval(this.getOpenVPNStatus, 5000);
+
+      $(".ui.sticky").sticky({
+        context: "#mainContainer",
+      });
     },
     destroyed() {
       clearInterval(this.refreshInterval);
@@ -100,6 +112,7 @@
       getOpenVPNStatus() {
         this.axios.get("/admin/openvpn/").then(resp => {
           this.vpnStatus = resp.data.status;
+          this.vpnRestartPending = resp.data.restart;
         });
       },
 
@@ -164,7 +177,11 @@
       // event for listeners.
       vpnStatus(newValue, oldValue) {
         this.store.events.$emit("vpnStatusChange", newValue);
-      }
+      },
+
+      vpnRestartPending(newValue, oldValue) {
+        this.store.events.$emit("vpnRestartPending", newValue);
+      },
     }, // #Watch
   }
 </script>

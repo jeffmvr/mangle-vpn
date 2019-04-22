@@ -474,6 +474,14 @@ class VpnSettingSerializer(BaseSettingSerializer):
     vpn_redirect_gateway = serializers.BooleanField(default=False)
     vpn_subnet = serializers.CharField(required=True)
 
+    def save(self, **kwargs):
+        """
+        Saves the settings and flags the OpenVPN server as requires a restart.
+        :return: None
+        """
+        super().save(**kwargs)
+        config.set("vpn_restart_pending", True)
+
     def validate_vpn_hostname(self, value):
         """
         Validates and returns the VPN hostname.

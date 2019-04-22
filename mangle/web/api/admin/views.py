@@ -229,7 +229,10 @@ class OpenVPNViewSet(AdminViewSet):
         Returns the status of the OpenVPN server.
         :return: Response
         """
-        return Response({"status": openvpn.is_running()})
+        return Response({
+            "restart": config.get_bool("vpn_restart_pending", False),
+            "status": openvpn.is_running(),
+        })
 
     @action(["GET"], detail=False)
     def toggle(self, request, *args, **kwargs):
