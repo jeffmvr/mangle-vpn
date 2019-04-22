@@ -22,6 +22,9 @@ elif [[ ${OS_VERSION_ID} == "18.04" ]]; then
     apt-get install -y python3-distutils
 fi
 
+apt-get update
+apt-get install -y openvpn
+
 # Install latest version of PIP
 curl https://bootstrap.pypa.io/get-pip.py | python3
 
