@@ -26,32 +26,27 @@
           <i class="cog icon left"></i>
           Settings
         </a>
-        <a href="javascript:" :class="['item', {disabled: store.updateAvailable === false}]" @click="update">
-          <i class="cloud download icon left"></i>
-          Update
-          <div class="ui red label" v-if="store.updateAvailable">Ready</div>
+        <a class="ui dropdown item">
+          <i :class="['circle', 'icon', 'left', {red: !vpnStatus, green: vpnStatus}]"></i>
+          OpenVPN Server
+          <i class="dropdown icon" style="margin-top: 0.2em;"></i>
+          <div class="menu">
+            <a :class="['item', 'button', {disabled: vpnStatus}]" @click="toggleOpenVPN">
+              <i class="play green icon"></i> Start
+            </a>
+            <a :class="['item', 'button', {disabled: !vpnStatus}]" @click="toggleOpenVPN">
+              <i class="stop red icon"></i> Stop
+            </a>
+            <a :class="['item', 'button', {disabled: !vpnStatus}]" @click="restartOpenVPN">
+              <i class="sync alternate icon"></i> Restart
+            </a>
+          </div>
         </a>
       </div><!-- #Side Nav -->
 
-      <div class="item" style="padding-top: 1em; text-align: center; width: 100%;">
-        <p>
-          OpenVPN server is &nbsp;
-          <span class="ui green horizontal label" v-if="vpnStatus === true">Running</span>
-          <span class="ui red horizontal label" v-else>Stopped</span>
-        </p>
-
-        <div class="ui icon buttons">
-          <button :class="['ui', 'button', {disabled: vpnStatus}]" @click="toggleOpenVPN">
-            <i class="play green icon"></i>
-          </button>
-          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="toggleOpenVPN">
-            <i class="stop red icon"></i>
-          </button>
-          <button :class="['ui', 'button', {disabled: !vpnStatus}]" @click="restartOpenVPN">
-            <i class="sync alternate icon"></i>
-          </button>
-        </div>
-      </div>
+      <button class="ui fluid icon button primary" v-if="store.updateAvailable" @click="update">
+        <i class="ui cloud download icon"></i> Update Now
+      </button>
     </div>
 
     <!-- #AdminContent -->
@@ -88,6 +83,10 @@
       this.setActiveAdminPage();
       this.getOpenVPNStatus();
       this.refreshInterval = setInterval(this.getOpenVPNStatus, 5000);
+
+      $(".ui.dropdown").dropdown({
+        on: "hover",
+      });
     },
     destroyed() {
       clearInterval(this.refreshInterval);

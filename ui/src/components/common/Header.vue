@@ -12,7 +12,7 @@
 
       <!-- #RightNavLinks -->
       <div class="right menu" v-if="store.profile !== null">
-        <a class="ui item simple dropdown">
+        <div class="ui item simple dropdown">
           <i class="ui user icon"></i>&nbsp; {{ store.profile.email }}
           <i class="dropdown icon"></i>
           <div class="menu">
@@ -33,7 +33,7 @@
               Mangle VPN v{{ store.appVersion }}
             </div>
           </div>
-        </a>
+        </div>
       </div><!-- #RightNavLinks -->
     </div>
   </div>
