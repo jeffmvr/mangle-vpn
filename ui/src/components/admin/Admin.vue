@@ -1,7 +1,7 @@
 <template>
   <div class="ui row">
     <!-- #Side Nav -->
-    <div class="four wide sticky column">
+    <div class="ui four wide column">
       <div class="ui fluid large pointing vertical menu">
         <div class="header item">
           Administration
@@ -88,10 +88,6 @@
       this.setActiveAdminPage();
       this.getOpenVPNStatus();
       this.refreshInterval = setInterval(this.getOpenVPNStatus, 5000);
-
-      $(".ui.sticky").sticky({
-        context: "#mainContainer",
-      });
     },
     destroyed() {
       clearInterval(this.refreshInterval);

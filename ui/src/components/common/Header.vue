@@ -1,5 +1,5 @@
 <template>
-  <div class="ui fixed inverted menu" style="padding: 0.66em 0;">
+  <div id="mainHeader" class="ui fixed inverted menu" style="padding: 0.66em 0;">
     <div class="ui container" style="width: 1024px;">
       <a href="/#/" class="header item">
         {{ store.appOrganization }} VPN
