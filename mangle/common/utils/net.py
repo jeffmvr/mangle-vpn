@@ -1,6 +1,13 @@
 import ipaddress
+import logging
+import os
 import socket
 import netifaces
+
+from mangle.common.utils import bash
+
+
+logger = logging.getLogger(__name__)
 
 
 def ip_addresses():
@@ -40,6 +47,7 @@ def interface_ip(iface):
     try:
         return netifaces.ifaddresses(iface)[netifaces.AF_INET][0]["addr"]
     except (IndexError, KeyError):
+        logger.error("failed to get IP for iface: %s", iface)
         return ""
 
 
@@ -78,4 +86,27 @@ def expand_cidr(value):
         ip = ipaddress.ip_network(value)
         return ip.network_address.exploded + " " + ip.netmask.exploded
     except ValueError:
+        logger.error("failed to expand CIDR value: %s", value)
         return ""
+
+
+def get_interface_stats(iface):
+    """
+    Returns the statistics for the given network interface.
+    :return: Dict
+    """
+    base = "/sys/class/net/{}/statistics/".format(iface)
+
+    try:
+        with open(os.path.join(base, "rx_bytes"), "r") as f:
+            rx_bytes = f.read()
+        with open(os.path.join(base, "tx_bytes"), "r") as f:
+            tx_bytes = f.read()
+
+        return {
+            "rx": int(rx_bytes),
+            "tx": int(tx_bytes),
+        }
+    except FileNotFoundError:
+        logger.error("failed to parse stats for iface: %s", iface)
+        return {}
