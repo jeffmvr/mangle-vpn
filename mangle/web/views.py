@@ -105,7 +105,9 @@ def process_login(request):
     user = authenticate(request, username=username, password=password)
 
     if not user:
-        return redirect("/logout")
+        logout(request)
+        request.session["error"] = "Invalid username or password."
+        return redirect("/login")
 
     login(request, user, "django.contrib.auth.backends.ModelBackend")
     return redirect("/")
@@ -120,7 +122,9 @@ def process_oauth(request):
     user = authenticate(request)
 
     if not user:
-        return redirect("/logout")
+        logout(request)
+        request.session["error"] = "Invalid username or password."
+        return redirect("/login")
 
     login(request, user, "mangle.web.authentication.oauth2.backend.OAuth2Backend")
     return redirect("/")
@@ -218,12 +222,10 @@ def process_mfa(request):
             detail="Incorrect two-factor authentication code"
         )
 
-        # if the user doesn't have two-factor authentication enabled on their
-        # account then they get redirected to the two-factor setup page
-        if not request.user.mfa_enabled:
-            return redirect("/mfa/setup")
-
-        return redirect("/mfa")
+        # redirect back to login on invalid two-factor authentication code
+        logout(request)
+        request.session["error"] = "Invalid two-factor authentication code."
+        return redirect("/login")
 
     # if the user has confirmed their two-factor authentication code then make
     # sure two-factor authentication is enabled for their account
@@ -251,9 +253,10 @@ def base_context_processor(request):
     :return: dict
     """
     return {
-        "organization": config.get("app_organization", "Mangle"),
+        "error": request.session.pop("error", None),
         "form": request.session.pop("form", {}),
         "oauth2_provider": config.get("oauth2_provider", None),
+        "organization": config.get("app_organization", "Mangle"),
     }
 
 

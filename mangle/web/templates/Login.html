@@ -70,6 +70,15 @@
         {% csrf_token %}
 
         <div class="ui body segment" style="border: none;">
+          {% if error %}
+          <div class="ui negative message" style="margin: -1em auto 2em auto; width: 75%;">
+            <div class="header">
+              Something went wrong!
+            </div>
+            <p>{{ error }}</p>
+          </div>
+          {% endif %}
+
           <table style="width: 75%; margin: 0 auto;">
             <tr>
               <td>Username</td>
