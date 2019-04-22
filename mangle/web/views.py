@@ -236,7 +236,7 @@ def process_mfa(request):
     models.Event.objects.create(
         name="web.login",
         user=request.user,
-        detail="Logged in to web application."
+        detail="Logged in to web application from {}.".format(get_client_ip(request))
     )
 
     request.session["mfa_confirmed"] = True
@@ -273,3 +273,17 @@ def save_form(request, form):
         "data": form.data,
         "errors": form.errors,
     }
+
+
+def get_client_ip(request):
+    """
+    Returns the remote IP address of the request. This will check the HTTP
+    header 'X-FORWARDED-FOR' which SHOULD exist since we are using Nginx to
+    proxy the request, but falls back to REMOTE_ADDR if the header is missing.
+    :return: str
+    """
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0]
+
+    return request.META.get("REMOTE_ADDR")
