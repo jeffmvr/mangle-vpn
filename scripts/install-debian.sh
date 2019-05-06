@@ -8,7 +8,7 @@ echo iptables-persistent iptables-persistent/autosave_v6 boolean false | sudo de
 
 # Install required OS Packages
 apt-get update
-apt-get install -y iptables iptables-persistent make nginx openssl python3 \
+apt-get install -y iptables iptables-persistent make nginx ntp openssl python3 \
     redis-server sqlite3 wget
 
 # Ubuntu version-specific steps
@@ -33,5 +33,11 @@ if [[ -f /etc/nginx/sites-enabled/default ]]; then
     rm /etc/nginx/sites-enabled/default
 fi
 
+systemctl enable ntp
+systemctl start ntp
+
 systemctl enable nginx
+systemctl start nginx
+
 systemctl enable redis-server
+systemctl start redis-server

@@ -7,7 +7,7 @@ systemctl disable firewalld
 
 # Install OS packages
 yum install -y epel-release
-yum install -y iptables iptables-services make nginx openssl openvpn redis \
+yum install -y iptables iptables-services make nginx ntp openssl openvpn redis \
     sqlite wget
 
 # Install Python3 (not available from official Red Hat repos) and symlink binary
@@ -26,6 +26,8 @@ if [[ -f /etc/nginx/conf.d/default ]]; then
 fi
 
 # Enable services
+systemctl start ntpd
+systemctl enable ntpd
 chkconfig iptables on
 systemctl enable iptables
 systemctl enable redis
