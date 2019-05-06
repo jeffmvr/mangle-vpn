@@ -45,7 +45,7 @@
       </div><!-- #Side Nav -->
 
       <button class="ui fluid icon button primary" v-if="store.updateAvailable" @click="update">
-        <i class="ui cloud download icon"></i> Update Now
+        <i class="ui cloud download icon"></i>&nbsp; Update Now
       </button>
     </div>
 

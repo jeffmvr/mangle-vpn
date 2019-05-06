@@ -233,7 +233,8 @@ SESSION_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 X_FRAME_OPTIONS = 'DENY'
 
-# allows the session to be "refreshed" each request
+# allows the session to be "refreshed" each request and renews the expiration
+# timestamp for the session
 SESSION_SAVE_EVERY_REQUEST = True
 
 # SECRET_KEY is read from file only
