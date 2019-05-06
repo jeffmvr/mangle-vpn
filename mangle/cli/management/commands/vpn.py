@@ -99,6 +99,10 @@ def vpn_post_stop():
     for group in models.Group.objects.filter(is_enabled=True).all():
         group.delete_firewall_chain()
 
+    # delete all clients to avoid potential stale clients persisting through
+    # dirty restarts or reboots
+    models.Client.objects.all().delete()
+
 
 def vpn_client_authenticate():
     """
