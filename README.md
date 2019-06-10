@@ -28,8 +28,8 @@ running nothing but the web application and OpenVPN server.*
 ### Installation
 Clone the repository and run the install script:
 ```bash
-$ git clone https://github.com/jeffmvr/mangle-vpn.git
-$ cd mangle-vpn
+$ sudo git clone https://github.com/jeffmvr/mangle-vpn.git /opt/mangle-vpn
+$ cd /opt/mangle-vpn
 $ sudo ./install.sh
 ``` 
 Once the installation script has finished, please navigate to the web
