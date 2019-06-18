@@ -51,13 +51,14 @@
 
     <!-- #AdminContent -->
     <div class="twelve wide column">
+      <!--
       <div class="ui info message" v-if="vpnRestartPending">
         There are changes that require the OpenVPN service to be restarted.
         <button class="ui blue mini button" @click="restartOpenVPN">
           Restart OpenVPN
         </button>
       </div>
-
+      -->
       <router-view></router-view>
     </div><!-- #AdminContent -->
   </div>
