@@ -14,6 +14,7 @@ class ProfileDeviceSerializer(serializers.ModelSerializer):
         fields = ("id",
                   "created_at",
                   "updated_at",
+                  "last_login",
                   "name",
                   "os", )
 

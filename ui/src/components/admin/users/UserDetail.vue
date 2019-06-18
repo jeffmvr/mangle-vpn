@@ -167,7 +167,8 @@
           <thead>
             <tr>
               <th style="width: 30%;">Name</th>
-              <th style="width: 30%;">Created</th>
+              <th style="width: 28%;">Created</th>
+              <th style="width: 28%;">Last Login</th>
               <th></th>
             </tr>
           </thead>
@@ -175,6 +176,7 @@
             <tr v-for="device in devices">
               <td>{{ device.name }}</td>
               <td>{{ device.created_at | prettyDateTime }}</td>
+              <td>{{ device.last_login | prettyDateTime }}</td>
               <td style="text-align: right;">
                 <button class="ui mini negative basic button" @click="deleteDevice(device)">
                   Revoke

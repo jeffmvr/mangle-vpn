@@ -20,6 +20,7 @@ class UserDeviceSerializer(serializers.ModelSerializer):
         fields = ("id",
                   "created_at",
                   "updated_at",
+                  "last_login",
                   "name", )
 
 
@@ -254,6 +255,7 @@ class ClientDeviceSerializer(serializers.ModelSerializer):
         fields = ("id",
                   "created_at",
                   "updated_at",
+                  "last_login",
                   "name",
                   "user", )
 

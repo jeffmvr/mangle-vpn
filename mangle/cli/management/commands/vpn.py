@@ -5,6 +5,7 @@ import sys
 
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils import timezone
 from mangle.cli.command import BaseCommand
 from mangle.common import config, iptables, models, openvpn
 from mangle.common.utils import net
@@ -51,7 +52,8 @@ def vpn_pre_start():
     with open(settings.OPENVPN_CONFIG_FILE, "w") as f:
         f.write(openvpn.server_config())
 
-    # make sure the CRL file exists
+    # this ensures the CRL file itself exists, regardless of whether it's an
+    # actual CRL and stops OpenVPN from failing to start when the file is gone
     pathlib.Path(settings.PKI_CRL_FILE).touch()
 
 
@@ -61,17 +63,13 @@ def vpn_post_start():
     :return: None
     """
     vpn_post_stop()
-
-    # create the application chains
     iptables.create_chain("filter", "MangleVPN")
     iptables.create_chain("filter", "MangleVPN_Clients")
 
     rules = render_rules()
-
     for rule in rules.split("\n"):
         iptables.run(rule)
 
-    # create each of the group chains
     for group in models.Group.objects.filter(is_enabled=True).all():
         group.create_firewall_chain()
 
@@ -168,6 +166,9 @@ def vpn_client_connect():
         user=device.user,
         detail="Device {} connected from {}".format(device.name, remote_ip),
     )
+
+    device.last_login = timezone.now()
+    device.save()
 
 
 def vpn_client_disconnect():
