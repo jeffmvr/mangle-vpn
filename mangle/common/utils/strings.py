@@ -1,3 +1,4 @@
+import math
 import os
 import random
 import string
@@ -28,3 +29,28 @@ def remove_empty_lines(value):
     :return: str
     """
     return os.linesep.join([s for s in value.splitlines() if s])
+
+
+def secs_to_hhmmss(value):
+    """
+    Returns a time string formatted as 'hh mm ss' for the given seconds value.
+    :return: str
+    """
+    value = int(value)
+
+    if value < 60:
+        return "{}s".format(value)
+
+    hours = math.floor(value / 3600)
+    mins = math.floor((value - hours * 3600) / 60)
+    secs = value % 60
+
+    if secs < 10:
+        secs = "0{}".format(secs)
+    if mins < 10:
+        mins = "0{}".format(mins)
+
+    if hours > 0:
+        return "{}h 0{}m {}s".format(hours, mins, secs)
+
+    return "{}m {}s".format(mins, secs)

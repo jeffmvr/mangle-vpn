@@ -34,7 +34,7 @@
             </td>
             <td>{{ client.virtual_ip }}</td>
             <td>{{ client.device.name }}</td>
-            <td>{{ client.duration | secsToHoursMins }}</td>
+            <td>{{ client.duration | secsToHoursMinsSecs }}</td>
             <td>
               <button class="ui mini basic negative button" @click="deleteClient(client)">
                 Disconnect

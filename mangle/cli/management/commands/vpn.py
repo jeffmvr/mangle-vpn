@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from mangle.cli.command import BaseCommand
 from mangle.common import config, iptables, models, openvpn
-from mangle.common.utils import net
+from mangle.common.utils import net, strings
 
 
 logger = logging.getLogger("cli")
@@ -184,10 +184,10 @@ def vpn_client_disconnect():
         models.Event.objects.create(
             name="vpn.disconnect",
             user=client.device.user,
-            detail="Device {} disconnected from {} after {} secs".format(
+            detail="Device {} disconnected from {} after {}".format(
                 client.device.name,
                 remote_ip,
-                client.duration,
+                strings.secs_to_hhmmss(client.duration),
             ),
         )
 

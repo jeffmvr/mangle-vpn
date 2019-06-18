@@ -19,25 +19,29 @@ Vue.filter('prettyDate', value => {
   return formattedDate(new Date(value));
 });
 
-// secsToHoursMins returns the given number of seconds into a string that shows
-// the number of minutes and hours.
-// Example: 1h 33m
-Vue.filter('secsToHoursMins', value => {
+// secsToHoursMinsSecs returns the given number of seconds into a string that
+// shows the number of minutes and hours in the format hh:mm:ss
+Vue.filter('secsToHoursMinsSecs', value => {
     if (value < 60) {
       return `${Math.floor(value)}s`;
     }
 
     let hours = Math.floor(value / 3600);
     let mins = Math.floor((value - hours * 3600) / 60);
+    let secs = value % 60;
+
+    if (secs < 10) {
+      secs = `0${secs}`
+    }
 
     if (hours > 0) {
       if (mins < 10) {
-        return `${hours}h 0${mins}m`;
+        return `${hours}h 0${mins}m ${secs}s`;
       } else {
-        return `${hours}h ${mins}m`
+        return `${hours}h ${mins}m ${secs}s`
       }
     }
-    return `${mins}m`;
+    return `${mins}m ${secs}s`;
 });
 
 // prettyDateTime returns a nicely formatted date and time string from a
@@ -85,7 +89,8 @@ function formattedDate(date) {
   return `${month}/${day}/${year}`;
 }
 
-// formattedTime returns a string that incldues a nicely formatted time string.
+// formattedTime returns a string that incldues a nicely formatted time string
+// with the format hh:mm:ss
 function formattedTime(date) {
   let hours = date.getHours();
   let minutes = date.getMinutes();
