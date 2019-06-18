@@ -92,6 +92,28 @@ is started/stopped alongside the mangle-web service:
 $ sudo systemctl [start|stop|restart|status] mangle-tasks.service
 ```
 
+## Usage
+
+### Devices
+The application works on the concept of devices, which are individual OpenVPN
+user devices (desktop, laptop, tablet, phone, etc) they will use to connect to
+the OpenVPN server.
+
+Devices can be added and deleted by each user but are limited to a maximum 
+device count set forth by their group settings.
+
+### Groups
+Users are separated into logical group units, with each group having their own
+settings. Visit the Groups page in the Admin section to modify these settings 
+and view detailed information.
+
+#### Firewall
+Each group has their own firewall settings which controls the IP addresses and
+subnets a client is allowed to access. You may whitelist by IP address, CIDR
+address, and protocol.
+
+**By default, every group has a DENY ALL rule set!**
+
 ## Updating
 You can update the application to the latest version from the administration
 UI in the web application or via the command-line:
