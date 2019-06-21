@@ -9,6 +9,7 @@ class GoogleOAuth2Provider(OAuth2Provider):
     token_url = "https://www.googleapis.com/oauth2/v4/token"
     profile_url = "https://www.googleapis.com/userinfo/v2/me"
     scopes = [
+        "openid",
         "https://www.googleapis.com/auth/userinfo.email",
         "https://www.googleapis.com/auth/userinfo.profile",
     ]
