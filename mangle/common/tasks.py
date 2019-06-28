@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from huey import crontab
-from huey.contrib.djhuey import task, db_periodic_task
+from huey.contrib.djhuey import db_task, db_periodic_task
 from mangle.common import mail, models, openvpn, pki
 
 
@@ -28,7 +28,7 @@ def create_crl():
     logger.info("CRL generated for {} revoked certs".format(len(serials)))
 
 
-@task()
+@db_task()
 def send_email(recipient, subject, body, sender):
     """
     Sends the given application e-mail.
@@ -46,7 +46,7 @@ def send_email(recipient, subject, body, sender):
         logger.info("email sent: %s - '%s'", recipient, subject)
 
 
-@task()
+@db_task()
 def disconnect_openvpn_client(client):
     """
     Kills the OpenVPN client connnection with the given address.
