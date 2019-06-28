@@ -292,6 +292,9 @@
           <template slot="help">
             Test your SMTP configuration by sending a test e-mail to this address. If
             you do not receive an e-mail within a minute, check your settings.
+            <br>
+            <br>
+            <i>You <b>must</b> save any changes for them to take effect.</i>
           </template>
           <template slot="input">
             <input type="text" class="input" v-model="smtpTestEmail">
@@ -593,7 +596,6 @@
        * @returns {null}
        */
       sendTestEmail() {
-        this.updateSettings();
         this.axios.post("/admin/settings/mail/test", {email: this.smtpTestEmail})
           .then(resp => {
             this.toastr.success("A test e-mail was sent.", "E-mail Sent");
