@@ -392,10 +392,23 @@ class AppSettingSerializer(BaseSettingSerializer):
             fs.write_file(settings.WEB_SSL_CRT_FILE, ssl_crt, 0o600)
             fs.write_file(settings.WEB_SSL_KEY_FILE, ssl_key, 0o600)
             bash.run("systemctl", "reload", "nginx")
-        
+
         if (old_http_port != self.validated_data["app_http_port"] or
                 old_https_port != self.validated_data["app_https_port"]):
-            install.create_web_vhost()
+            # update HTTP and HTTPs listen directives
+            http = "sed -i 's/{} default_server/{} default_server/g' /etc/nginx/conf.d/mangle.conf"
+            bash.run(http.format(old_http_port, self.validated_data["app_http_port"]))
+
+            https = "sed -i 's/{} ssl/{} ssl/g' /etc/nginx/conf.d/mangle.conf"
+            bash.run(https.format(old_https_port, self.validated_data["app_https_port"]))
+
+            # update the port number in redirect directive
+            bash.run("sed -i 's/$host:{}/$host:{}/g' /etc/nginx/conf.d/mangle.conf".format(
+                old_https_port,
+                self.validated_data["app_https_port"]
+            ))
+
+            # restart Nginx and web application
             bash.run("systemctl", "restart", "nginx")
             bash.run("systemctl", "restart", "mangle-web")
 
