@@ -7,6 +7,7 @@ export default {
   appOrganization: "Mangle",
   appVersion: "",
   updateAvailable: false,
+  vpnRestartPending: false,
   profile: {},
   events: new Vue(),
 }

@@ -51,14 +51,6 @@
 
     <!-- #AdminContent -->
     <div class="twelve wide column">
-      <!--
-      <div class="ui info message" v-if="vpnRestartPending">
-        There are changes that require the OpenVPN service to be restarted.
-        <button class="ui blue mini button" @click="restartOpenVPN">
-          Restart OpenVPN
-        </button>
-      </div>
-      -->
       <router-view></router-view>
     </div><!-- #AdminContent -->
   </div>
@@ -108,7 +100,7 @@
       getOpenVPNStatus() {
         this.axios.get("/admin/openvpn/").then(resp => {
           this.vpnStatus = resp.data.status;
-          this.vpnRestartPending = resp.data.restart;
+          this.vpnRestartPending = resp.data.restart_pending;
         });
       },
 
@@ -175,6 +167,8 @@
         this.store.events.$emit("vpnStatusChange", newValue);
       },
 
+      // vpnRestartPending watches for and alerts on changes to the OpenVPN restart
+      // pending status.
       vpnRestartPending(newValue, oldValue) {
         this.store.events.$emit("vpnRestartPending", newValue);
       },

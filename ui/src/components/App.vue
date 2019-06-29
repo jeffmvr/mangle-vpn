@@ -27,6 +27,7 @@
         .then(resp => {
           this.store.appOrganization = resp.data.app_organization;
           this.store.appVersion = resp.data.app_version;
+          this.store.vpnRestartPending = resp.data.vpn_restart_pending,
           this.store.updateAvailable = resp.data.update_available;
         });
     },

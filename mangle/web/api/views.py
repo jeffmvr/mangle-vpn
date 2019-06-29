@@ -30,6 +30,7 @@ class ApiInfoView(views.APIView):
         return Response({
             "app_organization": config.get("app_organization", "Mangle"),
             "app_version": version(),
+            "vpn_restart_pending": config.get_bool("vpn_restart_pending", False),
             "update_available": self.update_available(),
         })
 

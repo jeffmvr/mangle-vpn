@@ -585,6 +585,10 @@
             if ("app_organization" in this.settings) {
               this.store.appOrganization = this.settings.app_organization;
             }
+
+            if (this.activeTab === "vpn") {
+              this.store.vpnRestartPending = true;
+            }
           })
           .catch(err => {
             this.errors = err.response.data;

@@ -12,6 +12,12 @@
 
       <!-- #RightNavLinks -->
       <div class="right menu" v-if="store.profile !== null">
+        <div class="ui item" v-if="store.profile.is_admin === true && store.vpnRestartPending === true">
+          <button class="ui inverted orange button" @click="restartOpenVPN()">
+            <i class="ui icon exclamation triangle"></i>
+            Restart OpenVPN
+          </button>
+        </div>
         <div class="ui item simple dropdown">
           <i class="ui user icon"></i>&nbsp; {{ store.profile.email }}
           <i class="dropdown icon"></i>
@@ -49,6 +55,20 @@
       $('.ui.simple.dropdown').dropdown({
         on: "hover",
       });
+
+      this.store.events.$on("")
+    },
+    methods: {
+      /**
+       * Restarts the OpenVPN server.
+       * @returns {null}
+       */
+      restartOpenVPN() {
+        this.axios.get("/admin/openvpn/restart/").then(resp => {
+          this.toastr.success("Restarting the OpenVPN server.", "Restarting OpenVPN");
+          this.store.vpnRestartPending = false;
+        });
+      },
     },
   }
 </script>

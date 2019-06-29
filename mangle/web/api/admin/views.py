@@ -230,7 +230,7 @@ class OpenVPNViewSet(AdminViewSet):
         :return: Response
         """
         return Response({
-            "restart": config.get_bool("vpn_restart_pending", False),
+            "restart_pending": config.get_bool("vpn_restart_pending", False),
             "status": openvpn.is_running(),
         })
 
