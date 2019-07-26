@@ -85,4 +85,5 @@ chmod 600 ${CURDIR}/data/mangle.db
 python3 manage.py install
 
 # Start the web application
+systemctl enable `pwd`/data/systemd/mangle-web.service
 systemctl restart mangle-web
