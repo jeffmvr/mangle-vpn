@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ .Organization }} VPN</title>
+  {{ template "head" }}
+</head>
+
+<body>
+{{ if .User }}{{ template "account" . }}{{ end }}
+
+<main class="page">
+  {{ template "brand" . }}
+
+  <form class="card" action="mfa/process" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+
+    <div class="intro">
+      <h1>Two-factor authentication</h1>
+      <p class="muted">Enter the current six-digit code from your authenticator app.</p>
+    </div>
+
+    {{ template "banner" .Error }}
+
+    <div class="field">
+      <label for="code">Authentication code</label>
+      <input type="text" id="code" name="code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" autofocus>
+      <p class="error">{{ .Form.Errors.code }}</p>
+    </div>
+
+    <div class="actions">
+      <a href="/logout" class="button button-secondary">Cancel</a>
+      <button type="submit" class="button button-primary">Verify</button>
+    </div>
+  </form>
+</main>
+
+</body>
+</html>

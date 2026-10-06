@@ -1,0 +1,28 @@
+# Mangle VPN in Docker. Start it with "docker compose up -d", then follow
+# the setup link in "docker compose logs". See "Running in Docker" in the
+# README.
+services:
+  mangle-vpn:
+    image: jeffmvr/mangle-vpn:latest
+    # To build the image from this repository instead: docker compose build
+    build: .
+    restart: unless-stopped
+
+    # OpenVPN needs the tun device and to manage the container's network:
+    # its interfaces, routes and firewall.
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+
+    # Without forwarding, devices connect but reach nothing.
+    sysctls:
+      - net.ipv4.ip_forward=1
+
+    ports:
+      - "80:80"           # redirects to HTTPS, and Let's Encrypt
+      - "443:443"         # the web interface
+      - "1194:1194/udp"   # the VPN
+
+    volumes:
+      - ./data:/opt/mangle-vpn/data

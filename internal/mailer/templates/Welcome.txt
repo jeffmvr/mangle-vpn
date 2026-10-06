@@ -1,0 +1,11 @@
+Hello!
+
+You have been added to the {{ .Organization }} VPN. To set up your account, choose a password here:
+
+{{ .Link }}
+
+The link works once and for {{ .Lasts }}. Your username is {{ .Email }}. After choosing a password you can sign in at {{ .URL }} and add your devices.
+
+If you have any problems or questions, contact an administrator.
+
+Thank you.

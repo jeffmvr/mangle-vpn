@@ -1,0 +1,36 @@
+# Rebuilds the web interface and the binary, and restarts the server, on
+# every save. Run it with "make dev". The binary is built where "make build"
+# puts it, beside data/, which it reads.
+
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "npm --prefix ui run build --silent && CGO_ENABLED=0 go build -o ../mangle-vpn ./cmd/mangle"
+
+# A shell command, so that PORT can choose the port; exec, so that air's
+# interrupt reaches the server itself.
+full_bin = "exec ../mangle-vpn web -listen :${PORT:-9443} -listen-http off -insecure -log ''"
+
+include_dir = ["cmd", "internal", "ui/src", "ui/public"]
+include_file = ["ui/index.html", "ui/vite.config.js"]
+include_ext = ["go", "vue", "js", "css", "html", "sql", "conf", "txt", "json", "rules", "service"]
+
+# The interface build writes into internal/webui/dist, which would otherwise
+# set off another rebuild.
+exclude_dir = ["internal/webui/dist", "ui/node_modules", "tmp"]
+exclude_regex = ["_test\\.go$"]
+
+# A burst of saves becomes one rebuild.
+delay = 300
+
+# Let the server shut down cleanly, closing the database, before the next
+# one starts on the same port.
+send_interrupt = true
+kill_delay = "3s"
+
+[log]
+time = true
+
+[misc]
+clean_on_exit = true

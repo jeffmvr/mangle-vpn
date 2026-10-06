@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ .Organization }} VPN is ready</title>
+  {{ template "head" }}
+</head>
+
+<body>
+<main class="page">
+  {{ template "brand" . }}
+
+  <div class="card setup">
+    <div class="intro">
+      <span class="done-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+      </span>
+      <h1 style="margin-top: 10px">{{ .Organization }} VPN is ready</h1>
+      <p class="muted">Here's what was set up.</p>
+    </div>
+
+    {{ with .SetupDone }}
+    <ul class="checklist">
+      <li>
+        <svg class="icon ok" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <span class="checklist-text">
+          <span class="checklist-title">Certificate authority</span>
+          <span class="checklist-detail">
+            {{ if .KeptAuthority }}Kept the existing one, {{ .AuthorityName }}, so devices it issued keep working.
+            {{ else }}{{ .AuthorityName }}, with {{ .AuthorityKey }} keys, valid until {{ .AuthorityUntil.Format "January 2006" }}.{{ end }}
+          </span>
+        </span>
+      </li>
+      <li>
+        {{ if .VPNRunning }}
+        <svg class="icon ok" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        {{ else }}
+        <svg class="icon warn" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        {{ end }}
+        <span class="checklist-text">
+          <span class="checklist-title">OpenVPN</span>
+          <span class="checklist-detail">
+            {{ if .VPNRunning }}Running at {{ .VPNAddress }}.
+            {{ else }}Set up for {{ .VPNAddress }}, but it didn't start. Start it from the sidebar, and check Logs › OpenVPN if it stops again.{{ end }}
+          </span>
+        </span>
+      </li>
+      <li>
+        <svg class="icon ok" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <span class="checklist-text">
+          <span class="checklist-title">Access</span>
+          <span class="checklist-detail">
+            {{ if .FullTunnel }}All of a device's traffic goes through the VPN.
+            {{ else }}Devices reach {{ range $i, $route := .Routes }}{{ if $i }}, {{ end }}{{ $route }}{{ end }} through the VPN.{{ end }}
+          </span>
+        </span>
+      </li>
+    </ul>
+    {{ end }}
+
+    <h2>Next steps</h2>
+    <ul class="next">
+      <li>
+        <a href="/#/admin/settings/email">
+          <span class="next-text">
+            <span class="next-title">Set up email</span>
+            <span class="next-detail">Needed to send invitations and password resets.</span>
+          </span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a href="/#/admin/users">
+          <span class="next-text">
+            <span class="next-title">Invite people</span>
+            <span class="next-detail">Each person signs in here and adds their own devices.</span>
+          </span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a href="/#/">
+          <span class="next-text">
+            <span class="next-title">Connect your first device</span>
+            <span class="next-detail">Try it yourself before inviting anyone.</span>
+          </span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a href="/#/admin/settings/general">
+          <span class="next-text">
+            <span class="next-title">Use a trusted certificate</span>
+            <span class="next-detail">Browsers warn about this page until it has one, such as a free one from Let's Encrypt.</span>
+          </span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </li>
+    </ul>
+
+    {{ if .SetupDone.MFARequired }}
+    <p class="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      First, you'll set up two-factor authentication for your account.
+    </p>
+    {{ end }}
+
+    <a href="/" class="button button-primary">{{ if .SetupDone.MFARequired }}Set up two-factor{{ else }}Go to Mangle VPN{{ end }}</a>
+  </div>
+</main>
+</body>
+</html>

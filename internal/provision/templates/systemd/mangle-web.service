@@ -1,0 +1,42 @@
+[Unit]
+Description=Mangle VPN web application
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory={{ .RootDir }}
+ExecStart={{ .Executable }} web
+ExecStartPost={{ .Executable }} web post-start
+ExecStopPost={{ .Executable }} web post-stop
+Restart=on-failure
+RestartSec=5
+
+# Sandboxing. The web application, which also runs the background tasks,
+# binds the HTTP and HTTPS ports, writes under data/, runs iptables from its
+# start and stop hooks (which need /run for iptables' lock file), talks to
+# OpenVPN's management socket in /run, and asks systemd over D-Bus to
+# restart services, which needs no capability as root.
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_NET_RAW
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths={{ .RootDir }}/data /run
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+
+[Install]
+WantedBy=multi-user.target

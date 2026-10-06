@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ .Organization }} VPN</title>
+  {{ template "head" }}
+</head>
+
+<body>
+<main class="page">
+  <div class="brand-hero">{{ template "brand" . }}</div>
+
+  <form class="card" action="login/process" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+
+    <div class="intro">
+      <h1>Sign in</h1>
+      <p class="muted">Use your work email to manage your VPN devices.</p>
+    </div>
+
+    {{ template "banner" .Error }}
+
+    {{ if eq .OAuth2Provider "google" }}
+      <a href="/login/sso" class="button {{ if .PasswordSignIn }}button-secondary{{ else }}button-primary{{ end }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        Continue with Google
+      </a>
+      {{ if .PasswordSignIn }}<div class="divider">or</div>{{ end }}
+    {{ else if eq .OAuth2Provider "oidc" }}
+      <a href="/login/sso" class="button {{ if .PasswordSignIn }}button-secondary{{ else }}button-primary{{ end }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>
+        Continue with {{ .OAuth2Name }}
+      </a>
+      {{ if .PasswordSignIn }}<div class="divider">or</div>{{ end }}
+    {{ end }}
+
+    {{ if .PasswordSignIn }}
+
+    <div class="field">
+      <label for="username">Email</label>
+      <input type="text" id="username" name="username" autocomplete="username" autofocus>
+    </div>
+
+    <div class="field">
+      <div class="field-row">
+        <label for="password">Password</label>
+        {{ if .MailConfigured }}<a href="/password/forgot">Forgot password?</a>{{ end }}
+      </div>
+      <input type="password" id="password" name="password" autocomplete="current-password">
+    </div>
+
+    <button type="submit" class="button button-primary">Sign in</button>
+
+    {{ else }}
+    <p class="note"><a href="/login?password=1">Administrator? Sign in with a password</a></p>
+    {{ end }}
+
+    {{ if .PasswordSignIn }}
+    <p class="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      Next, you'll be asked for the six-digit code from your authenticator app.
+    </p>
+    {{ end }}
+  </form>
+
+  {{ if .SupportURL }}<p class="help">Need help? <a href="{{ .SupportURL }}">Contact IT</a></p>{{ end }}
+  {{ if .SignInNotice }}<p class="notice">{{ .SignInNotice }}</p>{{ end }}
+</main>
+
+</body>
+</html>

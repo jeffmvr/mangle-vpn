@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ .Organization }} VPN</title>
+  {{ template "head" }}
+</head>
+
+<body>
+{{ if .User }}{{ template "account" . }}{{ end }}
+
+<main class="page">
+  {{ template "brand" . }}
+
+  <form class="card wide" action="/mfa/process" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+
+    <div class="intro">
+      <h1>Set up two-factor authentication</h1>
+      <p class="muted">You need an authenticator app to sign in here and to connect to the VPN.</p>
+    </div>
+
+    {{ template "banner" .Error }}
+
+    <ol class="steps">
+      <li>Install Google Authenticator, Authy or a similar app on your phone.</li>
+      <li>In the app, add a new account and scan the QR code below.</li>
+      <li>Enter the six-digit code the app shows.</li>
+    </ol>
+
+    <div class="qr">
+      <canvas id="qr" width="180" height="180" data-value="{{ .MFAURL }}" aria-label="QR code for your authenticator app"></canvas>
+      <div class="help">Can't scan it? Enter this key instead:</div>
+      <div class="secret">{{ .User.MFASecret }}</div>
+    </div>
+
+    <div class="field">
+      <label for="code">Authentication code</label>
+      <input type="text" id="code" name="code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" autofocus>
+      <p class="error">{{ .Form.Errors.code }}</p>
+    </div>
+
+    <button type="submit" class="button button-primary">Confirm</button>
+  </form>
+</main>
+
+<script src="/static/vendor/qrious.min.js"></script>
+<script src="/static/mfa-setup.js"></script>
+</body>
+</html>

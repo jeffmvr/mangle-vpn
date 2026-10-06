@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Set up Mangle VPN</title>
+  {{ template "head" }}
+</head>
+
+<body>
+<main class="page">
+  {{ template "brand" . }}
+
+  <form class="card setup" action="/install/vpn" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+
+    {{ template "setup-steps" .Setup }}
+
+    <div class="intro">
+      <h1>The VPN</h1>
+      <p class="muted">Where devices connect, and what they can reach once they have.</p>
+    </div>
+
+    {{ template "banner" .Error }}
+
+    <div class="field">
+      <label for="vpn_hostname">Public address</label>
+      <input type="text" id="vpn_hostname" name="vpn_hostname" value="{{ .Form.Data.vpn_hostname }}" placeholder="vpn.example.com" spellcheck="false" autofocus>
+      <p class="help">Devices connect to this. Usually the same as the web address.</p>
+      <p class="error">{{ .Form.Errors.vpn_hostname }}</p>
+    </div>
+
+    <div class="field">
+      <div class="field-pair">
+        <div class="field">
+          <label for="vpn_protocol">Protocol</label>
+          <select id="vpn_protocol" name="vpn_protocol">
+            <option value="udp" {{ if eq .Form.Data.vpn_protocol "udp" }}selected{{ end }}>UDP</option>
+            <option value="tcp" {{ if eq .Form.Data.vpn_protocol "tcp" }}selected{{ end }}>TCP</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="vpn_port">Port</label>
+          <input type="text" id="vpn_port" name="vpn_port" value="{{ .Form.Data.vpn_port }}" inputmode="numeric" class="mono">
+        </div>
+      </div>
+      <p class="help">UDP 1194 is the standard. TCP 443 gets through networks that block everything else. Open the port in your firewall.</p>
+      <p class="error">{{ .Form.Errors.vpn_protocol }}</p>
+      <p class="error">{{ .Form.Errors.vpn_port }}</p>
+    </div>
+
+    <fieldset class="choices">
+      <legend>What can devices reach?</legend>
+      <label class="choice">
+        <input type="radio" id="access-networks" name="vpn_access" value="networks" {{ if ne .Form.Data.vpn_access "all" }}checked{{ end }}>
+        <span class="choice-text">
+          <span class="choice-title">Only your networks</span>
+          <span class="choice-help">Traffic for the networks you list goes through the VPN. Everything else uses the device's own connection.</span>
+        </span>
+      </label>
+      <label class="choice">
+        <input type="radio" id="access-all" name="vpn_access" value="all" {{ if eq .Form.Data.vpn_access "all" }}checked{{ end }}>
+        <span class="choice-text">
+          <span class="choice-title">All internet traffic</span>
+          <span class="choice-help">Everything goes through this server, such as for privacy on public Wi-Fi or to appear from one address.</span>
+        </span>
+      </label>
+      <p class="error">{{ .Form.Errors.vpn_access }}</p>
+    </fieldset>
+
+    <div class="field routes-only">
+      <label for="vpn_routes">Networks</label>
+      <textarea id="vpn_routes" name="vpn_routes" rows="3" class="mono" placeholder="10.0.0.0/8&#10;192.168.1.0/24" spellcheck="false">{{ .Form.Data.vpn_routes }}</textarea>
+      <p class="help">One per line. Groups can narrow this down later with firewall rules.</p>
+      <p class="error">{{ .Form.Errors.vpn_routes }}</p>
+    </div>
+
+    <div class="field">
+      <label for="vpn_nameservers">DNS servers <span class="optional">(optional)</span></label>
+      <textarea id="vpn_nameservers" name="vpn_nameservers" rows="2" class="mono" placeholder="10.0.0.2" spellcheck="false">{{ .Form.Data.vpn_nameservers }}</textarea>
+      <p class="help">One per line, for names on your networks. Leave empty to keep each device's own.</p>
+      <p class="error">{{ .Form.Errors.vpn_nameservers }}</p>
+    </div>
+
+    <details class="advanced" {{ if or .Form.Errors.vpn_subnet .Form.Errors.pki_key }}open{{ end }}>
+      <summary>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        Advanced
+      </summary>
+      <div class="advanced-body">
+        <div class="field">
+          <label for="vpn_subnet">Device addresses</label>
+          <input type="text" id="vpn_subnet" name="vpn_subnet" value="{{ .Form.Data.vpn_subnet }}" class="mono" spellcheck="false">
+          <p class="help">The private network connected devices get addresses from. Change it only if it overlaps one of yours.</p>
+          <p class="error">{{ .Form.Errors.vpn_subnet }}</p>
+        </div>
+
+        {{ if .Setup.HasAuthority }}
+        <p class="help">This server already has a certificate authority, which will be kept so existing devices keep working.</p>
+        {{ else }}
+        <div class="field">
+          <label for="pki_key">Certificate key type</label>
+          <select id="pki_key" name="pki_key">
+            <option value="ecdsa" {{ if eq .Form.Data.pki_key "ecdsa" }}selected{{ end }}>ECDSA P-256 (recommended)</option>
+            <option value="rsa2048" {{ if eq .Form.Data.pki_key "rsa2048" }}selected{{ end }}>RSA 2048</option>
+            <option value="rsa4096" {{ if eq .Form.Data.pki_key "rsa4096" }}selected{{ end }}>RSA 4096</option>
+          </select>
+          <p class="help">Used by your certificate authority and every device it signs. ECDSA is faster and just as strong. This can't be changed later.</p>
+          <p class="error">{{ .Form.Errors.pki_key }}</p>
+        </div>
+        {{ end }}
+      </div>
+    </details>
+
+    <div class="setup-actions">
+      <a href="/install/organization" class="button button-secondary">Back</a>
+      <button type="submit" class="button button-primary">Continue</button>
+    </div>
+  </form>
+</main>
+</body>
+</html>

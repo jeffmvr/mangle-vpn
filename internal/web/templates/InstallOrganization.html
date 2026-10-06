@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Set up Mangle VPN</title>
+  {{ template "head" }}
+</head>
+
+<body>
+<main class="page">
+  {{ template "brand" . }}
+
+  <form class="card setup" action="/install/organization" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+
+    {{ template "setup-steps" .Setup }}
+
+    <div class="intro">
+      <h1>Your organization</h1>
+      <p class="muted">How this server introduces itself to the people who use it.</p>
+    </div>
+
+    {{ template "banner" .Error }}
+
+    {{ if .Setup.NeedsCode }}
+    <div class="field">
+      <label for="setup_token">Setup code</label>
+      <input type="text" id="setup_token" name="setup_token" class="mono" autocomplete="off" spellcheck="false" autofocus>
+      <p class="help">Printed by <code>mangle-vpn install</code> on the server. It proves you're the person installing it.</p>
+      <p class="error">{{ .Form.Errors.setup_token }}</p>
+    </div>
+    {{ end }}
+
+    <div class="field">
+      <label for="app_organization">Organization name</label>
+      <input type="text" id="app_organization" name="app_organization" value="{{ .Form.Data.app_organization }}" placeholder="Acme" {{ if not .Setup.NeedsCode }}autofocus{{ end }}>
+      <p class="help">Shown on the sign-in page and in emails, and used to name your certificate authority.</p>
+      <p class="error">{{ .Form.Errors.app_organization }}</p>
+    </div>
+
+    <div class="field">
+      <label for="app_hostname">Web address</label>
+      <input type="text" id="app_hostname" name="app_hostname" value="{{ .Form.Data.app_hostname }}" placeholder="vpn.example.com" spellcheck="false">
+      <p class="help">Where people open this page to sign in and add devices. A DNS name or IP address.</p>
+      <p class="error">{{ .Form.Errors.app_hostname }}</p>
+    </div>
+
+    <div class="setup-actions">
+      <button type="submit" class="button button-primary">Continue</button>
+    </div>
+  </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<html>
+  <head></head>
+  <body>
+    <p>Hello!</p>
+    <p>
+      Someone asked to reset the password of your {{ .Organization }} VPN
+      account, <b>{{ .Email }}</b>. If it was you, choose a new password:
+    </p>
+    <p><a href="{{ .Link }}">Choose a new password</a></p>
+    <p>
+      The link works once and for {{ .Lasts }}. If you didn't ask, ignore this
+      e-mail: your password hasn't changed.
+    </p>
+    <p>Thank you.</p>
+  </body>
+</html>

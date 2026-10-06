@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ .Organization }} VPN</title>
+  {{ template "head" }}
+</head>
+
+<body>
+<main class="page">
+  {{ template "brand" . }}
+
+  {{ if .Sent }}
+  <div class="card">
+    <div class="intro">
+      <h1>Check your e-mail</h1>
+      <p class="muted">If that address has an account, we've sent it a link to choose a new password. The link works for an hour.</p>
+    </div>
+    <a href="/login" class="button button-secondary">Back to sign in</a>
+  </div>
+  {{ else }}
+  <form class="card" action="/password/forgot/process" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+
+    <div class="intro">
+      <h1>Reset your password</h1>
+      <p class="muted">Enter the e-mail address you sign in with and we'll send you a link to choose a new password.</p>
+    </div>
+
+    {{ template "banner" .Error }}
+
+    {{ if .MailConfigured }}
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="{{ .Form.Data.email }}" autocomplete="username" autofocus>
+      {{ if .Form.Errors.email }}
+        <p class="error">{{ .Form.Errors.email }}</p>
+      {{ end }}
+    </div>
+
+    <div class="actions">
+      <a href="/login" class="button button-secondary">Cancel</a>
+      <button type="submit" class="button button-primary">Send link</button>
+    </div>
+    {{ else }}
+    <p class="muted">This server can't send e-mail yet. Ask an administrator to reset your password.</p>
+    <a href="/login" class="button button-secondary">Back to sign in</a>
+    {{ end }}
+  </form>
+  {{ end }}
+</main>
+
+</body>
+</html>

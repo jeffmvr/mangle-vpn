@@ -1,0 +1,59 @@
+# Build output
+# ------------
+
+# Cross-compiled release binaries, from "make release".
+/dist/
+
+# A binary built here rather than in the repository root, and compiled tests.
+/mangle-vpn
+/mangle
+*.test
+
+# The web interface build, embedded into the binary. Only the placeholder
+# that lets the Go code build without it is committed.
+/internal/webui/dist/*
+!/internal/webui/dist/.gitkeep
+
+# The web interface
+# -----------------
+
+/ui/node_modules/
+/ui/dist/
+/ui/.vite/
+*.local
+
+# Development
+# -----------
+
+# air's scratch directory, from "make dev".
+/tmp/
+
+# An installation run from here with "-root .": the database, the secret key
+# and the certificate authority's private key. Never to be committed.
+/data/
+
+# Databases, logs, backups and coverage that end up beside the code.
+*.db
+*.db-shm
+*.db-wal
+*.log
+*.tar.gz
+coverage.out
+*.coverprofile
+
+# Private keys and environment files.
+*.key
+*.pem
+.env
+.env.*
+!.env.example
+
+# Editors and operating systems
+# -----------------------------
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Set up Mangle VPN</title>
+  {{ template "head" }}
+</head>
+
+<body>
+<main class="page">
+  {{ template "brand" . }}
+
+  <form class="card setup" action="/install/admin" method="post" data-busy-label="Setting up…">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+
+    {{ template "setup-steps" .Setup }}
+
+    <div class="intro">
+      <h1>Your administrator account</h1>
+      <p class="muted">You'll sign in with this to manage the server. You can add more administrators later.</p>
+    </div>
+
+    {{ template "banner" .Error }}
+
+    <div class="field">
+      <label for="admin_name">Full name</label>
+      <input type="text" id="admin_name" name="admin_name" value="{{ .Form.Data.admin_name }}" autocomplete="name" autofocus>
+      <p class="error">{{ .Form.Errors.admin_name }}</p>
+    </div>
+
+    <div class="field">
+      <label for="admin_email">Email</label>
+      <input type="email" id="admin_email" name="admin_email" value="{{ .Form.Data.admin_email }}" autocomplete="username">
+      <p class="error">{{ .Form.Errors.admin_email }}</p>
+    </div>
+
+    <div class="field">
+      <label for="admin_password">Password</label>
+      <input type="password" id="admin_password" name="admin_password" autocomplete="new-password">
+      <p class="help">{{ .PasswordRule }}</p>
+      <p class="error">{{ .Form.Errors.admin_password }}</p>
+    </div>
+
+    <div class="field">
+      <label for="admin_password_confirm">Confirm password</label>
+      <input type="password" id="admin_password_confirm" name="admin_password_confirm" autocomplete="new-password">
+      <p class="error">{{ .Form.Errors.admin_password_confirm }}</p>
+    </div>
+
+    <p class="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      Finishing creates your certificate authority and starts OpenVPN. It takes a few seconds.
+    </p>
+
+    <div class="setup-actions">
+      <a href="/install/vpn" class="button button-secondary">Back</a>
+      <button type="submit" class="button button-primary">Finish setup</button>
+    </div>
+  </form>
+</main>
+<script src="/static/setup.js"></script>
+</body>
+</html>

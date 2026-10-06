@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   The design tokens. One accent, blue, marks what can be acted on
+   and where you are. Green, amber and red carry state only:
+   connected, waiting on a restart, destructive.
+   --------------------------------------------------------------- */
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Surfaces. */
+  --color-canvas: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-subtle: #f9fafb;
+  --color-muted: #f2f4f7;
+  --color-line: #e4e7ec;
+  --color-hair: #eaecf0;
+  --color-field: #d0d5dd;
+  --color-field-hover: #98a2b3;
+  /* Text, darkest first. */
+  --color-ink: #101828;
+  --color-ink-2: #344054;
+  --color-ink-3: #475467;
+  --color-ink-4: #667085;
+  --color-ink-5: #98a2b3;
+
+  /* The accent. */
+  --color-accent: #2b50d6;
+  --color-accent-strong: #1e3a9e;
+  --color-accent-soft: #eef2ff;
+  --color-accent-tint: #e0e7ff;
+
+  /* State, and only state. */
+  --color-up: #067647;
+  --color-up-dot: #17b26a;
+  --color-up-soft: #ecfdf3;
+  --color-warn: #b54708;
+  --color-warn-ink: #93370d;
+  --color-warn-soft: #fffaeb;
+  --color-warn-line: #fedf89;
+  --color-deny: #b42318;
+  --color-deny-line: #fda29b;
+  --color-deny-soft: #fef3f2;
+  --color-drop: #b93815;
+  --color-drop-soft: #fff4ed;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-sm leading-normal text-ink;
+  }
+
+  /* Numbers that sit in columns line up. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* A white surface that is one object: a table, a form, a list. */
+  .card {
+    @apply rounded-xl border border-line bg-surface;
+  }
+
+  .card-head {
+    @apply flex items-center justify-between gap-3 border-b border-hair px-5 py-4;
+  }
+
+  .label {
+    @apply text-[13px] font-medium text-ink-2;
+  }
+
+  .hint {
+    @apply text-[13px] leading-normal text-ink-4;
+  }
+
+  .field-error {
+    @apply text-[13px] text-deny;
+  }
+
+  .input {
+    @apply h-10 w-full rounded-lg border border-field bg-surface px-3 text-sm text-ink transition-[border-color,box-shadow] placeholder:text-ink-5 enabled:not-focus:hover:border-field-hover focus:border-accent focus:ring-3 focus:ring-accent/15 focus:outline-none disabled:bg-muted disabled:text-ink-4;
+  }
+
+  /* The browser's own arrow sits wherever the platform puts it, so draw
+     one that lines up with the field's padding instead. */
+  select.input {
+    @apply appearance-none bg-no-repeat pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667085' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: right 12px center;
+    background-size: 16px;
+  }
+
+  select.input:disabled {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2398a2b3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+
+  /* Where the browser allows it, the open list is drawn by the page rather
+     than the operating system, whose menus can be translucent, so it
+     matches the rest of the interface. Elsewhere the native list stays. */
+  @supports (appearance: base-select) {
+    select.input,
+    select.input::picker(select) {
+      appearance: base-select;
+    }
+
+    select.input {
+      @apply flex items-center;
+    }
+
+    /* The chevron drawn above stands in for the browser's own. */
+    select.input::picker-icon {
+      display: none;
+    }
+
+    select.input::picker(select) {
+      @apply mt-1 rounded-xl border border-line bg-surface p-1 shadow-[0_12px_32px_rgba(16,24,40,0.12)];
+    }
+
+    select.input option {
+      @apply flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-ink-2;
+    }
+
+    select.input option:hover,
+    select.input option:focus-visible {
+      @apply bg-muted text-ink outline-none;
+    }
+
+    select.input option:checked {
+      @apply font-medium text-accent-strong;
+    }
+
+    select.input option:disabled {
+      @apply text-ink-5;
+    }
+
+    select.input option::checkmark {
+      @apply order-1 ml-auto text-accent;
+    }
+  }
+
+  textarea.input {
+    @apply h-auto min-h-24 py-2.5 leading-relaxed;
+  }
+
+  .input[aria-invalid="true"] {
+    @apply border-deny focus:ring-deny/15;
+  }
+
+  /* Tables. */
+  /* Relative so a visually hidden label inside stays within the table's
+     scroll box instead of widening the page. */
+  /* Column headings stay in view down a long list, where the table is
+     not in a scrolling box of its own. */
+  .th {
+    @apply sticky top-0 z-10 border-b border-hair bg-subtle px-5 py-3 text-left text-xs font-medium whitespace-nowrap text-ink-3;
+  }
+
+  /* With nothing clipping it, a card's first row of headings follows its
+     corners. */
+  .card thead tr:first-child > .th:first-child {
+    @apply rounded-tl-xl;
+  }
+
+  .card thead tr:first-child > .th:last-child {
+    @apply rounded-tr-xl;
+  }
+
+  /* A row that answers the pointer, and one that opens a page. */
+  .row {
+    @apply transition-colors duration-75 hover:bg-muted;
+  }
+
+  .row-link {
+    @apply cursor-pointer transition-colors duration-75 hover:bg-muted;
+  }
+
+  .td {
+    @apply border-b border-hair px-5 py-3.5 align-middle;
+  }
+
+  tr:last-child > .td {
+    @apply border-b-0;
+  }
+
+  .link {
+    @apply font-medium text-ink no-underline hover:text-accent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

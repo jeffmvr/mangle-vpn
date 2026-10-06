@@ -1,0 +1,18 @@
+<html>
+  <head></head>
+  <body>
+    <p>Hello!</p>
+    <p>
+      You have been added to the {{ .Organization }} VPN. To set up your
+      account, choose a password:
+    </p>
+    <p><a href="{{ .Link }}">Choose your password</a></p>
+    <p>
+      The link works once and for {{ .Lasts }}. Your username is
+      <b>{{ .Email }}</b>. After choosing a password you can sign in at
+      <a href="{{ .URL }}">{{ .URL }}</a> and add your devices.
+    </p>
+    <p>If you have any problems or questions, contact an administrator.</p>
+    <p>Thank you.</p>
+  </body>
+</html>

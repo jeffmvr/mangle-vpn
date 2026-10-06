@@ -1,0 +1,9 @@
+Hello!
+
+Someone asked to reset the password of your {{ .Organization }} VPN account, {{ .Email }}. If it was you, choose a new password here:
+
+{{ .Link }}
+
+The link works once and for {{ .Lasts }}. If you didn't ask, ignore this e-mail: your password hasn't changed.
+
+Thank you.

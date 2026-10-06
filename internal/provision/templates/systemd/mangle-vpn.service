@@ -1,0 +1,46 @@
+[Unit]
+Description=Mangle VPN OpenVPN server
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory={{ .RootDir }}
+# Data channel offload: load its kernel module, when it is installed, so
+# OpenVPN can leave encryption to the kernel. OpenVPN 2.6 uses ovpn-dco-v2
+# and later releases the kernel's own ovpn. "+" runs these outside the
+# sandbox, which cannot load modules, and "-" starts the service without
+# them.
+ExecStartPre=-+{{ .Modprobe }} -q ovpn-dco-v2
+ExecStartPre=-+{{ .Modprobe }} -q ovpn
+ExecStartPre={{ .Executable }} vpn pre-start
+ExecStart={{ .OpenVPN }} --config {{ .OpenVPNConfig }}
+ExecStartPost={{ .Executable }} vpn post-start
+ExecStopPost={{ .Executable }} vpn post-stop
+
+# Sandboxing. OpenVPN needs the tun device and network administration, its
+# management socket and iptables' lock file live in /run, and the hooks
+# write under data/. Devices stay visible and kernel tunables writable, so
+# the tunnel can be configured; kernel modules stay loadable, since
+# iptables may load netfilter modules on first use.
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETUID CAP_SETGID CAP_DAC_OVERRIDE
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths={{ .RootDir }}/data /run
+PrivateTmp=yes
+DeviceAllow=/dev/net/tun rw
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+
+[Install]
+WantedBy=multi-user.target

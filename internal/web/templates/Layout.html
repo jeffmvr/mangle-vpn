@@ -1,0 +1,408 @@
+{{/*
+  Shared pieces of the server rendered pages. Every file in this directory
+  is parsed into one template set, so the pages pull these in by name.
+*/}}
+
+{{ define "head" }}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="shortcut icon" type="image/png" href="/static/favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { -webkit-font-smoothing: antialiased; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #F6F7F9;
+      color: #101828;
+      font-family: Geist, ui-sans-serif, system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    a { color: #2B50D6; text-decoration: none; }
+    a:hover { color: #1E3A9E; }
+
+    .account {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 16px;
+      font-size: 13px;
+      color: #475467;
+    }
+
+    .page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      min-height: 100vh;
+      padding: 48px 16px;
+    }
+
+    .signout { display: inline; margin: 0; }
+    .signout button {
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      color: #2B50D6;
+      cursor: pointer;
+    }
+    .signout button:hover { color: #1E3A9E; }
+
+    .account + .page { min-height: calc(100vh - 53px); padding-top: 0; }
+
+    .brand { display: flex; align-items: center; gap: 10px; color: #101828; }
+    .brand:hover { color: #101828; }
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #101828;
+      color: #FFFFFF;
+    }
+    .brand-name { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+    .brand-logo { height: 36px; max-width: 160px; object-fit: contain; }
+
+    /* The sign in page gives the organization more presence. */
+    .brand-hero .brand { flex-direction: column; gap: 14px; }
+    .brand-hero .brand-mark { width: 56px; height: 56px; border-radius: 16px; }
+    .brand-hero .brand-mark svg { width: 30px; height: 30px; }
+    .brand-hero .brand-logo { height: 64px; max-width: 240px; }
+    .brand-hero .brand-name { font-size: 24px; letter-spacing: -0.02em; }
+
+    .help { font-size: 14px; color: #475467; }
+
+    .notice {
+      max-width: 400px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #667085;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 400px;
+      padding: 32px;
+      background: #FFFFFF;
+      border: 1px solid #E4E7EC;
+      border-radius: 14px;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(16, 24, 40, 0.04);
+    }
+    .card.wide { max-width: 520px; }
+
+    .intro { display: flex; flex-direction: column; gap: 6px; }
+
+    h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.015em; }
+    h2 {
+      margin: 4px 0 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #EAECF0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    p { margin: 0; }
+    .muted { font-size: 14px; color: #475467; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .field-row a { font-size: 13px; }
+
+    label { font-size: 13px; font-weight: 500; color: #344054; }
+
+    .help { font-size: 13px; color: #667085; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      border: 1px solid #D0D5DD;
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: #101828;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2B50D6;
+      box-shadow: 0 0 0 1px #2B50D6;
+    }
+
+    input.code {
+      height: 52px;
+      text-align: center;
+      font-family: "Geist Mono", ui-monospace, monospace;
+      font-size: 22px;
+      letter-spacing: 0.5em;
+      padding-left: calc(12px + 0.5em);
+    }
+
+    .error { font-size: 13px; color: #B42318; }
+    .error:empty { display: none; }
+
+    .banner {
+      padding: 12px 14px;
+      border: 1px solid #FDA29B;
+      border-radius: 10px;
+      background: #FEF3F2;
+      color: #B42318;
+      font-size: 13px;
+    }
+    .banner strong { display: block; font-weight: 600; }
+
+    .actions { display: flex; gap: 10px; }
+    .actions > * { flex: 1; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .button:focus-visible { outline: 2px solid #2B50D6; outline-offset: 2px; }
+
+    .button-primary { border: 0; background: #2B50D6; color: #FFFFFF; font-weight: 600; }
+    .button-primary:hover { background: #1E3A9E; color: #FFFFFF; }
+
+    .button-secondary { border: 1px solid #D0D5DD; background: #FFFFFF; color: #101828; font-weight: 500; }
+    .button-secondary:hover { background: #F9FAFB; color: #101828; }
+
+    .divider { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #667085; }
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #E4E7EC; }
+
+    .note { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: #475467; }
+    .note svg { flex: none; margin-top: 2px; }
+
+    .steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; counter-reset: step; }
+    .steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: #344054; counter-increment: step; }
+    .steps li::before {
+      content: counter(step);
+      display: flex;
+      flex: none;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: #EEF2FF;
+      color: #2B50D6;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .qr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+      border: 1px solid #EAECF0;
+      border-radius: 12px;
+      background: #F9FAFB;
+    }
+    .qr canvas { width: 180px; height: 180px; border-radius: 8px; background: #FFFFFF; }
+    .secret {
+      max-width: 100%;
+      font-family: "Geist Mono", ui-monospace, monospace;
+      font-size: 13px;
+      color: #344054;
+      word-break: break-all;
+      text-align: center;
+    }
+
+    /* Setup */
+
+    .card.setup { max-width: 560px; gap: 22px; }
+
+    select, textarea {
+      width: 100%;
+      border: 1px solid #D0D5DD;
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: #101828;
+      font: inherit;
+      font-size: 14px;
+    }
+    select {
+      height: 44px;
+      padding: 0 36px 0 12px;
+      appearance: none;
+      background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23667085' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+      cursor: pointer;
+    }
+    textarea { padding: 10px 12px; line-height: 1.5; resize: vertical; }
+    textarea.mono, input.mono { font-family: "Geist Mono", ui-monospace, monospace; font-size: 13px; }
+    select:focus, textarea:focus { outline: none; border-color: #2B50D6; box-shadow: 0 0 0 1px #2B50D6; }
+    input:hover:not(:focus), select:hover:not(:focus), textarea:hover:not(:focus) { border-color: #98A2B3; }
+
+    .field-pair { display: grid; grid-template-columns: minmax(0, 1fr) 112px; gap: 12px; }
+    .optional { font-weight: 400; color: #667085; }
+
+    .stepper { display: flex; align-items: center; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .stepper li { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #667085; }
+    .stepper li + li::before { content: ""; width: 24px; height: 1px; background: #D0D5DD; }
+    .stepper a, .stepper span.stepper-step { display: flex; align-items: center; gap: 8px; color: inherit; }
+    .stepper-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #F2F4F7;
+      color: #667085;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .stepper .current { color: #101828; font-weight: 500; }
+    .stepper .current .stepper-mark { background: #2B50D6; color: #FFFFFF; }
+    .stepper .done .stepper-mark { background: #EEF2FF; color: #2B50D6; }
+    .stepper .done a:hover { color: #2B50D6; }
+
+    .choices { display: grid; gap: 10px; border: 0; margin: 0; padding: 0; }
+    .choices legend { margin-bottom: 6px; padding: 0; font-size: 13px; font-weight: 500; color: #344054; }
+    .choice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border: 1px solid #D0D5DD;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .choice:hover { border-color: #98A2B3; }
+    .choice:has(input:checked) { border-color: #2B50D6; background: #EEF2FF; box-shadow: 0 0 0 1px #2B50D6; }
+    .choice:has(input:focus-visible) { outline: 2px solid #2B50D6; outline-offset: 2px; }
+    .choice input { margin: 2px 0 0; accent-color: #2B50D6; }
+    .choice-text { display: flex; flex-direction: column; gap: 2px; }
+    .choice-title { font-size: 14px; font-weight: 500; color: #101828; }
+    .choice-help { font-size: 13px; color: #475467; font-weight: 400; }
+
+    /* The networks only matter when only they are routed. */
+    form:has(#access-all:checked) .routes-only { display: none; }
+
+    details.advanced { border-top: 1px solid #EAECF0; padding-top: 14px; }
+    details.advanced summary { cursor: pointer; font-size: 13px; font-weight: 500; color: #344054; list-style: none; display: flex; align-items: center; gap: 6px; }
+    details.advanced summary::-webkit-details-marker { display: none; }
+    details.advanced summary svg { transition: transform 0.15s; }
+    details.advanced[open] summary svg { transform: rotate(90deg); }
+    details.advanced .advanced-body { display: flex; flex-direction: column; gap: 20px; padding-top: 18px; }
+
+    .setup-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-top: 4px; }
+    .setup-actions .button-primary { min-width: 140px; margin-left: auto; }
+    .button[aria-disabled="true"] { opacity: 0.7; pointer-events: none; }
+
+    .done-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: #ECFDF3;
+      color: #067647;
+    }
+
+    .checklist { margin: 0; padding: 0; list-style: none; border: 1px solid #EAECF0; border-radius: 10px; }
+    .checklist li { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-bottom: 1px solid #EAECF0; }
+    .checklist li:last-child { border-bottom: 0; }
+    .checklist .icon { flex: none; margin-top: 1px; }
+    .checklist .ok { color: #17B26A; }
+    .checklist .warn { color: #B54708; }
+    .checklist-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .checklist-title { font-weight: 500; color: #101828; }
+    .checklist-detail { font-size: 13px; color: #475467; overflow-wrap: anywhere; }
+
+    .next { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+    .next a { display: flex; align-items: center; gap: 12px; padding: 10px 8px; margin: 0 -8px; border-radius: 8px; color: #101828; }
+    .next a:hover { background: #F9FAFB; color: #101828; }
+    .next .next-text { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+    .next .next-title { font-weight: 500; }
+    .next .next-detail { font-size: 13px; color: #475467; }
+    .next svg { flex: none; color: #98A2B3; }
+
+    @media (max-width: 480px) {
+      .card { padding: 24px 20px; }
+      .stepper-label { display: none; }
+      .stepper .current .stepper-label { display: inline; }
+    }
+  </style>
+{{ end }}
+
+{{/* Given the whole page, for the organization's name and logo. */}}
+{{ define "brand" }}
+  <a href="/" class="brand">
+    {{ if .LogoURL }}
+      <img src="{{ .LogoURL }}" alt="" class="brand-logo">
+    {{ else }}
+      <span class="brand-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </span>
+    {{ end }}
+    <span class="brand-name">{{ .Organization }} VPN</span>
+  </a>
+{{ end }}
+
+{{/* Given the whole page, for the CSRF token the sign out form needs. */}}
+{{ define "account" }}
+  <div class="account">
+    <span>Signed in as {{ .User.Email }}</span>
+    <span aria-hidden="true">·</span>
+    <form action="/logout" method="post" class="signout">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ .CSRFToken }}">
+      <button type="submit">Sign out</button>
+    </form>
+  </div>
+{{ end }}
+
+{{/* The setup wizard's progress, given the setup view. Steps already
+     answered link back to themselves. */}}
+{{ define "setup-steps" }}
+  <ol class="stepper" aria-label="Setup progress">
+    {{ range .Items }}
+      <li class="{{ .State }}" {{ if eq .State "current" }}aria-current="step"{{ end }}>
+        {{ if eq .State "done" }}<a href="/install/{{ .Slug }}">{{ else }}<span class="stepper-step">{{ end }}
+          <span class="stepper-mark">
+            {{ if eq .State "done" }}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-label="Done"><path d="M20 6 9 17l-5-5"/></svg>{{ else }}{{ .Number }}{{ end }}
+          </span>
+          <span class="stepper-label">{{ .Label }}</span>
+        {{ if eq .State "done" }}</a>{{ else }}</span>{{ end }}
+      </li>
+    {{ end }}
+  </ol>
+{{ end }}
+
+{{ define "banner" }}
+  {{ if . }}
+    <div class="banner" role="alert">
+      <strong>Something went wrong</strong>
+      {{ . }}
+    </div>
+  {{ end }}
+{{ end }}

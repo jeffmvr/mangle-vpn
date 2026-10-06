@@ -1,0 +1,13 @@
+# Built inside the image, or not needed there.
+.git
+dist
+tmp
+data
+ui/node_modules
+ui/dist
+internal/webui/dist
+*.db
+*.log
+*.tar.gz
+.env
+.env.*
